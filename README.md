@@ -5,7 +5,7 @@ An online Checkers game system built in Java 8 and Spark, a web micro-framework.
 
 ## Team
 
-- MEMBER1
+- Ian Flournoy <icf6667@rit.edu>
 - MEMBER2
 - MEMBER3
 - MEMBER4
