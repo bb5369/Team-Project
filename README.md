@@ -9,7 +9,7 @@ An online Checkers game system built in Java 8 and Spark, a web micro-framework.
 - Rohandeep Singh <rs9773@rit.edu>
 - Logan D'Auria <lxd1644@rit.edu>
 - Justin Palmer <jxp8764@rit.edu>
-- Member5
+- Alexis Halbur <adh9570@rit.edu> 
 
 
 ## Prerequisites
