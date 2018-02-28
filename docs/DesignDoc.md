@@ -16,10 +16,10 @@ geometry: margin=1in
 
 ## Executive Summary
 
-This is a summary of the project.
+The web application for Webcheckers allows players to play checkers with other players who are currently signed in. The game user interface supports a game experience using drag-and-drop browser capabilities for making moves. Beyond these simple capabilities, players are able to play in Tournament Mode against other players in Tournament Mode, as well as being able to request help from the application on what moves to make in order to win the game.
 
 ### Purpose
-> Provide a very brief statement about the project and the most important user group and user goals.
+> Users play against one another in a game of checkers, competing to win.
 
 ### Glossary and Acronyms
 > Provide a table of terms and acronyms.
@@ -31,9 +31,9 @@ This is a summary of the project.
 
 ## Requirements
 
-This section describes the features of the application.
-
-> In this section you do not need to be exhaustive and list every story.  Focus on top-level features from the Vision document and maybe Epics and critical Stories.
+> Players must be able to sign-in to the application and start a game against other players. Using drag-and-drop capabilities, players move pieces down the board, jumping over their opponents, to advance towards winning the game.
+> If players reach their opponent's end of the board, their pieces will be "kinged," giving the piece advanced capabilities to move in any direction on the board.
+> Players have the option to enter Tournament Mode, in which they compete against other players to place in a 1st, 2nd, etc. style ranking system.
 
 ### Definition of MVP
 > Provide a simple description of the Minimum Viable Product.
