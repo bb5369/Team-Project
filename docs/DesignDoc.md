@@ -48,8 +48,7 @@ This section describes the features of the application.
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model-placeholder.png)
-> Replace the placeholder image above with your team's own domain model. 
+![The WebCheckers Domain Model](domain-model-checkers.png)
 
 > Provide a high-level overview of the domain for this application. You can discuss the more important domain entities and their relationship to each other.
 
@@ -81,7 +80,6 @@ This section describes the web interface flow; this is how the user views and in
 with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](WebCheckers-UI-State-Behavior.png)
-> Replace the placeholder image above with your team's own web interface state model. 
 
 > Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.
 
