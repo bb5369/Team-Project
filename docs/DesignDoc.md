@@ -80,7 +80,7 @@ Details of the components within these tiers are supplied below
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface-placeholder.png)
+![The WebCheckers Web Interface Statechart](WebCheckers-UI-State-Behavior.png)
 > Replace the placeholder image above with your team's own web interface state model. 
 
 > Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.
