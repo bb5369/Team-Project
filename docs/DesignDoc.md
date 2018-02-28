@@ -1,17 +1,18 @@
 ---
 geometry: margin=1in
 ---
-# PROJECT Design Documentation
+# WebCheckers Design Documentation
 
 > The following template provides the headings for your Design Documentation.  As you edit each section make sure you remove these commentary 'blockquotes'; the lines that start with a > character.
 
 # Team Information
-* Team name: TEAMNAME
+* Team name: (2175) SWEN-261-08-Team-C
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Ian Flournoy <icf6667@rit.edu>
+  * Rohandeep Singh <rs9773@rit.edu>
+  * Logan D'Auria <lxd1644@rit.edu>
+  * Justin M. Palmer <jxp8764@rit.edu>
+  * Alexis Halbur <adh9570@rit.edu>
 
 ## Executive Summary
 
