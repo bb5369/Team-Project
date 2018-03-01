@@ -36,10 +36,49 @@ The web application for Webcheckers allows players to play checkers with other p
 > Players have the option to enter Tournament Mode, in which they compete against other players to place in a 1st, 2nd, etc. style ranking system.
 
 ### Definition of MVP
-> Provide a simple description of the Minimum Viable Product.
+> Each player must sign-in before playing a game, and be able to sign-out when finished playing.
+> Two players must be able to play a game of checkers based upon the American rules.
+> Either player of a game may choose to resign, at any point, which ends the game.
 
 ### MVP Features
-> Provide a list of top-level Epics and/or Stories of the MVP.
+> Player Sign-In
+> > As a Player, I want to be able to sign-in so that I can play a game of checkers.
+> 
+> Player Sign-Out
+> > As a Player, I want to be able to sign-out so that I can do other things.
+>
+> Finding a Game
+> As a signed-in Player, I want to be able to find a regular game or join the tournament so that I can play checkers.
+>
+> Start a Game
+> > As a Player, I want to start a game so that I can play checkers against an opponent.
+>
+> Single Move
+> > As a Player, I want to be able to move my pieces diagonally away from me so that I can advance towards the far end of the board.
+>
+> JUMP MOVES
+> > As a Player, I want to be forced to make an available jump move so that I will gain an advantage in the game.
+> >
+> > Single Jump Move
+> > > As a Player, I want to be able to jump diagonally forward over an opponent piece so that I can eliminate the piece and advance in the game.
+> > 
+> > Multi Jump Move
+> > > As a Player, I want to be able to diagonally jump over my opponents pieces in one turn so that I can eliminate two or more of their pieces.
+> 
+> Unable to Move
+> > As a Player, I want to lose the game when I have no moves left so that I can move on and start a new game.
+> 
+> KINGS
+> > As a Player, I want to have Kinged pieces so that I will be able to capture more opponent pieces.
+> >
+> > King Me
+> > > As a Player, I want to have my pieces that reach the opponent end of the board to become Kings so that I can move diagonally forwards and backwards.
+> >
+> > King Moving
+> > > As a Player, I want to move my Kings diagonally forwards and backwards so that I can capture more of my opponent's pieces.
+>
+> Resignation
+> > As a Player, I want to be able to resign from an ongoing game so that I can go do other things.
 
 ### Roadmap of Enhancements
 > Provide a list of top-level features in the order you plan to consider them.
