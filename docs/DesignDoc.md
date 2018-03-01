@@ -48,7 +48,7 @@ The web application for Webcheckers allows players to play checkers with other p
 > > As a Player, I want to be able to sign-out so that I can do other things.
 >
 > Finding a Game
-> As a signed-in Player, I want to be able to find a regular game or join the tournament so that I can play checkers.
+> > As a signed-in Player, I want to be able to find a regular game or join the tournament so that I can play checkers.
 >
 > Start a Game
 > > As a Player, I want to start a game so that I can play checkers against an opponent.
@@ -56,7 +56,7 @@ The web application for Webcheckers allows players to play checkers with other p
 > Single Move
 > > As a Player, I want to be able to move my pieces diagonally away from me so that I can advance towards the far end of the board.
 >
-> JUMP MOVES
+> <b> JUMP MOVES </b>
 > > As a Player, I want to be forced to make an available jump move so that I will gain an advantage in the game.
 > >
 > > Single Jump Move
@@ -68,7 +68,7 @@ The web application for Webcheckers allows players to play checkers with other p
 > Unable to Move
 > > As a Player, I want to lose the game when I have no moves left so that I can move on and start a new game.
 > 
-> KINGS
+> <b> KINGS </b>
 > > As a Player, I want to have Kinged pieces so that I will be able to capture more opponent pieces.
 > >
 > > King Me
