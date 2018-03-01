@@ -1,4 +1,16 @@
 package com.webcheckers.model;
 
+/**
+ * Model entity for a checkers Player
+ */
 public class Player {
+	private String name;
+
+	public Player(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
 }
