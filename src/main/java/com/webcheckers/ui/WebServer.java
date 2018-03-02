@@ -133,7 +133,6 @@ public class WebServer {
     // Shows the Checkers game Home page.
     get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby));
 
-    get("/ian", new GetIanRoute(templateEngine, gameManager, playerLobby));
     LOG.config("WebServer is initialized.");
   }
 

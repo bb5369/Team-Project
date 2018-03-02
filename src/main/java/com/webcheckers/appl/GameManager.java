@@ -9,8 +9,6 @@ import com.webcheckers.model.Player;
  */
 public class GameManager {
 
-
-
 	public GameManager() {
 
 	}
