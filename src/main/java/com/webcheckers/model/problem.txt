@@ -1,0 +1,10 @@
+ Problem That I'm facing now:
+ I'm not able to see any of the changes made to this branch even after fetching.
+ But when I go to the github site the branch shows it has java classes added to the model.
+
+ I'm not sure what I'm doing wrong here
+ , but here are the things that I have tried:
+ I pulled from the master branch and the checkout the feature-player-signin
+ I fetch in the feature-player-singin branch to make sure I'm up to date
+ fetched all the branches again and still nothing
+
