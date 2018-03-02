@@ -15,7 +15,10 @@
     </div>
     
     <div class="body">
-      <p>Welcome to the world of online Checkers.</p>
+        <p>Welcome to the world of online Checkers.</p>
+        <#if activePlayerCount??>
+            <p>There are currently ${activePlayerCount} active players on the server.</p>
+        </#if>
     </div>
     
   </div>
