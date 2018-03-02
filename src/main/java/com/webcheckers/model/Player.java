@@ -1,9 +1,12 @@
 package com.webcheckers.model;
 
+import java.util.Objects;
+
 /**
- * Model entity for a checkers Player
+ * Model entity of a checkers Player
  */
 public class Player {
+
 	//instance variables
 	private String name;
 	
@@ -23,5 +26,22 @@ public class Player {
 	 */
 	public String getName() {
 		return this.name;
+	}
+
+	public boolean equals(Object obj) {
+		if (obj == this) return true;
+		if (!(obj instanceof Player)) return false;
+
+		final Player that = (Player) obj;
+
+		if (this.name != that.getName()) return false;
+
+		return true;
+	}
+
+	public int hashCode() {
+		return Objects.hash(
+				this.name
+		);
 	}
 }

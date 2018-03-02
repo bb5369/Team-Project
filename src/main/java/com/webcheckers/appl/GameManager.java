@@ -1,19 +1,24 @@
 package com.webcheckers.appl;
 
+import java.util.*;
+import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Player;
+
 /**
  * Coordinates the state of active games across the entire application
  */
 public class GameManager {
-	// Constants
 
-	// Attributes
 
-	// Constructors
+
 	public GameManager() {
 
 	}
 
-	// Public methods
+	public CheckersGame getGame(Player playerRed, Player playerWhite) {
+		final CheckersGame newGame = new CheckersGame(playerRed, playerWhite);
 
-	// Private Methods
+		return newGame;
+	}
+
 }

@@ -6,6 +6,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.appl.GameManager;
 
@@ -47,14 +49,14 @@ public final class Application {
       System.err.println("Could not initialize log manager because: " + e.getMessage());
     }
 
+    // Happy little singletons
     final Gson gson = new Gson();
-
     final TemplateEngine templateEngine = new FreeMarkerEngine();
-
     final GameManager gameManager = new GameManager();
+    final PlayerLobby playerLobby = new PlayerLobby();
 
-    final WebServer webServer = new WebServer(templateEngine, gameManager, gson);
-
+    // Inject some dependencies
+    final WebServer webServer = new WebServer(templateEngine, gameManager, playerLobby, gson);
     final Application app = new Application(webServer);
 
     app.initialize();
