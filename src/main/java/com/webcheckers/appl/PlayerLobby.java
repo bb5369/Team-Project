@@ -10,21 +10,24 @@ import com.webcheckers.model.Player;
 public class PlayerLobby {
 
 	// Attributes
-	private HashMap<String, Player> activePlayers = new HashMap<String, Player>();
+	private HashMap<String, Player> activePlayers;
 
 	public PlayerLobby() {
+		activePlayers = new HashMap<String, Player>();
 	}
 
-
+	// Behaviors
 	/**
+	 * getActivePlayers method
 	 * This may be an interim method.
-	 * @return
+	 * @return Hashmap containing all the active playes
 	 */
 	public HashMap<String, Player> getActivePlayers() {
 		return activePlayers;
 	}
 
 	/**
+	 * getActivePlayerCount method
 	 * Returns a count of the number of active players in the lobby
 	 * @return Integer activePlayerCount
 	 */
@@ -33,9 +36,10 @@ public class PlayerLobby {
 	}
 
 	/**
+	 * newPlayer method
 	 * Create a new Player given a name and returns that player
-	 * @param name
-	 * @return Player
+	 * @param name of the new player
+	 * @return a new Player
 	 */
 	public Player newPlayer(String name) {
 		final Player newPlayer = new Player(name);
