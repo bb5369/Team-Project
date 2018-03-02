@@ -9,7 +9,7 @@ public class Player {
 
 	//instance variables
 	private String name;
-	
+
 	/**
 	 * Parameterize constructor
 	 * This constructor intializes the name of the player
@@ -18,7 +18,7 @@ public class Player {
 	public Player(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * getName method
 	 * This method is used to get player's name
@@ -32,11 +32,9 @@ public class Player {
 		if (obj == this) return true;
 		if (!(obj instanceof Player)) return false;
 
-		final Player that = (Player) obj;
+	  	Player otherPlayer = (Player) obj;
 
-		if (this.name != that.getName()) return false;
-
-		return true;
+		return (this.name).equals(otherPlayer.getName());
 	}
 
 	public int hashCode() {
