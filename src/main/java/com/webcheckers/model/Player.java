@@ -28,6 +28,12 @@ public class Player {
 		return this.name;
 	}
 
+	/**
+	 * equals method
+	 * This method is used to compare two Player objects
+	 * @param obj other Player object to compare to
+	 * @return true if both the Player have same name
+	 */
 	public boolean equals(Object obj) {
 		if (obj == this) return true;
 		if (!(obj instanceof Player)) return false;
@@ -37,6 +43,11 @@ public class Player {
 		return (this.name).equals(otherPlayer.getName());
 	}
 
+	/**
+	 * hashCode method
+	 * This generates Player object's hashcode
+	 * @return int value representing object's hashcode
+	 */
 	public int hashCode() {
 		return Objects.hash(
 				this.name

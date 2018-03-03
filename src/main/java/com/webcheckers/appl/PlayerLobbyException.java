@@ -1,16 +1,11 @@
 package com.webcheckers.appl;
 
+/**
+ * <p>Title: PlayerLobbyException Class</p>
+ * <p>Description: Exception used by the PLayerLobby class</p>
+ */
 public class PlayerLobbyException extends RuntimeException {
-
-	private String message;
-
 	PlayerLobbyException(String message) {
-		this.message = message;
-	}
-
-
-	@Override
-	public String getMessage() {
-		return this.message;
+		super(message);
 	}
 }
