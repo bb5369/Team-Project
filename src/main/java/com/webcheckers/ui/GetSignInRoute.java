@@ -16,9 +16,8 @@ import spark.*;
  */
 public class GetSignInRoute implements Route {
 
-    // Values used in the view-model map for endering the singin view.
-    static final String MSG = "Please Sign in";
-    static final String TITLE = "Sign In Page";
+    // Values used in the view-model map for rendering the sign-in view.
+    static final String TITLE = "Player Sign-In";
     static final String VIEW_NAME = "signin.ftl";
 
     private final TemplateEngine templateEngine;
@@ -30,10 +29,10 @@ public class GetSignInRoute implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         Map<String, Object> vm = new HashMap<>();
 
-        vm.put("title", "Player Sign-In");
+        vm.put("title", TITLE);
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
