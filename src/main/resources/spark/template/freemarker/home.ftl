@@ -16,6 +16,10 @@
     
     <div class="body">
         <p>Welcome to the world of online Checkers.</p>
+        <div class="signin">
+            <h4> Click this button to get started!</h4>
+            <button type="submit" class="sign_btn">Sign in</button>
+        </div>
         <#if activePlayerCount??>
             <p>There are currently ${activePlayerCount} active players on the server.</p>
         </#if>
