@@ -1,8 +1,9 @@
 package com.webcheckers.appl;
 
+import com.webcheckers.model.Player;
+
 import java.util.HashMap;
 
-import com.webcheckers.model.Player;
 
 /**
  * PlayerLobby manages signed-in players
@@ -42,10 +43,16 @@ public class PlayerLobby {
 	 * @return a new Player
 	 */
 	public Player newPlayer(String name) {
-		final Player newPlayer = new Player(name);
 
-		// TODO: check for invalid characters in player name
-		// TODO: check hashmap if name exists, bail if so
+		if (! isValidName(name)) {
+			throw new PlayerLobbyException("Chosen player name not valid. Please use only alphanumerics and spaces.");
+		}
+
+		if (activePlayers.containsKey(name)) {
+			throw new PlayerLobbyException("Chosen name already exists in Lobby");
+		}
+
+		final Player newPlayer = new Player(name);
 
 		// Add the player to our lobby
 		this.activePlayers.put(name, newPlayer);
@@ -54,7 +61,14 @@ public class PlayerLobby {
 	}
 
 	// Private methods
+
+	/**
+	 * Validates alphanumeric property of a candidate name for a player
+	 * TODO: refactor out of PlayerLobby into util
+	 * @param String candidateName
+	 * @return Boolean
+	 */
 	public Boolean isValidName(String candidateName) {
-		return false;
+		return candidateName.matches("[a-zA-Z0-9 ]+");
 	}
 }

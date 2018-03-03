@@ -1,15 +1,14 @@
 package com.webcheckers.ui;
 
-import static spark.Spark.halt;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.webcheckers.ui.GetHomeRoute;
-
-
-import spark.*;
+import spark.Route;
+import spark.TemplateEngine;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
 
 /**
  * @author Justin Palmer
