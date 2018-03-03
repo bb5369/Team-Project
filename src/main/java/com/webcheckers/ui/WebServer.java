@@ -34,10 +34,8 @@ public class WebServer {
   // Constants
   //
 
-  /**
-   * The URL pattern to request the Home page.
-   */
   public static final String HOME_URL = "/";
+  public static final String SIGNIN_URL = "/signin";
 
   //
   // Attributes
@@ -130,10 +128,10 @@ public class WebServer {
     //// Create separate Route classes to handle each route; this keeps your
     //// code clean; using small classes.
 
-    get(HOME_URL, new GetSignInRoute(templateEngine));
     // Shows the Checkers game Home page.
     get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby));
 
+    get(SIGNIN_URL, new GetSignInRoute(templateEngine));
     LOG.config("WebServer is initialized.");
   }
 

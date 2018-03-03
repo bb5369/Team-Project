@@ -9,11 +9,7 @@ import java.util.Objects;
 import com.webcheckers.ui.GetHomeRoute;
 
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.Session;
-import spark.TemplateEngine;
+import spark.*;
 
 /**
  * @author Justin Palmer
@@ -26,17 +22,19 @@ public class GetSignInRoute implements Route {
     static final String VIEW_NAME = "signin.ftl";
 
     private final TemplateEngine templateEngine;
-    private final GetHomeRoute homeRoute;
-    GetSignInRoute(final GetHomeRoute homeRoute, final TemplateEngine templateEngine){
-        // validation
-        Objects.requireNonNull(homeRoute, "homeRout must not be null");
+
+    GetSignInRoute(final TemplateEngine templateEngine){
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
-        this.homeRoute = homeRoute;
         this.templateEngine = templateEngine;
     }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        return null;
+        Map<String, Object> vm = new HashMap<>();
+
+        vm.put("title", "Player Sign-In");
+
+        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }
