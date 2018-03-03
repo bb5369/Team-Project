@@ -52,4 +52,9 @@ public class PlayerLobby {
 
 		return newPlayer;
 	}
+
+	// Private methods
+	public Boolean isValidName(String candidateName) {
+		return false;
+	}
 }
