@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Player {
 
 	//instance variables
-	private String name;
+	public final String name;
 
 	/**
 	 * Parameterize constructor
