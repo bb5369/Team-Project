@@ -17,4 +17,12 @@ public class CheckersGame {
 		this.playerRed = playerRed;
 		this.playerWhite = playerWhite;
 	}
+
+	public Player getPlayerRed() {
+		return playerRed;
+	}
+
+	public Player getPlayerWhite() {
+		return playerWhite;
+	}
 }
