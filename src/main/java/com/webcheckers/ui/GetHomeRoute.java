@@ -17,9 +17,11 @@ import spark.TemplateEngine;
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
 public class GetHomeRoute implements Route {
-  private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+    private static final String PLAYER_NAMES_ATTR = "playerNames";
+    private static String PLAYER_NAMES = "testing123";
 
-  private final TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
 
   /**
    * Create the Spark Route (UI controller) for the
@@ -54,6 +56,8 @@ public class GetHomeRoute implements Route {
     //
     Map<String, Object> vm = new HashMap<>();
     vm.put("title", "Welcome!");
+    vm.put(PLAYER_NAMES_ATTR, PLAYER_NAMES);
+
     return templateEngine.render(new ModelAndView(vm , "home.ftl"));
   }
 

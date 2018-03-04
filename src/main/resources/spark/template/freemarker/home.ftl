@@ -17,6 +17,12 @@
     <div class="body">
       <p>Welcome to the world of online Checkers.</p>
     </div>
+
+    <h2>Players</h2>
+    <div class="body">
+      <p>${playerNames}</p>
+    </div>
+
     
   </div>
 </body>
