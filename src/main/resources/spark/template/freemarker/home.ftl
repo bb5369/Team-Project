@@ -22,7 +22,11 @@
 
             <ul>
             <#list activePlayers?keys as key>
-                <li>${activePlayers[key].getName()}</li>
+                <#if activePlayers[key].name != currentPlayer.name>
+                    <li>
+                    ${activePlayers[key].name}
+                    </li>
+                </#if>
             </#list>
             </ul>
         <#else>
@@ -40,13 +44,6 @@
         </#if>
 
     </div>
-
-    <h2>Players</h2>
-    <div class="body">
-      <p>${playerNames}</p>
-    </div>
-
-    
   </div>
 </body>
 </html>

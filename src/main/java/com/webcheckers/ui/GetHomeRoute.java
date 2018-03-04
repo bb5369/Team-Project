@@ -64,6 +64,7 @@ public class GetHomeRoute implements Route {
         if (request.session().attribute("Player") != null) {
             final Player currentPlayer = request.session().attribute("Player");
             vm.put("currentPlayer", currentPlayer);
+
             vm.put("activePlayers", playerLobby.getActivePlayers());
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
