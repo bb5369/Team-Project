@@ -1,5 +1,7 @@
 package main.java.com.webcheckers.model;
 
+import main.java.com.webcheckers.appl.SpaceIterator;
+
 import java.util.Iterator;
 
 /**
@@ -20,7 +22,7 @@ public class Row implements Iterable{
 
     @Override
     public Iterator iterator() {
-        return null;
+        return new SpaceIterator(spaces);
     }
 
 }
