@@ -13,7 +13,7 @@ public class GameManager {
 
 	}
 
-	public CheckersGame getGame(Player playerRed, Player playerWhite) {
+	public CheckersGame newGame(Player playerRed, Player playerWhite) {
 		final CheckersGame newGame = new CheckersGame(playerRed, playerWhite);
 
 		return newGame;
