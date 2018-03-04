@@ -7,30 +7,15 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
+import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.PlayerLobby;
 import spark.TemplateEngine;
 
 
 /**
  * The server that initializes the set of HTTP request handlers.
- * This defines the <em>web application interface</em> for this
+ * This defines the <em>web application interface</em> for the
  * WebCheckers application.
- *
- * <p>
- * There are multiple ways in which you can have the client issue a
- * request and the application generate responses to requests. If your team is
- * not careful when designing your approach, you can quickly create a mess
- * where no one can remember how a particular request is issued or the response
- * gets generated. Aim for consistency in your approach for similar
- * activities or requests.
- * </p>
- *
- * <p>Design choices for how the client makes a request include:
- * <ul>
- *     <li>Request URL</li>
- *     <li>HTTP verb for request (GET, POST, PUT, DELETE and so on)</li>
- *     <li><em>Optional:</em> Inclusion of request parameters</li>
- * </ul>
- * </p>
  *
  * <p>Design choices for generating a response to a request include:
  * <ul>
@@ -49,16 +34,16 @@ public class WebServer {
   // Constants
   //
 
-  /**
-   * The URL pattern to request the Home page.
-   */
   public static final String HOME_URL = "/";
+  public static final String SIGNIN_URL = "/signin";
 
   //
   // Attributes
   //
 
   private final TemplateEngine templateEngine;
+  private final GameManager gameManager;
+  private final PlayerLobby playerLobby;
   private final Gson gson;
 
   //
@@ -76,12 +61,19 @@ public class WebServer {
    * @throws NullPointerException
    *    If any of the parameters are {@code null}.
    */
-  public WebServer(final TemplateEngine templateEngine, final Gson gson) {
-    // validation
+  public WebServer(final TemplateEngine templateEngine,
+                   final GameManager gameManager,
+                   final PlayerLobby playerLobby,
+                   final Gson gson) {
+
     Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+    Objects.requireNonNull(gameManager, "gameManager must not be null");
+    Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     Objects.requireNonNull(gson, "gson must not be null");
-    //
+
     this.templateEngine = templateEngine;
+    this.gameManager = gameManager;
+    this.playerLobby = playerLobby;
     this.gson = gson;
   }
 
@@ -137,9 +129,11 @@ public class WebServer {
     //// code clean; using small classes.
 
     // Shows the Checkers game Home page.
-    get(HOME_URL, new GetHomeRoute(templateEngine));
+    get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby));
 
-    //
+    get(SIGNIN_URL, new GetSignInRoute(templateEngine));
+    post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
+
     LOG.config("WebServer is initialized.");
   }
 

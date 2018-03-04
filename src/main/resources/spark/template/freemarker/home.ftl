@@ -11,11 +11,34 @@
     <h1>Web Checkers</h1>
     
     <div class="navigation">
-      <a href="/">my home</a>
+        <a href="/">home</a>
     </div>
     
     <div class="body">
-      <p>Welcome to the world of online Checkers.</p>
+        <#if currentPlayer??>
+            <p>Welcome, ${currentPlayer.name}.</p>
+
+            <h2>Online Players</h2>
+
+            <ul>
+            <#list activePlayers?keys as key>
+                <li>${activePlayers[key].getName()}</li>
+            </#list>
+            </ul>
+        <#else>
+            <p>Welcome to the world of online Checkers.</p>
+        </#if>
+
+        <#if activePlayerCount??>
+        <p>There are currently ${activePlayerCount} active players on the server.</p>
+        </#if>
+
+        <#if ! currentPlayer??>
+        <div class="signin">
+            <button class="sign_btn" onclick="window.location.href='signin'" type="button" >Sign-in to play a game!</button>
+        </div>
+        </#if>
+
     </div>
 
     <h2>Players</h2>
