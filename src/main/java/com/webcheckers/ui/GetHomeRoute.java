@@ -59,13 +59,13 @@ public class GetHomeRoute implements Route {
 
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "Welcome!");
-
-
         if (request.session().attribute("Player") != null) {
             final Player currentPlayer = request.session().attribute("Player");
             vm.put("currentPlayer", currentPlayer);
 
             vm.put("activePlayers", playerLobby.getActivePlayers());
+
+            vm.put("gameRoute", "/gameroute");
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
         }

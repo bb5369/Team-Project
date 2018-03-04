@@ -25,7 +25,7 @@
                 <#if activePlayers[key].name != currentPlayer.name>
                     <li>
                     <!-- TODO: I really feel that this shouldn't be a function of the home route -->
-                    <li><a href="/?opponent=${activePlayers[key].name?url('ISO-8859-1')}">${activePlayers[key].name}</a></li>
+                    <li><a href= ${gameRoute}>${activePlayers[key].name}</a></li>
                     </li>
                 </#if>
             </#list>
