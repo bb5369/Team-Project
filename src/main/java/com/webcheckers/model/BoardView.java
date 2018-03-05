@@ -9,9 +9,10 @@ import java.util.NoSuchElementException;
  */
 public class BoardView implements Iterable{
 
-    private Row rows[] = new Row[8];
+    private Row[] rows;
 
     public BoardView(){
+        rows = new Row[8];
     }
 
     @Override

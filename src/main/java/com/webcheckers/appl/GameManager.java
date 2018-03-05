@@ -36,9 +36,18 @@ public class GameManager {
 	}
 
 	public CheckersGame getActiveGame(Player player) {
-		// TODO: write this
-		return new CheckersGame(player, player);
+		CheckersGame aGame = null;
+		for(CheckersGame game: gameList)
+		{
+			if(playerPlayingThisGame(player, game))
+			{
+				aGame = game;
+				break;
+			}
+		}
+		return aGame;
 	}
+
 
 	public CheckersGame getNewGame(Player playerRed, Player playerWhite) {
 		final CheckersGame newGame = new CheckersGame(playerRed, playerWhite);
