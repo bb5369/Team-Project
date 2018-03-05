@@ -1,7 +1,7 @@
 package com.webcheckers.model;
 
 public class Message {
-    private enum type {info, error}
+    private enum type {INFO, ERROR}
     public final type type;
     public final String message;
 
