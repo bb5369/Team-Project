@@ -62,10 +62,10 @@ public class BoardView implements Iterable{
         @Override
         public Row next() {
             if (!hasNext()) {
-                System.out.println("**************************************Test: something must be wrong with the logic here");
+                //System.out.println("**************************************Test: something must be wrong with the logic here");
 
             }
-            System.out.println("**************current value: " +current);
+           // System.out.println("**************current value: " +current);
             return rows[current++];
         }
     }
