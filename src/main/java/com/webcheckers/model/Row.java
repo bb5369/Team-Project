@@ -53,6 +53,14 @@ public class Row implements Iterable{
         this.index = index;
     }
 
+    public Row getReverseRow(int index){
+        Row r = new Row(index);
+        for(int x = 0; x < 8; x++){
+            r.spaces[x] = spaces[7-x];
+        }
+        return r;
+    }
+
     /**
      * getIndex method
      * This is getter for index
