@@ -69,7 +69,7 @@ public class GetGameRoute implements Route{
                 // check to see if either of us are in a game
                 vm.put("title", WebServer.GAME_URL);
                 vm.put("currentPlayer", game.getPlayerColor(currentPlayer));
-                vm.put("viewMode", WebServer.GAME_URL);
+                vm.put("viewMode", "PLAY");
                 vm.put("redPlayer", redPlayer);
                 vm.put("whitePlayer",whitePlayer);
                 vm.put("activeColor", Piece.color.RED);
