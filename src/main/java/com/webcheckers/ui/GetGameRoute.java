@@ -49,12 +49,10 @@ public class GetGameRoute implements Route{
         if (request.session().attribute("Player") != null) {
             final Player currentPlayer = request.session().attribute("Player");
             if(gameManager.isPlayerInGame(currentPlayer)){
-                final String redPlayerName = request.queryParams("redPlayer");
-                final String whitePlayerName = request.queryParams("whitePlayer");
                 //System.out.println("redPlayer: " + redPlayerName + " whitePlayer: " + whitePlayerName);
 
                 // make sure we have an ?opponent (This should never happen
-                if (redPlayerName == null) {
+                if (currentPlayer.getName() == null) {
                     // TODO: indicate to user why this happened
                     response.redirect(WebServer.HOME_URL);
                 }
