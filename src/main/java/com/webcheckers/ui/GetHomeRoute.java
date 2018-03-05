@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 
 import spark.ModelAndView;
@@ -58,7 +59,9 @@ public class GetHomeRoute implements Route {
         LOG.finer("GetHomeRoute is invoked.");
 
         Map<String, Object> vm = new HashMap<>();
+
         vm.put("title", "Welcome!");
+
         if (request.session().attribute("Player") != null) {
             final Player currentPlayer = request.session().attribute("Player");
             vm.put("currentPlayer", currentPlayer);
@@ -68,6 +71,12 @@ public class GetHomeRoute implements Route {
             vm.put("gameRoute", "/gameroute");
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
+        }
+
+        if (request.session().attribute("message") != null) {
+            final Message messageToRender = request.session().attribute("message");
+            request.session().removeAttribute("message");
+            vm.put("message", messageToRender);
         }
 
         return templateEngine.render(new ModelAndView(vm , "home.ftl"));

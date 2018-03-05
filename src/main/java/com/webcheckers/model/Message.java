@@ -1,11 +1,11 @@
 package com.webcheckers.model;
 
+
 public class Message {
-    private enum type {info, error}
-    public final type type;
+    public final MessageType type;
     public final String message;
 
-    public Message(String msg, type type)
+    public Message(String msg, MessageType type)
     {
         message = msg;
         this.type = type;
@@ -16,7 +16,7 @@ public class Message {
         return message;
     }
 
-    public type getType()
+    public MessageType getType()
     {
         return type;
     }

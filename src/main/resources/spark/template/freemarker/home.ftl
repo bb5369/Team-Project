@@ -20,6 +20,13 @@
 
             <h2>Online Players</h2>
 
+            <#if message??>
+            <div id="message" class="${message.type}">${message.text}</div>
+            <#else>
+            <div id="message" class="info" style="display:none">
+            </div>
+            </#if>
+
             <ul>
             <#list activePlayers?keys as key>
             <#if activePlayers[key].name != currentPlayer.name>

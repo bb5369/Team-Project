@@ -60,6 +60,11 @@ public class PlayerLobby {
 		return newPlayer;
 	}
 
+	public Player getPlayer(String name) {
+		// TODO: throw exception for nonexistant player
+		return activePlayers.get(name);
+	}
+
 	// Private methods
 
 	/**
