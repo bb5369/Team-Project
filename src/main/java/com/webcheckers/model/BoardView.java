@@ -5,12 +5,18 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * @author Team whatever
+ * <p>Title: BoardView class</p>
+ * <p>Description: This class represents a checkers board</p></p>
  */
 public class BoardView implements Iterable{
 
+    //instance variables
     private Row[] rows;
 
+    /**
+     * default constructor
+     * This initializes each row in the rows array
+     */
     public BoardView(){
         rows = new Row[8];
         for(int i = 0; i < rows.length; i++)
@@ -24,6 +30,10 @@ public class BoardView implements Iterable{
         return new RowIterator(rows);
     }
 
+    /**
+     * <p>Title: RowIterator</p>
+     * <p>Description: This is implementation of Row iterator</p>
+     */
     class RowIterator implements Iterator<Row> {
 
         private Row rows[] = new Row[8];

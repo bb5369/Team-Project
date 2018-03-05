@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public class Player {
 
-	//instance variables
+	//instance variable
 	public final String name;
 
 	/**

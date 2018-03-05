@@ -10,9 +10,13 @@ import java.util.HashMap;
  */
 public class PlayerLobby {
 
-	// Attributes
+	// instance variable
 	private HashMap<String, Player> activePlayers;
 
+	/**
+	 * default constructor
+	 * This initializes the activePlayers HashMap on instantiation
+	 */
 	public PlayerLobby() {
 		activePlayers = new HashMap<String, Player>();
 	}
@@ -21,7 +25,7 @@ public class PlayerLobby {
 	/**
 	 * getActivePlayers method
 	 * This may be an interim method.
-	 * @return Hashmap containing all the active playes
+	 * @return Hashmap containing all the active players
 	 */
 	public HashMap<String, Player> getActivePlayers() {
 		return activePlayers;
@@ -60,15 +64,16 @@ public class PlayerLobby {
 		return newPlayer;
 	}
 
+	/**
+	 * getPlayer method
+	 * This method returns a player of
+	 * @param name
+	 * @return
+	 */
 	public Player getPlayer(String name) {
-//		if (activePlayers.containsKey(name)) {
 			return activePlayers.get(name);
-//		} else {
-//			throw new PlayerLobbyException("There was no player found by that name.");
-//		}
 	}
 
-	// Private methods
 
 	/**
 	 * Validates alphanumeric property of a candidate name for a player

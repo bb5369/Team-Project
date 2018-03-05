@@ -5,13 +5,21 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * @author Team whatever
+ * <p>Title: Row class</p>
+ * <p>Description: This class represents a row on a checkers board</p>
  */
 public class Row implements Iterable{
 
+    //instance variable
     private int index;
     private Space[] spaces;
 
+    /**
+     * parameterized constructor
+     * This used to initialize the Row and each space in
+     * a row by assigning a index
+     * @param index space intex
+     */
     public Row(int index){
         spaces = new Space[8];
         for(int i = 0; i < spaces.length; i++)
@@ -21,6 +29,11 @@ public class Row implements Iterable{
         this.index = index;
     }
 
+    /**
+     * getIndex method
+     * This is getter for index
+     * @return - int represent the index
+     */
     public int getIndex(){
         return this.index;
     }
@@ -29,6 +42,7 @@ public class Row implements Iterable{
     public Iterator iterator() {
         return new SpaceIterator(spaces);
     }
+
 
     class SpaceIterator implements Iterator<Space> {
         private Space spaces[];
