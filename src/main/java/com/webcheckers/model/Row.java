@@ -79,7 +79,7 @@ public class Row implements Iterable{
 
         @Override
         public boolean hasNext() {
-            if(current+1 < spaces.length)
+            if(current < spaces.length)
                 return true;
             return false;
         }
