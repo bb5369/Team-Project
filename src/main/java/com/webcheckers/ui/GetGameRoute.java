@@ -40,6 +40,7 @@ public class GetGameRoute implements Route{
         this.gameManager = gameManager;
         LOG.config("GetHomeRoute is initialized.");
     }
+    
     @Override
     public Object handle(Request request, Response response){
         LOG.finer("GetGameRoute is invoked");

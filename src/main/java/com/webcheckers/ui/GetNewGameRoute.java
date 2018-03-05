@@ -74,7 +74,7 @@ public class GetNewGameRoute implements Route {
 		}
 		else
         {
-            CheckersGame newGame = gameManager.getNewGame(redPlayer,whitePlayer);
+            CheckersGame newGame = gameManager.getNewGame(redPlayer, whitePlayer);
             Map<String, Object> vm = new HashMap<>();
 
             vm.put("title", WebServer.NEWGAME_URL);
