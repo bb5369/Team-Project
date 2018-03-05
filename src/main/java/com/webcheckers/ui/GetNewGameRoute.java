@@ -8,14 +8,12 @@ import com.webcheckers.model.MessageType;
 import com.webcheckers.model.Player;
 
 import spark.*;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class GetNewGameRoute implements Route {
 
 	private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
+	private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
 
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
@@ -37,6 +35,7 @@ public class GetNewGameRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+    	// TODO: refactor this whole damn thing
 
         final String opponentPlayerName = request.queryParams("opponent");
 
@@ -55,6 +54,11 @@ public class GetNewGameRoute implements Route {
         // get opponent player model
 		final Player opponentPlayer = playerLobby.getPlayer(opponentPlayerName);
 
+        if (opponentPlayer == null) {
+			request.session().attribute("message", new Message(PLAYER_NOT_EXIST_MESSAGE, MessageType.ERROR));
+			response.redirect(WebServer.HOME_URL);
+		}
+
         // get my player model
 		final Player sessionPlayer = request.session().attribute("Player");
 
@@ -66,10 +70,8 @@ public class GetNewGameRoute implements Route {
 
         // get a new game with our models
 
+		// Direct player at /game
 
-
-        // profit!?!? - store
-
-        return null; // don't do this
+        return null;
     }
 }

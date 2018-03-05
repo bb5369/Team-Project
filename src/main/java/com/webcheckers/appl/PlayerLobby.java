@@ -61,8 +61,11 @@ public class PlayerLobby {
 	}
 
 	public Player getPlayer(String name) {
-		// TODO: throw exception for nonexistant player
-		return activePlayers.get(name);
+//		if (activePlayers.containsKey(name)) {
+			return activePlayers.get(name);
+//		} else {
+//			throw new PlayerLobbyException("There was no player found by that name.");
+//		}
 	}
 
 	// Private methods

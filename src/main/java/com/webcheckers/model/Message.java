@@ -2,22 +2,27 @@ package com.webcheckers.model;
 
 
 public class Message {
-    public final MessageType type;
-    public final String message;
+    private final MessageType type;
+    private final String text;
 
-    public Message(String msg, MessageType type)
+    public Message(String text, MessageType type)
     {
-        message = msg;
+        this.text = text;
         this.type = type;
     }
 
-    public String getMessage()
+    public String getText()
     {
-        return message;
+        return text;
     }
 
-    public MessageType getType()
+    public String getType()
     {
-        return type;
+        // Todo: this is unclean, so it should be fixed. Css selectors are case sensitive
+        return this.getTypeStringLower();
+    }
+
+    private String getTypeStringLower() {
+        return type.name().toLowerCase();
     }
 }

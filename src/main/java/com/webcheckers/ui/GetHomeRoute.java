@@ -68,7 +68,7 @@ public class GetHomeRoute implements Route {
 
             vm.put("activePlayers", playerLobby.getActivePlayers());
 
-            vm.put("gameRoute", "/gameroute");
+            vm.put("gameRoute", WebServer.NEWGAME_URL);
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
         }
