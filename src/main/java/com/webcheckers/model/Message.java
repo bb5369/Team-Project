@@ -1,15 +1,23 @@
 package com.webcheckers.model;
 
 public class Message {
-    private String message;
+    private enum type {info, error}
+    public final type type;
+    public final String message;
 
-    public Message(String msg)
+    public Message(String msg, type type)
     {
         message = msg;
+        this.type = type;
     }
 
     public String getMessage()
     {
-        return message.toString();
+        return message;
+    }
+
+    public type getType()
+    {
+        return type;
     }
 }
