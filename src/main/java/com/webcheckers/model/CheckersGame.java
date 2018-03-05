@@ -19,13 +19,24 @@ public class CheckersGame {
 		this.playerWhite = playerWhite;
 		this.board = new BoardView();
 	}
-
 	public Player getPlayerRed() {
 		return playerRed;
 	}
 
 	public Player getPlayerWhite() {
 		return playerWhite;
+	}
+
+	public Player getPlayerColor(Player currentPlayer){
+		if(currentPlayer.equals(playerRed)){
+			return playerRed;
+		}
+		else if (currentPlayer.equals(playerWhite)){
+			return currentPlayer;
+		}
+		else{
+			return null;
+		}
 	}
 
 	public BoardView getBoard() {

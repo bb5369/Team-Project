@@ -77,9 +77,9 @@ public class GetNewGameRoute implements Route {
             CheckersGame newGame = gameManager.getNewGame(redPlayer,whitePlayer);
             Map<String, Object> vm = new HashMap<>();
 
-            vm.put("title", WebServer.NEWGAME_URL);
+            vm.put("title", WebServer.GAME_URL);
             vm.put("currentPlayer", whitePlayer);
-            vm.put("viewMode", WebServer.NEWGAME_URL);
+            vm.put("viewMode", WebServer.GAME_URL);
             vm.put("redPlayer", redPlayer);
             vm.put("whitePlayer",whitePlayer);
             vm.put("activeColor", Piece.color.RED);
