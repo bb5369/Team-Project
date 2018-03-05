@@ -74,18 +74,10 @@ public class GetNewGameRoute implements Route {
 		}
 		else
         {
-            CheckersGame newGame = gameManager.getNewGame(redPlayer, whitePlayer);
-            Map<String, Object> vm = new HashMap<>();
+            gameManager.getNewGame(redPlayer, whitePlayer);
+            response.redirect(WebServer.GAME_URL);
 
-            vm.put("title", WebServer.NEWGAME_URL);
-            vm.put("currentPlayer", whitePlayer);
-            vm.put("viewMode", WebServer.NEWGAME_URL);
-            vm.put("redPlayer", redPlayer);
-            vm.put("whitePlayer",whitePlayer);
-            vm.put("activeColor", Piece.color.RED);
-            vm.put("board", newGame.getBoard());
-
-            return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+			return null;
         }
 
         // get a new game with our models
