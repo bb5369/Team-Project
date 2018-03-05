@@ -20,7 +20,7 @@ public class GetGameRoute implements Route{
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
 
-    private final String VIEW_NAME = "home.ftl";
+    private final String VIEW_NAME = "game.ftl";
 
     /**
      * Create the Spark Route (UI controller) for the
@@ -66,16 +66,16 @@ public class GetGameRoute implements Route{
 //		final Player sessionPlayer = request.session().attribute("Player");
 
                 // check to see if either of us are in a game
-                    vm.put("title", WebServer.GAME_URL);
-                    vm.put("currentPlayer", game.getPlayerColor(currentPlayer));
-                    vm.put("viewMode", WebServer.GAME_URL);
-                    vm.put("redPlayer", redPlayer);
-                    vm.put("whitePlayer",whitePlayer);
-                    vm.put("activeColor", Piece.color.RED);
-                    vm.put("board", game.getBoard());
+                vm.put("title", WebServer.GAME_URL);
+                vm.put("currentPlayer", game.getPlayerColor(currentPlayer));
+                vm.put("viewMode", WebServer.GAME_URL);
+                vm.put("redPlayer", redPlayer);
+                vm.put("whitePlayer",whitePlayer);
+                vm.put("activeColor", Piece.color.RED);
+                vm.put("board", game.getBoard());
 
-                    return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
-                }
+                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+            }
 
                 // get a new game with our models
 
