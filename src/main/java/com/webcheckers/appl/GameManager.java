@@ -12,15 +12,20 @@ public class GameManager {
 	//A list containing each active game
 	private ArrayList<CheckersGame> gameList;
 
+	public GameManager()
+	{
+		gameList = new ArrayList<>();
+	}
+
 	/**
 	 * Determines whether or not the player is in a game
 	 * @param player: player that the method checks if in game
 	 * @return: true if player is ingame, false if not
 	 */
 	public boolean isPlayerInGame(Player player){
-		if (player.getName() == "iantesting") return true;
+//		if (player.getName() == "iamtesting") return true;
 
-		if (gameList == null) return false;
+		if (gameList == null || player == null ) return false;
 
 		for (CheckersGame game : gameList) {
 			if(playerPlayingThisGame(player, game)){

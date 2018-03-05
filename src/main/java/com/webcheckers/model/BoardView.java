@@ -13,6 +13,10 @@ public class BoardView implements Iterable{
 
     public BoardView(){
         rows = new Row[8];
+        for(int i = 0; i < rows.length; i++)
+        {
+            rows[i] = new Row(i);
+        }
     }
 
     @Override
@@ -40,8 +44,10 @@ public class BoardView implements Iterable{
         @Override
         public Row next() {
             if (!hasNext()) {
-                throw new NoSuchElementException();
+                System.out.println("**************************************Test: something must be wrong with the logic here");
+
             }
+            System.out.println("**************current value: " +current);
             return rows[current++];
         }
     }

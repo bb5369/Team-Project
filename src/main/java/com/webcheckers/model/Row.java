@@ -10,9 +10,14 @@ import java.util.NoSuchElementException;
 public class Row implements Iterable{
 
     private int index;
-    private Space spaces[] = new Space[8];
+    private Space[] spaces;
 
     public Row(int index){
+        spaces = new Space[8];
+        for(int i = 0; i < spaces.length; i++)
+        {
+            spaces[i] = new Space(i);
+        }
         this.index = index;
     }
 
@@ -26,7 +31,7 @@ public class Row implements Iterable{
     }
 
     class SpaceIterator implements Iterator<Space> {
-        private Space spaces[] = new Space[8];
+        private Space spaces[];
 
         public SpaceIterator(Space spaces[]){
             this.spaces = spaces;
@@ -36,7 +41,7 @@ public class Row implements Iterable{
 
         @Override
         public boolean hasNext() {
-            if(current < spaces.length)
+            if(current+1 < spaces.length)
                 return true;
             return false;
         }

@@ -4,6 +4,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Message;
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 
 import spark.*;
@@ -73,10 +74,16 @@ public class GetNewGameRoute implements Route {
 		}
 		else
         {
-            gameManager.getNewGame(redPlayer,whitePlayer);
+            CheckersGame newGame = gameManager.getNewGame(redPlayer,whitePlayer);
             Map<String, Object> vm = new HashMap<>();
 
             vm.put("title", WebServer.NEWGAME_URL);
+            vm.put("currentPlayer", whitePlayer);
+            vm.put("viewMode", WebServer.NEWGAME_URL);
+            vm.put("redPlayer", redPlayer);
+            vm.put("whitePlayer",whitePlayer);
+            vm.put("activeColor", Piece.color.RED);
+            vm.put("board", newGame.getBoard());
 
             return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
         }

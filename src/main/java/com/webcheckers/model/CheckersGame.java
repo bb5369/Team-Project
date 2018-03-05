@@ -5,6 +5,7 @@ public class CheckersGame {
 	//instance variables
 	private final Player playerRed;
 	private final Player playerWhite;
+	private final BoardView board;
 
 	/**
 	 * Parameterized constructor
@@ -16,6 +17,7 @@ public class CheckersGame {
 	public CheckersGame(Player playerRed, Player playerWhite) {
 		this.playerRed = playerRed;
 		this.playerWhite = playerWhite;
+		this.board = new BoardView();
 	}
 
 	public Player getPlayerRed() {
@@ -24,5 +26,9 @@ public class CheckersGame {
 
 	public Player getPlayerWhite() {
 		return playerWhite;
+	}
+
+	public BoardView getBoard() {
+		return board;
 	}
 }
