@@ -2,9 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.appl.PlayerLobbyException;
 import com.webcheckers.model.Message;
-import com.webcheckers.model.MessageType;
 import com.webcheckers.model.Player;
 
 import spark.*;
@@ -55,7 +53,7 @@ public class GetNewGameRoute implements Route {
 		final Player opponentPlayer = playerLobby.getPlayer(opponentPlayerName);
 
         if (opponentPlayer == null) {
-			request.session().attribute("message", new Message(PLAYER_NOT_EXIST_MESSAGE, MessageType.ERROR));
+			request.session().attribute("message", new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error));
 			response.redirect(WebServer.HOME_URL);
 		}
 
@@ -64,7 +62,7 @@ public class GetNewGameRoute implements Route {
 
         // check to see if either of us are in a game
 		if (gameManager.isPlayerInGame(opponentPlayer) || gameManager.isPlayerInGame(sessionPlayer)) {
-			request.session().attribute("message", new Message(PLAYER_IN_GAME_MESSAGE, MessageType.ERROR));
+			request.session().attribute("message", new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error));
 			response.redirect(WebServer.HOME_URL);
 		}
 

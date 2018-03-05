@@ -2,6 +2,7 @@ package com.webcheckers.model;
 
 
 public class Message {
+    public enum MessageType{info, error}
 
     private MessageType type;
     private String text;
@@ -17,13 +18,8 @@ public class Message {
         return text;
     }
 
-    public String getType()
+    public MessageType getType()
     {
-        // Todo: this is unclean, so it should be fixed. Css selectors are case sensitive
-        return this.getTypeStringLower();
-    }
-
-    private String getTypeStringLower() {
-        return type.name().toLowerCase();
+        return type;
     }
 }

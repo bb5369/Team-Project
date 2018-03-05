@@ -23,11 +23,16 @@ public class GameManager {
 		if (gameList == null) return false;
 
 		for (CheckersGame game : gameList) {
-			if(player.equals(game.getPlayerRed()) || player.equals(game.getPlayerWhite())){
+			if(playerPlayingThisGame(player, game)){
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private boolean playerPlayingThisGame(Player player, CheckersGame game)
+	{
+		return player.equals(game.getPlayerRed()) || player.equals(game.getPlayerWhite());
 	}
 
 	public CheckersGame getActiveGame(Player player) {
