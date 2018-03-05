@@ -25,6 +25,14 @@ public class BoardView implements Iterable{
         }
     }
 
+    public BoardView getReverseBoard(){
+        BoardView b = new BoardView();
+        for(int x = 0; x < 8; x++){
+            b.rows[x] = rows[7-x];
+        }
+        return b;
+    }
+
     @Override
     public Iterator iterator() {
         return new RowIterator(rows);

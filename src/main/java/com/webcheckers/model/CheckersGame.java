@@ -42,4 +42,8 @@ public class CheckersGame {
 	public BoardView getBoard() {
 		return board;
 	}
+
+//	public BoardView getReverseBoard(){
+//		return board
+//	}
 }
