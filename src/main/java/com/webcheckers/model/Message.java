@@ -2,14 +2,9 @@ package com.webcheckers.model;
 
 
 public class Message {
-<<<<<<< HEAD
-    private enum type {INFO, ERROR}
-    public final type type;
-    public final String message;
-=======
-    private final MessageType type;
-    private final String text;
->>>>>>> c2d793dc14c78dfa001d854f93459ce648301b51
+
+    private MessageType type;
+    private String text;
 
     public Message(String text, MessageType type)
     {
