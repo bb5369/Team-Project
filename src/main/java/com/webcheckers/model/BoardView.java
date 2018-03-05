@@ -1,6 +1,6 @@
-package main.java.com.webcheckers.model;
+package com.webcheckers.model;
 
-import main.java.com.webcheckers.appl.RowIterator;
+import com.webcheckers.appl.RowIterator;
 
 import java.util.Iterator;
 

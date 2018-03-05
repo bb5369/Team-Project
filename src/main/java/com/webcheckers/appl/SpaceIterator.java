@@ -1,6 +1,6 @@
 package com.webcheckers.appl;
 
-import java.com.webcheckers.model.Space;
+import com.webcheckers.model.Space;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

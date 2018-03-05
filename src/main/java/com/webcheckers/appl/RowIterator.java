@@ -1,6 +1,6 @@
 package com.webcheckers.appl;
 
-import main.java.com.webcheckers.model.Row;
+import com.webcheckers.model.Row;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
