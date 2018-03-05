@@ -7,7 +7,7 @@ package com.webcheckers.model;
 public class  Piece {
 
     //enums
-    private enum type {SINGLE, KING}
+    public enum type {SINGLE, KING}
     public enum color {RED, WHITE}
 
     //instance

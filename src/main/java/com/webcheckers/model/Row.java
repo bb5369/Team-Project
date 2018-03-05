@@ -22,10 +22,34 @@ public class Row implements Iterable{
      */
     public Row(int index){
         spaces = new Space[8];
-        for(int i = 0; i < spaces.length; i++)
-        {
-            spaces[i] = new Space(i);
+        boolean flipFlop = false;
+//        Piece.color whiteColor = Piece.color.WHITE;
+        if(index%2 ==0){
+            flipFlop = true;
         }
+            for(int i = 0; i < spaces.length; i++)
+            {
+                if(index != 3 && index != 4 )
+                {
+                    if(flipFlop) {
+                        spaces[i] = new Space(i);
+                    }
+                    else
+                    {
+                        if(index<4)
+                            spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
+                        else
+                            spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
+                    }
+                }
+                else
+                {
+                    spaces[i] = new Space(i);
+//                    color = Piece.color.WHITE;
+                }
+                flipFlop = !flipFlop;
+            }
+
         this.index = index;
     }
 

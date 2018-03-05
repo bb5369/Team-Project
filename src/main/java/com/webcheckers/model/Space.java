@@ -16,7 +16,7 @@ public class Space {
      * This used to initialize a space by assigning it a index
      * @param cellIdx - cells index
      */
-    public Space(int cellIdx){
+    public Space(int cellIdx){ // This is bad constructor to use
         this.cellIdx = cellIdx;
         this.currPiece = null;
     }
