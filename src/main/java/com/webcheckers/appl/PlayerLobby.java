@@ -60,6 +60,14 @@ public class PlayerLobby {
 		return newPlayer;
 	}
 
+	public Player getPlayer(String name) {
+//		if (activePlayers.containsKey(name)) {
+			return activePlayers.get(name);
+//		} else {
+//			throw new PlayerLobbyException("There was no player found by that name.");
+//		}
+	}
+
 	// Private methods
 
 	/**

@@ -1,4 +1,4 @@
-package main.java.com.webcheckers.model;
+package com.webcheckers.model;
 
 /**
  * @author Alexis Halbur
