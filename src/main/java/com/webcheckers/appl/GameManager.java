@@ -55,18 +55,23 @@ public class GameManager {
 	/**
 	 * getActiveGame method
 	 * This is used to fetch the game that player is currently in
-	 * @param player - the player
+	 * If there isn't a game, it will make one
+	 * @param player1 - the first player
+	 * @param player2 - the second player
 	 * @return - CheckerGame reference to the game that the player is in
 	 */
-	public CheckersGame getActiveGame(Player player) {
+	public CheckersGame getActiveGame(Player player1, Player player2) {
 		CheckersGame aGame = null;
 		for(CheckersGame game: gameList)
 		{
-			if(playerPlayingThisGame(player, game))
+			if(playerPlayingThisGame(player1, game))
 			{
 				aGame = game;
 				break;
 			}
+		}
+		if(aGame == null){
+			aGame = getNewGame(player1, player2);
 		}
 		return aGame;
 	}

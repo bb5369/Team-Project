@@ -72,7 +72,7 @@ public class GetHomeRoute implements Route {
 
             vm.put("activePlayers", playerLobby.getActivePlayers());
 
-            vm.put("gameRoute", WebServer.NEWGAME_URL);
+            vm.put("gameRoute", WebServer.GAME_URL);
             if(gameManager.isPlayerInGame(currentPlayer)){
                 response.redirect(WebServer.GAME_URL);
             }

@@ -22,6 +22,9 @@ public class GetGameRoute implements Route{
 
     private final String VIEW_NAME = "game.ftl";
 
+    private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
+    private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
+
     /**
      * Create the Spark Route (UI controller) for the
      * {@code GET /} HTTP request.
@@ -57,7 +60,7 @@ public class GetGameRoute implements Route{
                     // TODO: indicate to user why this happened
                     response.redirect(WebServer.HOME_URL);
                 }
-                final CheckersGame game = gameManager.getActiveGame(currentPlayer);
+                final CheckersGame game = gameManager.getActiveGame(currentPlayer, new Player(""));
                 // get opponent player model
                 final Player redPlayer = game.getPlayerRed();
                 final Player whitePlayer = game.getPlayerWhite();
@@ -80,11 +83,46 @@ public class GetGameRoute implements Route{
                 }
                 return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
             }
+            else{
+                final String redPlayerName = request.queryParams("redPlayer");
+                final String whitePlayerName = request.queryParams("whitePlayer");
+                if (redPlayerName == null) {
+                    // TODO: indicate to user why this happened
+                    response.redirect(WebServer.HOME_URL);
+                }
 
+                // get opponent player model
+                final Player redPlayer = playerLobby.getPlayer(redPlayerName);
+                final Player whitePlayer = playerLobby.getPlayer(whitePlayerName);
+
+                if (redPlayer == null)//this should never happen
+                {
+                    request.session().attribute("message", new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error));
+                    response.redirect(WebServer.HOME_URL);
+                }
+
+//        // get my player model
+//		final Player sessionPlayer = request.session().attribute("Player");
+
+                // check to see if either of us are in a game
+                if (gameManager.isPlayerInGame(redPlayer) || gameManager.isPlayerInGame(whitePlayer))
+                {
+                    request.session().attribute("message", new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error));
+                    response.redirect(WebServer.HOME_URL);
+                }
+                else
+                {
+                    gameManager.getNewGame(redPlayer, whitePlayer);
+                    response.redirect(WebServer.GAME_URL);
+
+                    return null;
+                }
+            }
                 // get a new game with our models
 
                 // Direct player at /game
             }
+
             return null;
     }
 }
