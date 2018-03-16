@@ -9,8 +9,9 @@ import com.webcheckers.model.Player;
  */
 public class GameManager {
 
-	//A list active players
+	// A list of all active games
 	private ArrayList<CheckersGame> gameList;
+
 
 	/**
 	 * default construct
@@ -21,60 +22,75 @@ public class GameManager {
 		gameList = new ArrayList<>();
 	}
 
+
 	/**
-	 * isPlayerInGame
-	 * Determines whether or not the player is in a game
+	 * isPlayerInAGame
+	 * Determines whether or not a given player is in a game
 	 * @param player: player that the method checks if in game
 	 * @return: true if player is ingame, false if not
 	 */
-	public boolean isPlayerInGame(Player player){
-//		if (player.getName() == "iamtesting") return true;
+	public boolean isPlayerInAGame(Player player){
 
 		if (gameList == null || player == null ) return false;
 
 		for (CheckersGame game : gameList) {
-			if(playerPlayingThisGame(player, game)){
+			if(isPlayerInThisGame(game, player)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+
 	/**
-	 * playerPlayingThisGame
+	 * isPlayerInThisGame
 	 * This is a private method that checks if the player is in a game
-	 * @param player - player to check for
 	 * @param game - game to checkin
+	 * @param player - player to check for
 	 * @return true if the player is in the game
 	 */
-	private boolean playerPlayingThisGame(Player player, CheckersGame game)
+	private boolean isPlayerInThisGame(CheckersGame game, Player player)
 	{
 		return player.equals(game.getPlayerRed()) || player.equals(game.getPlayerWhite());
 	}
 
+
 	/**
-	 * getActiveGame method
+	 * Get a game between two players - Existing or New game
 	 * This is used to fetch the game that player is currently in
 	 * If there isn't a game, it will make one
 	 * @param player1 - the first player
 	 * @param player2 - the second player
 	 * @return - CheckerGame reference to the game that the player is in
 	 */
-	public CheckersGame getActiveGame(Player player1, Player player2) {
+	public CheckersGame getGame(Player player1, Player player2) {
 		CheckersGame aGame = null;
-		for(CheckersGame game: gameList)
-		{
-			if(playerPlayingThisGame(player1, game))
-			{
-				aGame = game;
-				break;
+
+		for (CheckersGame game: gameList) {
+			if(isPlayerInThisGame(game, player1) && isPlayerInThisGame(game, player2)) {
+				return game;
 			}
 		}
-		if(aGame == null){
-			aGame = getNewGame(player1, player2);
-		}
-		return aGame;
+
+		return getNewGame(player1, player2);
 	}
+
+
+	/**
+	 * Get the game that a given player is currently in
+	 * @param currentPlayer
+	 * @return CheckersGame
+	 */
+	public CheckersGame getGame(Player currentPlayer) {
+		for (CheckersGame game: gameList) {
+			if (isPlayerInThisGame(game, currentPlayer)) {
+				return game;
+			}
+		}
+
+		return null;
+	}
+
 
 	/**
 	 * getNewGame method
@@ -85,6 +101,11 @@ public class GameManager {
 	 * @return reference to newly created CheckerGame game
 	 */
 	public CheckersGame getNewGame(Player playerRed, Player playerWhite) {
+
+		if (isPlayerInAGame(playerRed) || isPlayerInAGame(playerWhite)) {
+			return null;
+		}
+
 		final CheckersGame newGame = new CheckersGame(playerRed, playerWhite);
 		gameList.add(newGame);
 		return newGame;

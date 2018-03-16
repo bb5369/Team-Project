@@ -13,12 +13,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class GetGameRoute implements Route{
+public class GetGameRoute implements Route {
+
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
-    private final TemplateEngine templateEngine;
-    private final PlayerLobby playerLobby;
-    private final GameManager gameManager;
+    private final TemplateEngine    templateEngine;
+    private final PlayerLobby       playerLobby;
+    private final GameManager       gameManager;
+
+    private final String VIEW_TITLE = "Checkers Game";
 
     private final String VIEW_NAME = "game.ftl";
 
@@ -31,9 +34,12 @@ public class GetGameRoute implements Route{
      *
      * @param templateEngine
      *   the HTML template rendering engine
+	 * @param playerLobby
+     *   Player Lobby component
+     * @param gameManager
+     *   Game Manager component
      */
     public GetGameRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameManager gameManager) {
-        // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         Objects.requireNonNull(playerLobby, "gameManager must not be null");
@@ -41,90 +47,141 @@ public class GetGameRoute implements Route{
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
+
         LOG.config("GetHomeRoute is initialized.");
     }
-    
+
+
+    /**
+     * Spark Controller for rendering new and existing games
+     *
+     * @param request
+     * @param response
+     * @return Rendered template engine
+     */
     @Override
-    public Object handle(Request request, Response response){
+    public Object handle(Request request, Response response) {
+
         LOG.finer("GetGameRoute is invoked");
+
+		final Player currentPlayer = request.session().attribute("Player");
+
+		if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
+			// We are playing an existing game
+
+			return playGameWith(currentPlayer);
+
+        } else if (haveParam(request,"whitePlayer")) {
+			// We are setting up a new game
+
+			// NOTE: The player initiating the game will ALWAYS be the red player, therefore the opponent is white
+			final Player redPlayer = currentPlayer;
+			final Player whitePlayer = playerLobby.getPlayer(request.queryParams("whitePlayer"));
+
+			if (redPlayer.equals(whitePlayer)) {
+				redirectWithError(request, response, "You cannot play a game with yourself", WebServer.HOME_URL);
+			}
+
+			if (whitePlayer == null) {
+				redirectWithError(request, response, PLAYER_NOT_EXIST_MESSAGE, WebServer.HOME_URL);
+			}
+
+			if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer)) {
+				redirectWithError(request, response, PLAYER_IN_GAME_MESSAGE, WebServer.HOME_URL);
+			}
+
+			return playGameBetween(redPlayer, whitePlayer);
+		} else {
+			response.redirect(WebServer.HOME_URL);
+		}
+
+		// We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design
+		// is proposed.
+		LOG.warning("We fell through in GameRoute...no view available");
+		return templateEngine.render(new ModelAndView(new HashMap<String, Object>(), "home.ftl"));
+   }
+
+
+	/**
+	 * Helper function to determine if the given Spark request has a named parameter
+	 * @param request
+	 * @param paramName
+	 * @return true/false
+	 */
+	private boolean haveParam(Request request, String paramName) {
+		final String param = request.queryParams(paramName);
+
+		return param != null;
+	}
+
+	/**
+	 * Helper function used to redirect to a route and show the user an error
+	 * @param request
+	 * @param response
+	 * @param message
+	 * @param destination
+	 */
+	private void redirectWithError(Request request, Response response, String message, String destination) {
+		LOG.fine(String.format("Redirecting to %s with error [%s]", destination, message));
+
+		Message messageObj = new Message(message, Message.MessageType.error);
+		request.session().attribute("message", messageObj);
+		response.redirect(destination);
+	}
+
+	private Object playGameBetween(Player currentPlayer, Player opponentPlayer) {
+		LOG.fine(String.format("Playing game between [%s] and [%s]", currentPlayer.getName(), opponentPlayer.getName()));
+
+		final CheckersGame game = gameManager.getGame(currentPlayer, opponentPlayer);
+
+		return renderGame(game, currentPlayer);
+	}
+
+	/**
+	 * Given a player we will render the template for the player's current game
+	 * @param currentPlayer
+	 * @return Rendered template engine template game.ftl
+	 */
+	private Object playGameWith(Player currentPlayer) {
+		LOG.fine(String.format("Playing game with [%s]", currentPlayer.getName()));
+
+		final CheckersGame game = gameManager.getGame(currentPlayer);
+
+		return renderGame(game, currentPlayer);
+	}
+
+	/**
+	 * Render a given checkers game from the perspective of the session player
+	 * @param game
+	 * @param sessionPlayer
+	 * @return
+	 */
+	private Object renderGame(CheckersGame game, Player sessionPlayer) {
+		LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
+				game.getPlayerRed().getName(),
+				game.getPlayerWhite().getName(),
+				sessionPlayer.getName()));
 
         Map<String, Object> vm = new HashMap();
 
-        if (request.session().attribute("Player") != null) {
-            final Player currentPlayer = request.session().attribute("Player");
-            if(gameManager.isPlayerInGame(currentPlayer)){
-                //System.out.println("redPlayer: " + redPlayerName + " whitePlayer: " + whitePlayerName);
+		final Player redPlayer = game.getPlayerRed();
+		final Player whitePlayer = game.getPlayerWhite();
 
-                // make sure we have an ?opponent (This should never happen
-                if (currentPlayer.getName() == null) {
-                    // TODO: indicate to user why this happened
-                    response.redirect(WebServer.HOME_URL);
-                }
-                final CheckersGame game = gameManager.getActiveGame(currentPlayer, new Player(""));
-                // get opponent player model
-                final Player redPlayer = game.getPlayerRed();
-                final Player whitePlayer = game.getPlayerWhite();
+		vm.put("title", VIEW_TITLE);
+		vm.put("currentPlayer", sessionPlayer);
+		vm.put("viewMode", "PLAY");
+		vm.put("redPlayer", redPlayer);
+		vm.put("whitePlayer",whitePlayer);
+		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
+		if(sessionPlayer.equals(whitePlayer)) {
+			vm.put("board", game.getBoard());
+		} else {
+			vm.put("board", game.getBoard().getReverseBoard());
+		}
 
-//        // get my player model
-//		final Player sessionPlayer = request.session().attribute("Player");
+		return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
 
-                // check to see if either of us are in a game
-                vm.put("title", WebServer.GAME_URL);
-                vm.put("currentPlayer", game.getPlayerColor(currentPlayer));
-                vm.put("viewMode", "PLAY");
-                vm.put("redPlayer", redPlayer);
-                vm.put("whitePlayer",whitePlayer);
-                vm.put("activeColor", Piece.color.RED);
-                if(currentPlayer.equals(whitePlayer)) {
-                    vm.put("board", game.getBoard());
-                } else {
-                    vm.put("board", game.getBoard().getReverseBoard());
-                }
-                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
-            }
-            else{
-                final String redPlayerName = request.queryParams("redPlayer");
-                final String whitePlayerName = request.queryParams("whitePlayer");
-                if (redPlayerName == null) {
-                    // TODO: indicate to user why this happened
-                    response.redirect(WebServer.HOME_URL);
-                }
-
-                // get opponent player model
-                final Player redPlayer = playerLobby.getPlayer(redPlayerName);
-                final Player whitePlayer = playerLobby.getPlayer(whitePlayerName);
-
-                if (redPlayer == null)//this should never happen
-                {
-                    request.session().attribute("message", new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error));
-                    response.redirect(WebServer.HOME_URL);
-                }
-
-//        // get my player model
-//		final Player sessionPlayer = request.session().attribute("Player");
-
-                // check to see if either of us are in a game
-                if (gameManager.isPlayerInGame(redPlayer) || gameManager.isPlayerInGame(whitePlayer))
-                {
-                    request.session().attribute("message", new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error));
-                    response.redirect(WebServer.HOME_URL);
-                }
-                else
-                {
-                    gameManager.getNewGame(redPlayer, whitePlayer);
-                    response.redirect(WebServer.GAME_URL);
-
-                    return null;
-                }
-            }
-                // get a new game with our models
-
-                // Direct player at /game
-            }
-
-            return null;
-    }
+	}
 }
-
 

@@ -5,6 +5,7 @@ public class CheckersGame {
 	//instance variables
 	private final Player playerRed;
 	private final Player playerWhite;
+	private final Player playerActive;
 	private final BoardView board;
 
 	/**
@@ -17,6 +18,9 @@ public class CheckersGame {
 	public CheckersGame(Player playerRed, Player playerWhite) {
 		this.playerRed = playerRed;
 		this.playerWhite = playerWhite;
+
+		this.playerActive = this.playerRed;
+
 		this.board = new BoardView();
 	}
 	public Player getPlayerRed() {
@@ -27,12 +31,17 @@ public class CheckersGame {
 		return playerWhite;
 	}
 
-	public Player getPlayerColor(Player currentPlayer){
+	public Player getPlayerActive() {
+		return playerActive;
+	}
+
+	// TODO: fix this return?
+	public Piece.color getPlayerColor(Player currentPlayer){
 		if(currentPlayer.equals(playerRed)){
-			return playerRed;
+			return Piece.color.RED;
 		}
 		else if (currentPlayer.equals(playerWhite)){
-			return currentPlayer;
+			return Piece.color.WHITE;
 		}
 		else{
 			return null;

@@ -30,8 +30,7 @@
             <ul>
             <#list activePlayers?keys as key>
             <#if activePlayers[key].name != currentPlayer.name>
-                <!-- TODO: I really feel that this shouldn't be a function of the home route -->
-                <li><a href="${gameRoute}?redPlayer=${activePlayers[key].name}&whitePlayer=${currentPlayer.name}">${activePlayers[key].name}</a></li>
+                <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
             </#if>
             </#list>
             </ul>
