@@ -36,7 +36,6 @@ public class WebServer {
 
   public static final String HOME_URL = "/";
   public static final String SIGNIN_URL = "/signin";
-  public static final String NEWGAME_URL = "/newGame";
   public static final String GAME_URL = "/game";
 
   //
@@ -135,8 +134,6 @@ public class WebServer {
 
     get(SIGNIN_URL, new GetSignInRoute(templateEngine));
     post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
-
-    get(NEWGAME_URL, new GetNewGameRoute(templateEngine, playerLobby, gameManager));
 
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
 
