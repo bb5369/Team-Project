@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class GetGameRoute implements Route {
 
-    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
 
     private final TemplateEngine    templateEngine;
     private final PlayerLobby       playerLobby;

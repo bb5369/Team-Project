@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import java.util.*;
+import java.util.logging.Logger;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 
@@ -8,6 +9,8 @@ import com.webcheckers.model.Player;
  * Coordinates the state of active games across the entire application
  */
 public class GameManager {
+
+	private static final Logger LOG = Logger.getLogger(GameManager.class.getName());
 
 	// A list of all active games
 	private ArrayList<CheckersGame> gameList;
@@ -68,6 +71,10 @@ public class GameManager {
 
 		for (CheckersGame game: gameList) {
 			if(isPlayerInThisGame(game, player1) && isPlayerInThisGame(game, player2)) {
+				LOG.finer(String.format("getGame(Player: '%s', Player: '%s') Found a game in progress",
+						player1.getName(),
+						player2.getName()));
+
 				return game;
 			}
 		}
@@ -84,6 +91,8 @@ public class GameManager {
 	public CheckersGame getGame(Player currentPlayer) {
 		for (CheckersGame game: gameList) {
 			if (isPlayerInThisGame(game, currentPlayer)) {
+				LOG.finer(String.format("getGame(Player: '%s') Found game in progress",
+						currentPlayer.getName()));
 				return game;
 			}
 		}
@@ -103,11 +112,20 @@ public class GameManager {
 	public CheckersGame getNewGame(Player playerRed, Player playerWhite) {
 
 		if (isPlayerInAGame(playerRed) || isPlayerInAGame(playerWhite)) {
+			LOG.warning(String.format("getNewGame(Player: '%s', Player: '%s') Player in requested pair already in game",
+					playerRed.getName(),
+					playerWhite.getName()));
+
 			return null;
 		}
 
 		final CheckersGame newGame = new CheckersGame(playerRed, playerWhite);
 		gameList.add(newGame);
+
+		LOG.fine(String.format("getNewGame(Player: '%s', Player: '%s') New game created",
+				playerRed.getName(),
+				playerWhite.getName()));
+
 		return newGame;
 	}
 }
