@@ -128,4 +128,9 @@ public class GameManager {
 
 		return newGame;
 	}
+
+
+	public void clearGames() {
+		this.gameList.clear();
+	}
 }

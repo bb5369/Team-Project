@@ -66,8 +66,18 @@ public class GetHomeRoute implements Route {
 
         vm.put("title", "Welcome!");
 
-        if (request.session().attribute("Player") != null) {
-            final Player currentPlayer = request.session().attribute("Player");
+        Player currentPlayer = request.session().attribute("Player");
+
+        if ( ! playerLobby.isPlayerInLobby(currentPlayer)) {
+            // This means that the lobby was cleared so we must log the user out
+            // TODO: make this a part of player sign-out story.
+            request.session().removeAttribute("Player");
+
+            currentPlayer = null;
+        }
+
+        if (currentPlayer != null) {
+
             vm.put("currentPlayer", currentPlayer);
 
             vm.put("activePlayers", playerLobby.getActivePlayers());

@@ -41,6 +41,21 @@ public class PlayerLobby {
 	}
 
 	/**
+	 * isPlayerInLobby method
+	 * Returns true/false if a player value object is in the lobby
+	 * @param player
+	 * @return
+	 */
+	public boolean isPlayerInLobby(Player player) {
+		if (getActivePlayerCount() == 0) {
+			return false;
+		}
+
+		return activePlayers.containsKey(player.getName());
+	}
+
+
+	/**
 	 * newPlayer method
 	 * Create a new Player given a name and returns that player
 	 * @param name of the new player
@@ -84,4 +99,11 @@ public class PlayerLobby {
 	public Boolean isValidName(String candidateName) {
 		return candidateName.matches("[a-zA-Z0-9 ]+");
 	}
+
+
+	public void clearLobby() {
+		this.activePlayers.clear();
+	}
+
+
 }
