@@ -47,9 +47,6 @@ The web application for Webcheckers allows players to play checkers with other p
 > <b>Player Sign-Out</b>
 > > As a Player who is signed into WebCheckers I want to be able to sign-out so that I am not placed in any new games.
 >
-> <b>Finding a Game</b>
-> > As a signed-in Player, I want to be able to find a regular game or join the tournament so that I can play checkers.
->
 > <b>Start a Game</b>
 > > As a Player, I want to start a game so that I can play checkers against an opponent.
 >
