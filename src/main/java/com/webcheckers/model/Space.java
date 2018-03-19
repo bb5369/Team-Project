@@ -9,6 +9,7 @@ public class Space {
     //instance variables
     private int cellIdx;
     private Piece currPiece;
+    private Boolean valid;
 
 
     /**
@@ -19,6 +20,7 @@ public class Space {
     public Space(int cellIdx){ // This is bad constructor to use
         this.cellIdx = cellIdx;
         this.currPiece = null;
+        this.valid = false;
     }
 
     /**
@@ -31,6 +33,7 @@ public class Space {
     public Space(int cellIdx, Piece currPiece){
         this.cellIdx = cellIdx;
         this.currPiece = currPiece;
+        this.valid = true;
     }
 
     /**
@@ -48,7 +51,7 @@ public class Space {
      * @return
      */
     public boolean isValid(){
-        return true;
+		return this.valid;
     }
 
     /**

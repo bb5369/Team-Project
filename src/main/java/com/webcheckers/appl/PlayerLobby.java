@@ -51,6 +51,10 @@ public class PlayerLobby {
 			return false;
 		}
 
+		if (player == null) {
+			return false;
+		}
+
 		return activePlayers.containsKey(player.getName());
 	}
 

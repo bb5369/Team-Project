@@ -21,36 +21,42 @@ public class Row implements Iterable{
      * @param index space intex
      */
     public Row(int index){
-        spaces = new Space[8];
-        boolean flipFlop = false;
-//        Piece.color whiteColor = Piece.color.WHITE;
-        if(index%2 ==0){
-            flipFlop = true;
-        }
-            for(int i = 0; i < spaces.length; i++)
-            {
-                if(index != 3 && index != 4 )
-                {
-                    if(flipFlop) {
-                        spaces[i] = new Space(i);
-                    }
-                    else
-                    {
-                        if(index<4)
-                            spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
-                        else
-                            spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
-                    }
-                }
-                else
-                {
-                    spaces[i] = new Space(i);
-//                    color = Piece.color.WHITE;
-                }
-                flipFlop = !flipFlop;
-            }
+        this.spaces = new Space[8];
+		this.index = index;
 
-        this.index = index;
+		this.initializeSpaces();
+    }
+
+
+    private void initializeSpaces() {
+        boolean startWhite = false;
+
+		// Alternating rows begin with a dark space
+        if(this.index % 2 == 0) {
+            startWhite = true;
+        }
+
+        // Build row from Left to Right
+		for (int i = 0; i < spaces.length; i++) {
+
+        	if (startWhite) {
+				// we use startWhite to indicate a square that player cannot land on
+				spaces[i] = new Space(i);
+
+			} else {
+        		// A player can land on this square (or starts with a piece in the square
+				if (index < 3) {
+					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
+				} else if (index > 4 ) {
+					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
+				} else {
+					spaces[i] = new Space(i, null);
+				}
+
+			}
+
+			startWhite = !startWhite;
+		}
     }
 
     public Row getReverseRow(int index){
