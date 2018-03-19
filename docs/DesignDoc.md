@@ -45,7 +45,7 @@ The web application for Webcheckers allows players to play checkers with other p
 > > As a Player, I want to be able to sign-in so that I can play a game of checkers.
 > 
 > <b>Player Sign-Out</b>
-> > As a Player, I want to be able to sign-out so that I can do other things.
+> > As a Player who is signed into WebCheckers I want to be able to sign-out so that I am not placed in any new games.
 >
 > <b>Finding a Game</b>
 > > As a signed-in Player, I want to be able to find a regular game or join the tournament so that I can play checkers.
@@ -60,25 +60,22 @@ The web application for Webcheckers allows players to play checkers with other p
 > > As a Player, I want to be forced to make an available jump move so that I will gain an advantage in the game.
 > >
 > > <b>Single Jump Move</b>
-> > > As a Player, I want to be able to jump diagonally forward over an opponent piece so that I can eliminate the piece and advance in the game.
+> > > As a Player, I want to be able to jump diagonally forward with a single piece or in either direction with a King over an opponent piece so that I can eliminate the piece and advance in the game.
 > > 
 > > <b>Multi Jump Move</b>
 > > > As a Player, I want to be able to diagonally jump over my opponents pieces in one turn so that I can eliminate two or more of their pieces.
 > 
 > <b>Unable to Move</b>
 > > As a Player, I want to lose the game when I have no moves left so that I can move on and start a new game.
+>
+> <b>Winning</b>
+> > As a Player, I want to win the game by capturing all of my opponent pieces so that I can claim victory.
 > 
-> <b> KINGS </b>
-> > As a Player, I want to have Kinged pieces so that I will be able to capture more opponent pieces.
-> >
-> > <b>King Me</b>
-> > > As a Player, I want to have my pieces that reach the opponent end of the board to become Kings so that I can move diagonally forwards and backwards.
-> >
-> > <b>King Moving</b>
-> > > As a Player, I want to move my Kings diagonally forwards and backwards so that I can capture more of my opponent's pieces.
+> <b>King Me</b>
+> > As a Player, I want to have my pieces that reach the opponent end of the board to become Kings so that I can move diagonally forwards and backwards.
 >
 > <b>Resignation</b>
-> > As a Player, I want to be able to resign from an ongoing game so that I can go do other things.
+> > As a Player in an ongoing game I want to be able to forfeit from an ongoing game so that I can return to the lobby.
 
 ### Roadmap of Enhancements
 > <b>Getting Help</b>
