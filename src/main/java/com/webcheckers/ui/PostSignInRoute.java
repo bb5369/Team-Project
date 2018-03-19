@@ -42,6 +42,7 @@ public class PostSignInRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        // TODO: redirect to home if player session exists
 
         Map<String, Object> vm = new HashMap<>();
 

@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 
 import spark.ModelAndView;
@@ -24,6 +26,7 @@ public class GetHomeRoute implements Route {
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
+    private final GameManager gameManager;
 
     /**
      * Create the Spark Route (UI controller) for the
@@ -32,13 +35,15 @@ public class GetHomeRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetHomeRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby) {
+    public GetHomeRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final GameManager gameManager) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(playerLobby, "gameManager must not be null");
 
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.gameManager = gameManager;
         LOG.config("GetHomeRoute is initialized.");
     }
 
@@ -58,16 +63,37 @@ public class GetHomeRoute implements Route {
         LOG.finer("GetHomeRoute is invoked.");
 
         Map<String, Object> vm = new HashMap<>();
+
         vm.put("title", "Welcome!");
 
+        Player currentPlayer = request.session().attribute("Player");
 
-        if (request.session().attribute("Player") != null) {
-            final Player currentPlayer = request.session().attribute("Player");
+        if ( ! playerLobby.isPlayerInLobby(currentPlayer)) {
+            // This means that the lobby was cleared so we must log the user out
+            // TODO: make this a part of player sign-out story.
+            request.session().removeAttribute("Player");
+
+            currentPlayer = null;
+        }
+
+        if (currentPlayer != null) {
+
             vm.put("currentPlayer", currentPlayer);
 
             vm.put("activePlayers", playerLobby.getActivePlayers());
+
+            vm.put("gameRoute", WebServer.GAME_URL);
+            if(gameManager.isPlayerInAGame(currentPlayer)){
+                response.redirect(WebServer.GAME_URL);
+            }
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
+        }
+
+        if (request.session().attribute("message") != null) {
+            final Message messageToRender = request.session().attribute("message");
+            request.session().removeAttribute("message");
+            vm.put("message", messageToRender);
         }
 
         return templateEngine.render(new ModelAndView(vm , "home.ftl"));

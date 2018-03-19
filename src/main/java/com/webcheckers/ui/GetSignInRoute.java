@@ -14,6 +14,7 @@ import spark.Response;
  * @author Justin Palmer
  */
 public class GetSignInRoute implements Route {
+    // TODO: Redirect to home if player session exists
 
     // Values used in the view-model map for rendering the sign-in view.
     static final String TITLE = "Player Sign-In";
