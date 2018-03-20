@@ -3,8 +3,6 @@ geometry: margin=1in
 ---
 # WebCheckers Design Documentation
 
-> The following template provides the headings for your Design Documentation.  As you edit each section make sure you remove these commentary 'blockquotes'; the lines that start with a > character.
-
 # Team Information
 * Team name: (2175) SWEN-261-08-Team-C
 * Team members
@@ -43,7 +41,7 @@ The web application for Webcheckers allows players to play checkers with other p
 ### MVP Features
 > <b>Player Sign-In</b>
 > > As a Player, I want to be able to sign-in so that I can play a game of checkers.
-> 
+>
 > <b>Player Sign-Out</b>
 > > As a Player who is signed into WebCheckers I want to be able to sign-out so that I am not placed in any new games.
 >
@@ -58,16 +56,16 @@ The web application for Webcheckers allows players to play checkers with other p
 > >
 > > <b>Single Jump Move</b>
 > > > As a Player, I want to be able to jump diagonally forward with a single piece or in either direction with a King over an opponent piece so that I can eliminate the piece and advance in the game.
-> > 
+> >
 > > <b>Multi Jump Move</b>
 > > > As a Player, I want to be able to diagonally jump over my opponents pieces in one turn so that I can eliminate two or more of their pieces.
-> 
+>
 > <b>Unable to Move</b>
 > > As a Player, I want to lose the game when I have no moves left so that I can move on and start a new game.
 >
 > <b>Winning</b>
 > > As a Player, I want to win the game by capturing all of my opponent pieces so that I can claim victory.
-> 
+>
 > <b>King Me</b>
 > > As a Player, I want to have my pieces that reach the opponent end of the board to become Kings so that I can move diagonally forwards and backwards.
 >
@@ -77,10 +75,10 @@ The web application for Webcheckers allows players to play checkers with other p
 ### Roadmap of Enhancements
 > <b>Getting Help</b>
 > > As a Player, I want to have valid next-moves shown to me when I request help so that I can advance in the game.
-> 
+>
 > <b>TOURNAMENT MODE</b>
 > > As a competitive Player, I want to play games inside a Tournament Ladder so that I can see my ranking against other Tournament players.
-> > 
+> >
 > > <b>Finding a Game</b>
 > > > As a Player, I want to be able to find a regular game or joing the Tournament so that I can play checkers.
 > >
@@ -89,12 +87,9 @@ The web application for Webcheckers allows players to play checkers with other p
 
 ## Application Domain
 
-This section describes the application domain.
+Below are the entities involved in the Checkers application domain. In every checkers game there always exists two players who controls pieces that are placed on squares of a board.  There is a logical concept of a "game" between these two players that is modeled in the diagram for cohesion.
 
 ![The WebCheckers Domain Model](domain-model-checkers.png)
-
-> Provide a high-level overview of the domain for this application. You can discuss the more important domain entities and their relationship to each other.
-
 
 
 ## Architecture
