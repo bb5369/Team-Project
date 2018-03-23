@@ -17,6 +17,7 @@ public class GetSignInRoute implements Route {
     // TODO: Redirect to home if player session exists
 
     // Values used in the view-model map for rendering the sign-in view.
+    static final String TITLE_ATTR = "title";
     static final String TITLE = "Player Sign-In";
     static final String VIEW_NAME = "signin.ftl";
 
@@ -33,7 +34,7 @@ public class GetSignInRoute implements Route {
 
         Map<String, Object> vm = new HashMap<>();
 
-        vm.put("title", TITLE);
+        vm.put(TITLE_ATTR, TITLE);
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
