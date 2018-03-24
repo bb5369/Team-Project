@@ -46,9 +46,9 @@ public class Row implements Iterable{
 			} else {
         		// A player can land on this square (or starts with a piece in the square
 				if (index < 3) {
-					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
-				} else if (index > 4 ) {
 					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
+				} else if (index > 4 ) {
+					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
 				} else {
 					spaces[i] = new Space(i, null);
 				}

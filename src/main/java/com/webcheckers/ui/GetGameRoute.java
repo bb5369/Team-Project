@@ -62,7 +62,7 @@ public class GetGameRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
 
-        LOG.finer("GetGameRoute is invoked");
+        LOG.finer("GetGameRoute is invoked.");
 
 		final Player currentPlayer = request.session().attribute("Player");
 
@@ -174,7 +174,7 @@ public class GetGameRoute implements Route {
 		vm.put("whitePlayer",whitePlayer);
 		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
-		if(sessionPlayer.equals(whitePlayer)) {
+		if(sessionPlayer.equals(redPlayer)) {
 			vm.put("board", game.getBoard());
 		} else {
 			vm.put("board", game.getBoard().getReverseBoard());
