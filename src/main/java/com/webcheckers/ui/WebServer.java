@@ -138,7 +138,7 @@ public class WebServer {
 
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
 
-    get("/clear", new GetClearRoute(playerLobby, gameManager));
+    get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));
 
     LOG.config("WebServer is initialized.");
   }
