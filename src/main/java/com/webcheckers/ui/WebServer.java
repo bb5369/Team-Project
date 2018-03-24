@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.MoveValidator;
 import com.webcheckers.appl.PlayerLobby;
 import spark.TemplateEngine;
 
@@ -37,6 +38,7 @@ public class WebServer {
   public static final String HOME_URL = "/";
   public static final String SIGNIN_URL = "/signin";
   public static final String GAME_URL = "/game";
+  public static final String VALIDATE_MOVE_URL = "/validateMove";
   public static final String CLEAR_URL = "/clear";
 
   //
@@ -47,6 +49,7 @@ public class WebServer {
   private final GameManager gameManager;
   private final PlayerLobby playerLobby;
   private final Gson gson;
+  private final MoveValidator moveValidator;
 
   //
   // Constructor
@@ -66,17 +69,20 @@ public class WebServer {
   public WebServer(final TemplateEngine templateEngine,
                    final GameManager gameManager,
                    final PlayerLobby playerLobby,
-                   final Gson gson) {
+                   final Gson gson,
+                   final MoveValidator moveValidator) {
 
     Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     Objects.requireNonNull(gameManager, "gameManager must not be null");
     Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     Objects.requireNonNull(gson, "gson must not be null");
+    Objects.requireNonNull(moveValidator, "moveValidator must not be null");
 
     this.templateEngine = templateEngine;
     this.gameManager = gameManager;
     this.playerLobby = playerLobby;
     this.gson = gson;
+    this.moveValidator = moveValidator;
   }
 
   //
@@ -137,6 +143,7 @@ public class WebServer {
     post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
 
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
+    post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(gson, gameManager, moveValidator));
 
     get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));
 

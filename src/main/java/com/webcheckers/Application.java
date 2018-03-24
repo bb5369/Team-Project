@@ -6,6 +6,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.MoveValidator;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
@@ -54,9 +55,14 @@ public final class Application {
     final TemplateEngine templateEngine = new FreeMarkerEngine();
     final GameManager gameManager = new GameManager();
     final PlayerLobby playerLobby = new PlayerLobby();
+    final MoveValidator moveValidator = new MoveValidator();
 
     // Inject some dependencies
-    final WebServer webServer = new WebServer(templateEngine, gameManager, playerLobby, gson);
+    final WebServer webServer = new WebServer(templateEngine,
+                                              gameManager,
+                                              playerLobby,
+                                              gson,
+                                              moveValidator);
     final Application app = new Application(webServer);
 
     app.initialize();
