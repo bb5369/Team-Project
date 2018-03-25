@@ -24,8 +24,8 @@ public class PostResignGame implements Route {
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
-    private final String info_Message = "";
-    private final String error_Message = "";
+    private final String info_Message = "Resign the current player from the game";
+    private final String error_Message = "This player cannot currently resign";
 
     public PostResignGame(TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager){
         // validation
@@ -47,14 +47,14 @@ public class PostResignGame implements Route {
         Player currentPlayer = request.session().attribute("Player");
         Message message;
 
-        if(currentPlayer.checkState(PlayerState.EMPTY_TURN)){
+        if(currentPlayer.checkState(PlayerState.EMPTY_TURN) || currentPlayer.checkState(PlayerState.WAITING_FOR_MY_TURN)){
             message = new Message(info_Message, Message.MessageType.info);
-            response.body(message);
+            response.body(message.getText());
             response.redirect(WebServer.HOME_URL);
         }
         else{
             message = new Message(error_Message, Message.MessageType.error);
-            response.body(message);
+            response.body(message.getText());
             response.redirect(WebServer.GAME_URL);
         }
         return null;
