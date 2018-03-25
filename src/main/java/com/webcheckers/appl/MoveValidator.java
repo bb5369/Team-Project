@@ -54,13 +54,40 @@ public class MoveValidator {
 
 		// We can have single space moves, or jump moves
 		// In this story we do not support jump moves
-		boolean validMoveType = (isMoveSingleSpace(move) || isMoveJump(move));
+		boolean isMoveValidType = (isMoveSingleSpace(move) || isMoveJump(move));
 
 		// The frontend code should prevent this, but server side checks are good
 		boolean isTargetSpaceOpen = (endState == SpaceState.OPEN);
 
+		// Unless a piece is king, a player can only move away from their starting row
+		boolean isMoveForward = isMoveForward(playerColor, move);
 
-		return (isMoveDiagonal && validMoveType && isTargetSpaceOpen);
+
+		return (isMoveDiagonal && isMoveValidType && isTargetSpaceOpen && isMoveForward);
+	}
+
+	/**
+	 * If a Piece is not a King then it can only move "forward"
+	 * Forward is defined as "away from the player's side of the board"
+	 * @param color
+	 * @param move
+	 * @return
+	 */
+	private boolean isMoveForward(Piece.color color, Move move) {
+		// row for white player must increase
+		// row for red player must decrease
+
+		int startRow = move.getStartRow();
+		int endRow = move.getEndRow();
+
+		switch(color) {
+			case RED:
+				return (endRow < startRow); // moving up the board
+			case WHITE:
+				return (endRow > startRow); // moving down the board
+		}
+
+		return false;
 	}
 
 	/**
