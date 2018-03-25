@@ -109,5 +109,7 @@ public class PlayerLobby {
 		this.activePlayers.clear();
 	}
 
-
+	public void destroyPlayer(String playerName){
+		this.activePlayers.remove(playerName);
+	}
 }
