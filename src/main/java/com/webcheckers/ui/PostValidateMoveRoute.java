@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import spark.*;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -73,8 +74,28 @@ public class PostValidateMoveRoute implements Route {
         boolean isValidMove = moveValidator.validateMove(activeGame, sessionPlayer, requestedMove);
 
         if (isValidMove) {
+            LOG.fine("Move is valid!");
+
+            ArrayList<Move> turnMoveList = request.session().attribute("turnMoveList");
+
+            if (turnMoveList == null) {
+                turnMoveList = new ArrayList<Move>();
+            }
+
+            LOG.finer("Adding valid move to active player's move list for this turn");
+            turnMoveList.add(requestedMove);
+            request.session().attribute("turnMoveList", turnMoveList);
+
+            LOG.finest(String.format("%s Player [%s] has %d moves queued this turn",
+                    activeGame.getPlayerColor(sessionPlayer),
+                    sessionPlayer.getName(),
+                    turnMoveList.size()));
+
             return formatMessageJson(Message.MessageType.info, "Good move");
+
         } else {
+        	LOG.fine("Move is invalid!");
+
             // TODO: it says we should explain why the move was not valid
             // IE destination space occupied, space is invalid
             return formatMessageJson(Message.MessageType.error, "Your move was not valid EXPLAIN");
