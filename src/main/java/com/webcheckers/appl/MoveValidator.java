@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 public class MoveValidator {
 	private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
 
+	private SpaceState[][] matrix;
+
 	private enum SpaceState {
 		INVALID,
 		OPEN,
@@ -22,7 +24,7 @@ public class MoveValidator {
 		LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
 		// Get matrix view of board
-		SpaceState[][] matrix = buildBoardMatrix(game.getBoard());
+		matrix = buildBoardMatrix(game.getBoard());
 
 		// Trace log our board matrix
 		for (SpaceState[] row : matrix) {
@@ -31,10 +33,8 @@ public class MoveValidator {
 
 		// Make sure starting position is accurate (player is moving a piece they own)
 		Piece.color playerColor = game.getPlayerColor(player);
-		int startX = move.getStartCell();
-		int startY = move.getStartRow();
-
-		SpaceState startState = matrix[startY][startX];
+		SpaceState startState = getPositionState(move.getStart());
+		LOG.finest(String.format("Starting position is [%s]", startState));
 
 		if (playerColor == Piece.color.RED && startState != SpaceState.RED_OCCUPIED) {
 			return false;
@@ -46,26 +46,44 @@ public class MoveValidator {
 
 
 		// Now lets check the target space
-		int endX = move.getEndCell();
-		int endY = move.getEndRow();
+		SpaceState endState = getPositionState(move.getEnd());
+		LOG.finest(String.format("Target position is [%s]", endState));
+
+		// All moves are diagonal
+		boolean isMoveDiagonal = isMoveDiagonal(move);
+
+		// We can have single space moves, or jump moves
+		// In this story we do not support jump moves
+		boolean validMoveType = (isMoveSingleSpace(move) || isMoveJump(move));
+
+		// The frontend code should prevent this, but server side checks are good
+		boolean isTargetSpaceOpen = (endState == SpaceState.OPEN);
 
 
-		// Check the vector, it should be diagonal
-		boolean isDiagonalMove = isDiagonalMove(move);
-		boolean isValid = isDiagonalMove;
-		SpaceState endState = matrix[endY][endX];
-
-		int xDiff = Math.abs(endX- startX);
-		int yDiff = Math.abs(endY - startY);
-		if(xDiff > 1 || yDiff >1)
-		{
-			isValid = isValid && isValidJumpMove(move);
-		}
-
-		return (isValid && endState == SpaceState.OPEN);
+		return (isMoveDiagonal && validMoveType && isTargetSpaceOpen);
 	}
 
-	boolean isDiagonalMove(Move move) {
+	/**
+	 * Checks to see if we are only moving one space away
+	 * @param move
+	 * @return boolean
+	 */
+	private boolean isMoveSingleSpace(Move move) {
+		int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
+		int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
+
+		LOG.finest(String.format("Move distance is %d rows and %d cells", deltaY, deltaX));
+
+		return (deltaY == 1 && deltaX == 1);
+
+	}
+
+	/**
+	 * All moves must be diagonal, therefore rise==run
+	 * @param move
+	 * @return boolean
+	 */
+	private boolean isMoveDiagonal(Move move) {
 		int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
 		int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
 
@@ -78,7 +96,7 @@ public class MoveValidator {
 	 * purposes assuming no valid jump move will me made
 	 * @return
 	 */
-	boolean isValidJumpMove(Move move)
+	private boolean isMoveJump(Move move)
 	{
 		return false;
 	}
@@ -110,6 +128,15 @@ public class MoveValidator {
 		}
 
 		return matrix;
+	}
+
+	/**
+	 * Matrix lookup function - given a position it will return the enumerated state
+	 * @param pos
+	 * @return SpaceState
+	 */
+	private SpaceState getPositionState(Position pos) {
+		return matrix[pos.getRow()][pos.getCell()];
 	}
 
 	/**
