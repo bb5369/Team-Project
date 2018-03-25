@@ -31,8 +31,8 @@ public class MoveValidator {
 
 		// Make sure starting position is accurate (player is moving a piece they own)
 		Piece.color playerColor = game.getPlayerColor(player);
-		int startX = move.getStart().getCell();
-		int startY = move.getStart().getRow();
+		int startX = move.getStartCell();
+		int startY = move.getStartRow();
 
 		SpaceState startState = matrix[startY][startX];
 
@@ -46,24 +46,41 @@ public class MoveValidator {
 
 
 		// Now lets check the target space
-		int endX = move.getEnd().getCell();
-		int endY = move.getEnd().getRow();
+		int endX = move.getEndCell();
+		int endY = move.getEndRow();
 
 
 		// Check the vector, it should be diagonal
 		boolean isDiagonalMove = isDiagonalMove(move);
-
+		boolean isValid = isDiagonalMove;
 		SpaceState endState = matrix[endY][endX];
 
-		return (isDiagonalMove && endState == SpaceState.OPEN);
+		int xDiff = Math.abs(endX- startX);
+		int yDiff = Math.abs(endY - startY);
+		if(xDiff > 1 || yDiff >1)
+		{
+			isValid = isValid && isValidJumpMove(move);
+		}
+
+		return (isValid && endState == SpaceState.OPEN);
 	}
 
 	boolean isDiagonalMove(Move move) {
-		int deltaY = Math.abs(move.getStart().getRow() - move.getEnd().getRow());
-		int deltaX = Math.abs(move.getStart().getCell() - move.getEnd().getCell());
+		int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
+		int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
 
 		return (deltaY == deltaX);
 
+	}
+
+	/**
+	 * :TODO implement is a valid jump move, For now return false for test
+	 * purposes assuming no valid jump move will me made
+	 * @return
+	 */
+	boolean isValidJumpMove(Move move)
+	{
+		return false;
 	}
 
 	/**

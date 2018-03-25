@@ -16,4 +16,10 @@ public class Position {
 	public int getCell() {
 		return this.cell;
 	}
+
+	public String toString()
+	{
+		return new String("Row: " + row+ " Column: " + cell);
+	}
+
 }

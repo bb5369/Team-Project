@@ -44,4 +44,11 @@ public class  Piece {
         return col;
     }
 
+    public String toString()
+    {
+        return new String("Piece: "
+                + ((col==color.RED)? "Red " : "White ")
+                + ((ty == type.SINGLE)? "Single" : "King"));
+    }
+
 }
