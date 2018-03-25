@@ -1,11 +1,10 @@
 package com.webcheckers.ui;
 
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.TemplateEngine;
+import spark.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class GetSignOutRoute implements Route {
@@ -22,6 +21,8 @@ public class GetSignOutRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        return null;
+        Map<String, Object> vm = new HashMap<>();
+        vm.put("title", TITLE);
+        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }
