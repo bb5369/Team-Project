@@ -8,7 +8,25 @@ import java.util.NoSuchElementException;
  * <p>Title: Row class</p>
  * <p>Description: This class represents a row on a checkers board</p>
  */
-public class Row implements Iterable{
+public class Row implements Iterable {
+
+	/**
+	 * A "border" row is considered the last row a players pieces start in.
+	 *
+	 * Example board view:
+	 * R0: WHITE
+	 * R1: WHITE
+	 * R2: WHITE
+	 * R3: open
+	 * R4: open
+	 * R5: RED
+	 * R6: RED
+	 * R7: RED
+	 *
+	 * These constants are used in here in Row building and in Move validation for sanity
+	 */
+	public static final Integer WHITE_BORDER_INDEX = 2;
+	public static final Integer RED_BORDER_INDEX   = 5;
 
     //instance variable
     private int index;
@@ -29,33 +47,37 @@ public class Row implements Iterable{
 
 
     private void initializeSpaces() {
-        boolean startWhite = false;
+        boolean startWhiteSquare = false;
 
 		// Alternating rows begin with a dark space
         if(this.index % 2 == 0) {
-            startWhite = true;
+            startWhiteSquare = true;
         }
 
         // Build row from Left to Right
 		for (int i = 0; i < spaces.length; i++) {
 
-        	if (startWhite) {
-				// we use startWhite to indicate a square that player cannot land on
+        	if (startWhiteSquare) {
+				// we use startWhiteSquare to indicate a square that player cannot land on
 				spaces[i] = new Space(i);
 
 			} else {
-        		// A player can land on this square (or starts with a piece in the square
-				if (index < 3) {
+				// A player can land on this Space, or Space filled with starting Piece
+
+				if (index <= WHITE_BORDER_INDEX) {
 					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
-				} else if (index > 4 ) {
+
+				} else if (index >= RED_BORDER_INDEX) {
 					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
+
 				} else {
 					spaces[i] = new Space(i, null);
 				}
 
 			}
 
-			startWhite = !startWhite;
+			// The next Space is inverted, ie a White wont follow a Black
+			startWhiteSquare = !startWhiteSquare;
 		}
     }
 
