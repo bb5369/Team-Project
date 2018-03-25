@@ -109,6 +109,10 @@ public class PlayerLobby {
 		this.activePlayers.clear();
 	}
 
+	/**
+	 * Remove the given player from the map of active players
+	 * @param playerName
+	 */
 	public void destroyPlayer(String playerName){
 		this.activePlayers.remove(playerName);
 	}
