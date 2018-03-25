@@ -16,15 +16,18 @@ public class MoveValidator {
 	private enum SpaceState {
 		INVALID,
 		OPEN,
-		WHITE_OCCUPIED,
-		RED_OCCUPIED
+		WHITE_KING_OCCUPIED,
+		RED_KING_OCCUPIED,
+		WHITE_SINGLE_OCCUPIED,
+		RED_SINGLE_OCCUPIED
 	}
 
 	public boolean validateMove(CheckersGame game, Player player, Move move) {
 		LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
 		// Get matrix view of board
-		matrix = buildBoardMatrix(game.getBoard());
+		BoardView board = game.getBoard();
+		matrix = buildBoardMatrix(board);
 
 		// Trace log our board matrix
 		for (SpaceState[] row : matrix) {
@@ -36,11 +39,11 @@ public class MoveValidator {
 		SpaceState startState = getPositionState(move.getStart());
 		LOG.finest(String.format("Starting position is [%s]", startState));
 
-		if (playerColor == Piece.color.RED && startState != SpaceState.RED_OCCUPIED) {
+		if (playerColor == Piece.color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
-		if (playerColor == Piece.color.WHITE && startState != SpaceState.WHITE_OCCUPIED) {
+		if (playerColor == Piece.color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
@@ -60,30 +63,34 @@ public class MoveValidator {
 		boolean isTargetSpaceOpen = (endState == SpaceState.OPEN);
 
 		// Unless a piece is king, a player can only move away from their starting row
-		boolean isMoveForward = isMoveForward(playerColor, move);
+		boolean isMoveInRightDirection = isMoveInRightDirection(move);
 
 
-		return (isMoveDiagonal && isMoveValidType && isTargetSpaceOpen && isMoveForward);
+		return (isMoveDiagonal && isMoveValidType && isTargetSpaceOpen && isMoveInRightDirection);
 	}
 
 	/**
-	 * If a Piece is not a King then it can only move "forward"
-	 * Forward is defined as "away from the player's side of the board"
-	 * @param color
+	 * Determines if the piece is moved in the right direction
 	 * @param move
-	 * @return
+	 * @return True, if it does, false otherwise
 	 */
-	private boolean isMoveForward(Piece.color color, Move move) {
+	private boolean isMoveInRightDirection(Move move) {
 		// row for white player must increase
 		// row for red player must decrease
 
 		int startRow = move.getStartRow();
+		SpaceState spaceState = getPositionState(move.getStart());
 		int endRow = move.getEndRow();
 
-		switch(color) {
-			case RED:
+		if(spaceState == SpaceState.RED_KING_OCCUPIED || spaceState == SpaceState.WHITE_KING_OCCUPIED)
+		{
+			return true;
+		}
+
+		switch(spaceState) {
+			case RED_SINGLE_OCCUPIED:
 				return (endRow < startRow); // moving up the board
-			case WHITE:
+			case WHITE_SINGLE_OCCUPIED:
 				return (endRow > startRow); // moving down the board
 		}
 
@@ -182,12 +189,24 @@ public class MoveValidator {
 		if (piece == null) {
 			return SpaceState.OPEN;
 		} else {
-			switch (space.getPiece().getColor()) {
+			switch (piece.getColor()) {
 				case RED:
-					return SpaceState.RED_OCCUPIED;
+					if(piece.getType()== Piece.type.KING)
+					{
+						return SpaceState.RED_KING_OCCUPIED;
+					}
+					else{
+						return SpaceState.RED_SINGLE_OCCUPIED;
+					}
 
 				case WHITE:
-					return SpaceState.WHITE_OCCUPIED;
+					if(piece.getType()== Piece.type.KING)
+					{
+						return SpaceState.WHITE_KING_OCCUPIED;
+					}
+					else{
+						return SpaceState.WHITE_SINGLE_OCCUPIED;
+					}
 			}
 		}
 
