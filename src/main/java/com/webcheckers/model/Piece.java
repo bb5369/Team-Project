@@ -7,12 +7,12 @@ package com.webcheckers.model;
 public class  Piece {
 
     //enums
-    public enum type {SINGLE, KING}
-    public enum color {RED, WHITE}
+    public enum Type {SINGLE, KING}
+    public enum Color {RED, WHITE}
 
     //instance
-    private type ty;
-    private color col;
+    private Type ty;
+    private Color col;
 
     /**
      * Parameterized constructor
@@ -21,7 +21,7 @@ public class  Piece {
      * @param ty - type of the piece (SINGLE, KING)
      * @param col - Color of the PIECE (RED, WHITE)
      */
-    public Piece(type ty, color col){
+    public Piece(Type ty, Color col){
         this.ty = ty;
         this.col = col;
     }
@@ -31,7 +31,7 @@ public class  Piece {
      * getter for type
      * @return ty(types) value
      */
-    public type getType(){
+    public Type getType(){
         return ty;
     }
 
@@ -40,15 +40,15 @@ public class  Piece {
      * getter for col (color)
      * @return color
      */
-    public color getColor(){
+    public Color getColor(){
         return col;
     }
 
     public String toString()
     {
         return new String("Piece: "
-                + ((col==color.RED)? "Red " : "White ")
-                + ((ty == type.SINGLE)? "Single" : "King"));
+                + ((col==Color.RED)? "Red " : "White ")
+                + ((ty == Type.SINGLE)? "Single" : "King"));
     }
 
 }
