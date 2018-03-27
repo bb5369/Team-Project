@@ -59,7 +59,7 @@ public class Row implements Iterable {
 
         	if (startWhiteSquare) {
 				// we use startWhiteSquare to indicate a square that player cannot land on
-				spaces[i] = new Space(i);
+				spaces[i] = new Space(i, Space.State.INVALID);
 
 			} else {
 				// A player can land on this Space, or Space filled with starting Piece
@@ -71,7 +71,7 @@ public class Row implements Iterable {
 					spaces[i] =  new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 
 				} else {
-					spaces[i] = new Space(i, null);
+					spaces[i] = new Space(i, Space.State.OPEN);
 				}
 
 			}

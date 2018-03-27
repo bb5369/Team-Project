@@ -9,64 +9,95 @@ import java.util.logging.Logger;
  * and determines if the Move is a valid one
  */
 public class MoveValidator {
+
 	private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
 
-	private SpaceState[][] matrix;
+	private CheckersGame game;
+	private Player player;
+	private Move move;
+	private Space[][] matrix;
 
-	private enum SpaceState {
-		INVALID,
-		OPEN,
-		WHITE_KING_OCCUPIED,
-		RED_KING_OCCUPIED,
-		WHITE_SINGLE_OCCUPIED,
-		RED_SINGLE_OCCUPIED
+
+	/**
+	 * MoveValidator constructor for seeding info needed for the algorithm
+	 * @param game
+	 * @param player
+	 * @param move
+	 */
+	public MoveValidator(CheckersGame game, Player player, Move move) {
+
+		this.game = game;
+		this.player = player;
+		this.move = move;
+
+		buildBoardMatrix();
 	}
 
-	public boolean validateMove(CheckersGame game, Player player, Move move) {
+	/**
+	 * Entrypoint to move validation algorithm - kicks off the process
+	 * @return
+	 */
+    public boolean validateMove() {
+
 		LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
-		// Get matrix view of board
-		BoardView board = game.getBoard();
-		matrix = buildBoardMatrix(board);
+		logBoardMatrix();
 
-		// Trace log our board matrix
-		for (SpaceState[] row : matrix) {
-			LOG.finest(Arrays.toString(row));
+		logMoveStates();
+
+		return validateMoveByStep();
+	}
+
+	/**
+	 * Facade of move validation steps
+	 * @return boolean if the given move is a valid one or not
+	 */
+	private boolean validateMoveByStep() {
+
+		return 	isMoveDiagonal(move) &&
+				(isMoveSingleSpace(move) || isMoveJump(move)) &&
+				isMoveInRightDirection(move) &&
+				isEndSpaceOpen(move);
+	}
+
+	/**
+	 * Helper function for logging the current state of start and end positions in a move
+	 */
+	private void logMoveStates() {
+        Space startSpace = getSpace(move.getStart());
+		Space endSpace = getSpace(move.getEnd());
+
+		LOG.finest(String.format("Starting position is [%s]", startSpace.getState()));
+		LOG.finest(String.format("End position is [%s]", endSpace.getState()));
+
+	}
+
+	private void logBoardMatrix() {
+        // Trace log our board matrix
+		for (Space[] row : matrix) {
+			StringBuilder rowStates = new StringBuilder();
+
+		    for (Space space : row) {
+		        rowStates.append(space.getState());
+			}
+
+			LOG.finest(rowStates.toString());
 		}
+	}
 
-		// Make sure starting position is accurate (player is moving a piece they own)
-		Piece.Color playerColor = game.getPlayerColor(player);
-		SpaceState startState = getPositionState(move.getStart());
-		LOG.finest(String.format("Starting position is [%s]", startState));
+	/**
+	 * MOVE VALIDATION STEPS
+	 */
 
-		if (playerColor == Piece.Color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
-			return false;
-		}
+	/**
+	 * Given a move is the end position open
+	 * @param move
+	 * @return
+	 */
+	private boolean isEndSpaceOpen(Move move) {
+		Space endSpace = getSpace(move.getEnd());
 
-		if (playerColor == Piece.Color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
-			return false;
-		}
-
-
-		// Now lets check the target space
-		SpaceState endState = getPositionState(move.getEnd());
-		LOG.finest(String.format("Target position is [%s]", endState));
-
-		// All moves are diagonal
-		boolean isMoveDiagonal = isMoveDiagonal(move);
-
-		// We can have single space moves, or jump moves
-		// In this story we do not support jump moves
-		boolean isMoveValidType = (isMoveSingleSpace(move) || isMoveJump(move));
-
-		// The frontend code should prevent this, but server side checks are good
-		boolean isTargetSpaceOpen = (endState == SpaceState.OPEN);
-
-		// Unless a piece is king, a player can only move away from their starting row
-		boolean isMoveInRightDirection = isMoveInRightDirection(move);
-
-
-		return (isMoveDiagonal && isMoveValidType && isTargetSpaceOpen && isMoveInRightDirection);
+		return endSpace.isOpen();
 	}
 
 	/**
@@ -75,23 +106,25 @@ public class MoveValidator {
 	 * @return True, if it does, false otherwise
 	 */
 	private boolean isMoveInRightDirection(Move move) {
-		// row for white player must increase
-		// row for red player must decrease
+	    Piece piece = getSpace(move.getStart()).getPiece();
 
-		int startRow = move.getStartRow();
-		SpaceState spaceState = getPositionState(move.getStart());
-		int endRow = move.getEndRow();
-
-		if(spaceState == SpaceState.RED_KING_OCCUPIED || spaceState == SpaceState.WHITE_KING_OCCUPIED)
-		{
+		// If the piece is a king then they can move bi-directionally
+		if (piece != null && piece.getType() == Piece.Type.KING) {
 			return true;
 		}
 
-		switch(spaceState) {
-			case RED_SINGLE_OCCUPIED:
-				return (endRow < startRow); // moving up the board
-			case WHITE_SINGLE_OCCUPIED:
-				return (endRow > startRow); // moving down the board
+		// row for white player must increase
+		// row for red player must decrease
+
+		Piece.Color playerColor = game.getPlayerColor(player);
+		int startRow = move.getStartRow();
+		int endRow = move.getEndRow();
+
+		switch (playerColor) {
+			case RED:
+				return (endRow < startRow);
+			case WHITE:
+				return (endRow > startRow);
 		}
 
 		return false;
@@ -135,17 +168,21 @@ public class MoveValidator {
 		return false;
 	}
 
+
+
+	/**
+	 * BOARD MATRIX AND HELPERS
+	 */
+
 	/**
 	 * Because OO is sometimes hard we want our move algorithms to be able to directly translate cell,row coordinates
 	 * into actionable space states, which is what this matrix provides.
 	 * It gives a current view of the checkers board in a two-dimensional array of space state enums
-	 * @param board
-	 * @return
 	 */
-	private SpaceState[][] buildBoardMatrix(BoardView board) {
-		SpaceState[][] matrix = new SpaceState[8][8];
+	private void buildBoardMatrix() {
+		Space[][] matrix = new Space[8][8];
 
-		Iterator<Row> rowIterator = board.iterator();
+		Iterator<Row> rowIterator = this.game.getBoard().iterator();
 
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
@@ -157,11 +194,11 @@ public class MoveValidator {
 				Space space = spaceIterator.next();
 				int spaceId = space.getCellIdx(); // X
 
-				matrix[rowId][spaceId] = getSpaceState(space);
+				matrix[rowId][spaceId] = space;
 			}
 		}
 
-		return matrix;
+		this.matrix = matrix;
 	}
 
 	/**
@@ -169,47 +206,7 @@ public class MoveValidator {
 	 * @param pos
 	 * @return SpaceState
 	 */
-	private SpaceState getPositionState(Position pos) {
+	private Space getSpace(Position pos) {
 		return matrix[pos.getRow()][pos.getCell()];
-	}
-
-	/**
-	 * This method shouldn't exist since it smells like a proxy function
-	 * The space model should have the state enum and we should directly pull it from there
-	 * @param space
-	 * @return
-	 */
-	private SpaceState getSpaceState(Space space) {
-		if ( ! space.isValid()) {
-			return SpaceState.INVALID;
-		}
-
-		Piece piece = space.getPiece();
-
-		if (piece == null) {
-			return SpaceState.OPEN;
-		} else {
-			switch (piece.getColor()) {
-				case RED:
-					if(piece.getType()== Piece.Type.KING)
-					{
-						return SpaceState.RED_KING_OCCUPIED;
-					}
-					else{
-						return SpaceState.RED_SINGLE_OCCUPIED;
-					}
-
-				case WHITE:
-					if(piece.getType()== Piece.Type.KING)
-					{
-						return SpaceState.WHITE_KING_OCCUPIED;
-					}
-					else{
-						return SpaceState.WHITE_SINGLE_OCCUPIED;
-					}
-			}
-		}
-
-		return SpaceState.OPEN;
 	}
 }

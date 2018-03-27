@@ -6,22 +6,17 @@ package com.webcheckers.model;
  */
 public class Space {
 
+    public enum State {
+		INVALID,
+		OPEN,
+		WHITE_OCCUPIED,
+		RED_OCCUPIED
+	}
+
     //instance variables
     private int cellIdx;
     private Piece currPiece;
-    private Boolean valid;
-
-
-    /**
-     * parameterized constructor
-     * This used to initialize a space by assigning it a index
-     * @param cellIdx - cells index
-     */
-    public Space(int cellIdx){ // This is bad constructor to use
-        this.cellIdx = cellIdx;
-        this.currPiece = null;
-        this.valid = false;
-    }
+    private State state;
 
     /**
      * Parameterized constructor
@@ -33,7 +28,27 @@ public class Space {
     public Space(int cellIdx, Piece currPiece){
         this.cellIdx = cellIdx;
         this.currPiece = currPiece;
-        this.valid = true;
+
+        switch (currPiece.getColor()) {
+            case RED:
+                this.state = State.RED_OCCUPIED;
+                break;
+            case WHITE:
+                this.state = State.WHITE_OCCUPIED;
+                break;
+        }
+    }
+
+    /**
+     * Custom space constructor
+     * Used in practice to build an open space
+     * @param cellIdx
+     * @param state
+     */
+    public Space(int cellIdx, State state) {
+        this.cellIdx = cellIdx;
+        this.currPiece = null;
+        this.state = state;
     }
 
     /**
@@ -45,13 +60,25 @@ public class Space {
         return this.cellIdx;
     }
 
+    public State getState() {
+        return this.state;
+    }
+
     /**
      * isValid method
      * This method checks if the space is valid
      * @return
      */
     public boolean isValid(){
-		return this.valid;
+		return (this.state != State.INVALID);
+    }
+
+    public boolean isOccupied() {
+        return (this.state == State.WHITE_OCCUPIED || this.state == State.RED_OCCUPIED);
+    }
+
+    public boolean isOpen() {
+        return (this.state == State.OPEN);
     }
 
     /**
@@ -62,5 +89,7 @@ public class Space {
     public Piece getPiece(){
         return currPiece;
     }
+
+    // TODO: Add setter for moving a piece onto a Space
 
 }
