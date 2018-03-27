@@ -22,19 +22,15 @@ public class PostValidateMoveRoute implements Route {
 
     private final Gson gson;
     private final GameManager gameManager;
-    private final MoveValidator moveValidator;
 
     PostValidateMoveRoute(final Gson gson,
-                          final GameManager gameManager,
-                          final MoveValidator moveValidator) {
+                          final GameManager gameManager) {
 
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
-        Objects.requireNonNull(moveValidator, "moveValidator must not be null");
 
         this.gson = gson;
         this.gameManager = gameManager;
-        this.moveValidator = moveValidator;
 
         LOG.config("PostValidateMoveRoute initialized");
     }
@@ -71,7 +67,11 @@ public class PostValidateMoveRoute implements Route {
                 sessionPlayer.getName(),
                 formatMoveLogMessage(requestedMove)));
 
-        boolean isValidMove = moveValidator.validateMove(activeGame, sessionPlayer, requestedMove);
+
+        MoveValidator moveValidator = new MoveValidator(activeGame, sessionPlayer, requestedMove);
+
+
+        boolean isValidMove = moveValidator.validateMove();
 
         if (isValidMove) {
             LOG.fine("Move is valid!");
