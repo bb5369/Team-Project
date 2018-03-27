@@ -36,12 +36,12 @@ public class CheckersGame {
 	}
 
 	// TODO: fix this return?
-	public Piece.color getPlayerColor(Player currentPlayer){
+	public Piece.Color getPlayerColor(Player currentPlayer){
 		if(currentPlayer.equals(playerRed)){
-			return Piece.color.RED;
+			return Piece.Color.RED;
 		}
 		else if (currentPlayer.equals(playerWhite)){
-			return Piece.color.WHITE;
+			return Piece.Color.WHITE;
 		}
 		else{
 			return null;

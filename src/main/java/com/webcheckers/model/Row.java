@@ -65,10 +65,10 @@ public class Row implements Iterable {
 				// A player can land on this Space, or Space filled with starting Piece
 
 				if (index <= WHITE_BORDER_INDEX) {
-					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.WHITE));
+					spaces[i] =  new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
 
 				} else if (index >= RED_BORDER_INDEX) {
-					spaces[i] =  new Space(i, new Piece(Piece.type.SINGLE, Piece.color.RED));
+					spaces[i] =  new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 
 				} else {
 					spaces[i] = new Space(i, null);

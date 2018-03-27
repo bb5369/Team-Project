@@ -35,15 +35,15 @@ public class MoveValidator {
 		}
 
 		// Make sure starting position is accurate (player is moving a piece they own)
-		Piece.color playerColor = game.getPlayerColor(player);
+		Piece.Color playerColor = game.getPlayerColor(player);
 		SpaceState startState = getPositionState(move.getStart());
 		LOG.finest(String.format("Starting position is [%s]", startState));
 
-		if (playerColor == Piece.color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
+		if (playerColor == Piece.Color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
-		if (playerColor == Piece.color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
+		if (playerColor == Piece.Color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
@@ -191,7 +191,7 @@ public class MoveValidator {
 		} else {
 			switch (piece.getColor()) {
 				case RED:
-					if(piece.getType()== Piece.type.KING)
+					if(piece.getType()== Piece.Type.KING)
 					{
 						return SpaceState.RED_KING_OCCUPIED;
 					}
@@ -200,7 +200,7 @@ public class MoveValidator {
 					}
 
 				case WHITE:
-					if(piece.getType()== Piece.type.KING)
+					if(piece.getType()== Piece.Type.KING)
 					{
 						return SpaceState.WHITE_KING_OCCUPIED;
 					}
