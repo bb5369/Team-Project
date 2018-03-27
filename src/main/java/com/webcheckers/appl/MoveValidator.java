@@ -43,7 +43,6 @@ public class MoveValidator {
 		SpaceState startState = getPositionState(move.getStart());
 		LOG.finest(String.format("Starting position is [%s]", startState));
 
-//		return true;
 
 		if (playerColor == Piece.Color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
 			return false;
