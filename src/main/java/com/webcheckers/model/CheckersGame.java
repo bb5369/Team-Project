@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.PriorityQueue;
+
 public class CheckersGame {
 
 	//instance variables
@@ -7,6 +9,7 @@ public class CheckersGame {
 	private final Player playerWhite;
 	private final Player playerActive;
 	private final BoardView board;
+//	private PriorityQueue<Move> validMoves;
 
 	/**
 	 * Parameterized constructor
@@ -22,6 +25,7 @@ public class CheckersGame {
 		this.playerActive = this.playerRed;
 
 		this.board = new BoardView();
+//		validMoves = new PriorityQueue<>();
 	}
 	public Player getPlayerRed() {
 		return playerRed;
@@ -35,13 +39,18 @@ public class CheckersGame {
 		return playerActive;
 	}
 
+//	public void clearValidMoves()
+//	{
+//		validMoves = new PriorityQueue<>();
+//	}
+
 	// TODO: fix this return?
-	public Piece.color getPlayerColor(Player currentPlayer){
+	public Piece.Color getPlayerColor(Player currentPlayer){
 		if(currentPlayer.equals(playerRed)){
-			return Piece.color.RED;
+			return Piece.Color.RED;
 		}
 		else if (currentPlayer.equals(playerWhite)){
-			return Piece.color.WHITE;
+			return Piece.Color.WHITE;
 		}
 		else{
 			return null;

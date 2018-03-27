@@ -23,6 +23,10 @@ public class MoveValidator {
 	}
 
 	public boolean validateMove(CheckersGame game, Player player, Move move) {
+		return true;
+	}
+
+	public boolean validateMove1(CheckersGame game, Player player, Move move) {
 		LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
 		// Get matrix view of board
@@ -35,15 +39,17 @@ public class MoveValidator {
 		}
 
 		// Make sure starting position is accurate (player is moving a piece they own)
-		Piece.color playerColor = game.getPlayerColor(player);
+		Piece.Color playerColor = game.getPlayerColor(player);
 		SpaceState startState = getPositionState(move.getStart());
 		LOG.finest(String.format("Starting position is [%s]", startState));
 
-		if (playerColor == Piece.color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
+//		return true;
+
+		if (playerColor == Piece.Color.RED && (startState != SpaceState.RED_KING_OCCUPIED || startState != SpaceState.RED_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
-		if (playerColor == Piece.color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
+		if (playerColor == Piece.Color.WHITE && (startState != SpaceState.WHITE_KING_OCCUPIED || startState != SpaceState.WHITE_SINGLE_OCCUPIED)) {
 			return false;
 		}
 
@@ -65,7 +71,7 @@ public class MoveValidator {
 		// Unless a piece is king, a player can only move away from their starting row
 		boolean isMoveInRightDirection = isMoveInRightDirection(move);
 
-
+//		return true;
 		return (isMoveDiagonal && isMoveValidType && isTargetSpaceOpen && isMoveInRightDirection);
 	}
 
@@ -191,7 +197,7 @@ public class MoveValidator {
 		} else {
 			switch (piece.getColor()) {
 				case RED:
-					if(piece.getType()== Piece.type.KING)
+					if(piece.getType()== Piece.Type.KING)
 					{
 						return SpaceState.RED_KING_OCCUPIED;
 					}
@@ -200,7 +206,7 @@ public class MoveValidator {
 					}
 
 				case WHITE:
-					if(piece.getType()== Piece.type.KING)
+					if(piece.getType()== Piece.Type.KING)
 					{
 						return SpaceState.WHITE_KING_OCCUPIED;
 					}

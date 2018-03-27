@@ -10,6 +10,7 @@ import spark.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 import static com.webcheckers.model.Message.MessageType.error;
@@ -76,10 +77,10 @@ public class PostValidateMoveRoute implements Route {
         if (isValidMove) {
             LOG.fine("Move is valid!");
 
-            ArrayList<Move> turnMoveList = request.session().attribute("turnMoveList");
+            PriorityQueue<Move> turnMoveList = request.session().attribute("turnMoveList");
 
             if (turnMoveList == null) {
-                turnMoveList = new ArrayList<Move>();
+                turnMoveList = new PriorityQueue<>();
             }
 
             LOG.finer("Adding valid move to active player's move list for this turn");
