@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import spark.*;
 
 import java.util.HashMap;
@@ -10,6 +9,9 @@ import java.util.Objects;
 
 import static com.webcheckers.ui.WebServer.HOME_URL;
 
+/**
+ * @author Alexis Halbur
+ */
 public class PostSignOutRoute implements Route{
 
     static final String TITLE = "Player Sign-Out";
@@ -18,6 +20,10 @@ public class PostSignOutRoute implements Route{
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
 
+    /**
+     * @param templateEngine    HTML template rendering engine
+     * @param playerLobby       PlayerLobby component
+     */
     public PostSignOutRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby){
         Objects.requireNonNull(templateEngine, "Template Engine must not be null.");
         Objects.requireNonNull(playerLobby, "Player Lobby must not be null");
@@ -26,16 +32,26 @@ public class PostSignOutRoute implements Route{
         this.playerLobby = playerLobby;
     }
 
+    /**
+     * Finds the player name of the player signing out, removes the player from the playerLobby,
+     * removes the player from the session, and redirects to the signed out page.
+     *
+     * @param request
+     * @param response
+     * @return Freemarker rendered template
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Map<String, Object> vm = new HashMap<>();
 
         String playerName = request.queryParams("name");
 
-//        Player leavingPlayer = playerLobby.getPlayer(playerName);
         playerLobby.destroyPlayer(playerName);
 
+        // Remove the player from the session
         request.session().removeAttribute(playerName);
+
+        // Redirect to homepage which should show the Signed Out page
         response.redirect(HOME_URL);
 
         vm.put("title", TITLE);
