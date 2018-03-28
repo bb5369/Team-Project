@@ -41,7 +41,7 @@ public class PostSignOutRoute implements Route{
      * @return Freemarker rendered template
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         Map<String, Object> vm = new HashMap<>();
 
         String playerName = request.queryParams("name");
