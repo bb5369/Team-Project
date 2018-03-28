@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.webcheckers.ui.WebServer.HOME_URL;
+
 public class PostSignOutRoute implements Route{
 
     static final String TITLE = "Player Sign-Out";
@@ -30,10 +32,13 @@ public class PostSignOutRoute implements Route{
 
         String playerName = request.queryParams("name");
 
-        Player leavingPlayer = playerLobby.getPlayer(playerName);
+//        Player leavingPlayer = playerLobby.getPlayer(playerName);
         playerLobby.destroyPlayer(playerName);
 
         request.session().removeAttribute(playerName);
+        response.redirect(HOME_URL);
+
+        vm.put("title", TITLE);
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }

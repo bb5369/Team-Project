@@ -13,10 +13,12 @@
         </div>
 
         <div class="body">
+            <h2>Signed Out</h2>
+
             <form action="/signout" method="POST">
-                <button type="Sign Out">Sign Out</button>
             </form>
         </div>
+
     </div>
 </body>
 </head>
