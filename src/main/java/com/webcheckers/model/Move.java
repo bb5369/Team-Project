@@ -39,6 +39,16 @@ public class Move {
 
 	public String toString()
 	{
-		return new String("Start" + start + " " + "End" + end);
+		int startX, startY, endX, endY;
+
+        startX = start.getCell();
+        startY = start.getRow();
+
+        endX = end.getCell();
+        endY = end.getRow();
+
+        return String.format("<%d,%d> to <%d,%d>",
+                startX, startY,
+                endX, endY);
 	}
 }

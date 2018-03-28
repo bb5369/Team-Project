@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.MoveValidator;
+import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.*;
 
 import com.google.gson.Gson;
@@ -19,7 +20,7 @@ public class PostValidateMoveRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());
 
     private final String NO_POSITION_PROVIDED_MESSAGE = "No position was provided for validation.";
-    private final String NOT_YOUR_TURN_MESSAGE = "You cannot validate a move if it is not your turn";
+    private final String INVALID_MOVE_MESSAGE = "The move you requested is not valid!";
 
     private final Gson gson;
     private final GameManager gameManager;
@@ -47,14 +48,17 @@ public class PostValidateMoveRoute implements Route {
     public Object handle(Request request, Response response) {
     	LOG.finer("PostValidateMoveRoute invoked");
 
-        String positionAsJson = request.body();
         Player sessionPlayer = request.session().attribute("Player");
+        TurnController turnController = request.session().attribute("turnController");
 
-        CheckersGame activeGame = gameManager.getGame(sessionPlayer);
-
-        if ( ! activeGame.getPlayerActive().equals(sessionPlayer)) {
-            return formatMessageJson(Message.MessageType.error, NOT_YOUR_TURN_MESSAGE);
+        if (turnController == null) {
+            turnController = gameManager.getTurnController(sessionPlayer);
+            request.session().attribute("turnController", turnController);
         }
+
+        String positionAsJson = request.body();
+
+        LOG.finest(String.format("JSON body: [%s]", positionAsJson));
 
         if (positionAsJson.isEmpty()) {
             return formatMessageJson(Message.MessageType.error, NO_POSITION_PROVIDED_MESSAGE);
@@ -62,44 +66,14 @@ public class PostValidateMoveRoute implements Route {
 
         Move requestedMove = gson.fromJson(positionAsJson, Move.class);
 
-        // "RED Player [username] wants to move from <0,1> to <1,2>"
-        LOG.finest(String.format("%s Player [%s] wants to %s",
-                activeGame.getPlayerColor(sessionPlayer),
-                sessionPlayer.getName(),
-                formatMoveLogMessage(requestedMove)));
-
-
-        MoveValidator moveValidator = new MoveValidator(activeGame, sessionPlayer, requestedMove);
-
-
-        boolean isValidMove = moveValidator.validateMove();
+        boolean isValidMove = turnController.validateMove(requestedMove);
 
         if (isValidMove) {
-            LOG.fine("Move is valid!");
-
-            PriorityQueue<Move> turnMoveList = request.session().attribute("turnMoveList");
-
-            if (turnMoveList == null) {
-                turnMoveList = new PriorityQueue<>();
-            }
-
-            LOG.finer("Adding valid move to active player's move list for this turn");
-            turnMoveList.add(requestedMove);
-            request.session().attribute("turnMoveList", turnMoveList);
-
-            LOG.finest(String.format("%s Player [%s] has %d moves queued this turn",
-                    activeGame.getPlayerColor(sessionPlayer),
-                    sessionPlayer.getName(),
-                    turnMoveList.size()));
-
+        	LOG.fine("Move was found to be valid!");
             return formatMessageJson(Message.MessageType.info, "Good move");
-
         } else {
-        	LOG.fine("Move is invalid!");
-
-            // TODO: it says we should explain why the move was not valid
-            // IE destination space occupied, space is invalid
-            return formatMessageJson(Message.MessageType.error, "Your move was not valid EXPLAIN");
+        	LOG.fine("Move was found to be invalid!");
+            return formatMessageJson(Message.MessageType.error, INVALID_MOVE_MESSAGE);
         }
     }
 
@@ -107,31 +81,11 @@ public class PostValidateMoveRoute implements Route {
      * formatMessageJson - Format text and a message type as JSON for use in returning to the frontend
      * @param messageType
      * @param messageText
-     * @return
+     * @return gson Message object
      */
     public Object formatMessageJson(Message.MessageType messageType, String messageText) {
         Message message = new Message(messageText, messageType);
 
         return gson.toJson(message);
-    }
-
-    /**
-     * Helper function used for object level debug logging of a move
-     * @param move
-     * @return
-     */
-    private String formatMoveLogMessage(Move move) {
-        int startX, startY, endX, endY;
-
-        startX = move.getStart().getCell();
-        startY = move.getStart().getRow();
-
-        endX = move.getEnd().getCell();
-        endY = move.getEnd().getRow();
-
-        return String.format("move from <%d,%d> to <%d,%d>",
-                startX, startY,
-                endX, endY);
-
     }
 }

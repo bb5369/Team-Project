@@ -133,4 +133,16 @@ public class GameManager {
 	public void clearGames() {
 		this.gameList.clear();
 	}
+
+	/**
+	 * Factory method for creating a new TurnController for a player if they are in a game
+	 * @param player
+	 * @return
+	 */
+	public TurnController getTurnController(Player player) {
+		final CheckersGame game = getGame(player);
+
+		return new TurnController(game, player);
+	}
+
 }

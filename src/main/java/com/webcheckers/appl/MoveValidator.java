@@ -14,7 +14,6 @@ public class MoveValidator {
 
 	private CheckersGame game;
 	private Player player;
-	private Move move;
 	private Space[][] matrix;
 
 
@@ -22,37 +21,38 @@ public class MoveValidator {
 	 * MoveValidator constructor for seeding info needed for the algorithm
 	 * @param game
 	 * @param player
-	 * @param move
 	 */
-	public MoveValidator(CheckersGame game, Player player, Move move) {
+	public MoveValidator(CheckersGame game, Player player) {
 
 		this.game = game;
 		this.player = player;
-		this.move = move;
 
 		buildBoardMatrix();
+
+		LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
 	}
 
 	/**
 	 * Entrypoint to move validation algorithm - kicks off the process
 	 * @return
 	 */
-    public boolean validateMove() {
+    public boolean validateMove(Move move) {
 
 		LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
+
 		logBoardMatrix();
+		logMoveCoordinates(move);
+		logMoveStates(move);
 
-		logMoveStates();
-
-		return validateMoveByStep();
+		return validateMoveByStep(move);
 	}
 
 	/**
 	 * Facade of move validation steps
 	 * @return boolean if the given move is a valid one or not
 	 */
-	private boolean validateMoveByStep() {
+	private boolean validateMoveByStep(Move move) {
 
 		return 	isMoveDiagonal(move) &&
 				(isMoveSingleSpace(move) || isMoveJump(move)) &&
@@ -61,29 +61,46 @@ public class MoveValidator {
 	}
 
 	/**
-	 * Helper function for logging the current state of start and end positions in a move
+	 * Logs the matrix board for debug
 	 */
-	private void logMoveStates() {
-        Space startSpace = getSpace(move.getStart());
-		Space endSpace = getSpace(move.getEnd());
-
-		LOG.finest(String.format("Starting position is [%s]", startSpace.getState()));
-		LOG.finest(String.format("End position is [%s]", endSpace.getState()));
-
-	}
-
 	private void logBoardMatrix() {
         // Trace log our board matrix
 		for (Space[] row : matrix) {
 			StringBuilder rowStates = new StringBuilder();
 
 		    for (Space space : row) {
-		        rowStates.append(space.getState());
+		        rowStates.append(space.getState() + " ");
 			}
 
 			LOG.finest(rowStates.toString());
 		}
 	}
+
+	/**
+	 * Logs the move as a pair of coordinates
+	 * @param move
+	 */
+	private void logMoveCoordinates(Move move) {
+		// "RED Player [username] wants to move from <0,1> to <1,2>"
+        LOG.finest(String.format("%s Player [%s] wants to move from %s",
+                game.getPlayerColor(player),
+                player.getName(),
+                move.toString()));
+	}
+
+	/**
+	 * Logs the current state of affairs at the two spaces involved in the move
+	 */
+	private void logMoveStates(Move move) {
+        Space startSpace = getSpace(move.getStart());
+		Space endSpace = getSpace(move.getEnd());
+
+		LOG.finest(String.format("Starting position state is [%s]", startSpace.getState()));
+		LOG.finest(String.format("End position state is [%s]", endSpace.getState()));
+
+	}
+
+
 
 	/**
 	 * MOVE VALIDATION STEPS
