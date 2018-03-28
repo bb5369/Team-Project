@@ -26,7 +26,7 @@ public class GetSignOutRoute implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", TITLE);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
