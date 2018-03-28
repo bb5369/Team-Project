@@ -68,8 +68,12 @@ public class GetGameRoute implements Route {
 
 		if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
 			// We are playing an existing game
-
-			return playGameWith(currentPlayer);
+			if(!gameManager.getGame(currentPlayer).getOtherPlayer(currentPlayer).equals(new Player("null")))
+				return playGameWith(currentPlayer);
+			else {
+				gameManager.clearGame(currentPlayer);
+				redirectWithError(request, response, "The other player is not in the game", WebServer.HOME_URL);
+			}
 
         } else if (haveParam(request,"whitePlayer")) {
 			// We are setting up a new game

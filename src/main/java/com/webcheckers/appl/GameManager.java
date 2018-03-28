@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.PlayerState;
 
 /**
  * Coordinates the state of active games across the entire application
@@ -129,6 +130,19 @@ public class GameManager {
 		return newGame;
 	}
 
+	public void resignGame(Player player){
+		CheckersGame game = getGame(player);
+		//To Do create a null game with each player
+		gameList.remove(game);
+		CheckersGame copy = game.remove(game, game.getOtherPlayer(player));
+		game = game.remove(game, player);
+		gameList.add(game);
+		gameList.add(copy);
+	}
+
+	public void clearGame(Player player){
+		gameList.remove(getGame(player));
+	}
 
 	public void clearGames() {
 		this.gameList.clear();

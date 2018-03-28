@@ -19,7 +19,7 @@ import spark.TemplateEngine;
 
 
 public class PostResignGame implements Route {
-    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(PostResignGame.class.getName());
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
@@ -42,21 +42,14 @@ public class PostResignGame implements Route {
 
     @Override
     public Object handle(Request request, Response response) {
-        LOG.finer("GetHomeRoute is invoked.");
+        LOG.finer("PostResignGame is invoked.");
 
         Player currentPlayer = request.session().attribute("Player");
         Message message;
-
-        if(currentPlayer.checkState(PlayerState.EMPTY_TURN) || currentPlayer.checkState(PlayerState.WAITING_FOR_MY_TURN)){
-            message = new Message(info_Message, Message.MessageType.info);
-            response.body(message.getText());
-            response.redirect(WebServer.HOME_URL);
-        }
-        else{
-            message = new Message(error_Message, Message.MessageType.error);
-            response.body(message.getText());
-            response.redirect(WebServer.GAME_URL);
-        }
+        message = new Message(info_Message, Message.MessageType.info);
+        response.body(message.getText());
+        gameManager.resignGame(currentPlayer);
+        response.redirect(WebServer.HOME_URL);
         return null;
     }
 }
