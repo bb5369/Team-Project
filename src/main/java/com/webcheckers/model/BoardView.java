@@ -12,6 +12,8 @@ public class BoardView implements Iterable{
 
     //instance variables
     private Row[] rows;
+    private Space[][] spaceMatrix;
+    private Space[][] reverseMatrix;
 
     /**
      * default constructor
@@ -19,9 +21,18 @@ public class BoardView implements Iterable{
      */
     public BoardView(){
         rows = new Row[8];
+        spaceMatrix = new Space[8][8];
+        reverseMatrix = new Space[8][8];
         for(int i = 0; i < rows.length; i++)
         {
             rows[i] = new Row(i);
+            Iterator spaceIterator = rows[i].iterator();
+
+            for(int j = 0; spaceIterator.hasNext(); j++)
+            {
+                spaceMatrix[i][j] = (Space)spaceIterator.next();
+                reverseMatrix[7-i][7-j] = spaceMatrix[i][j];
+            }
         }
     }
 
@@ -32,6 +43,27 @@ public class BoardView implements Iterable{
         }
         return b;
     }
+
+    public Space[][] getSpaceMatrix()
+    {
+        return spaceMatrix;
+    }
+
+    public Space[][] getReverseMatrix()
+    {
+        return reverseMatrix;
+    }
+
+    public Space getSpace(int row, int col)
+    {
+        return spaceMatrix[row][col];
+    }
+
+    public Space getReverseSpace(int row,int col)
+    {
+        return reverseMatrix[col][row];
+    }
+
 
     @Override
     public Iterator iterator() {
