@@ -8,10 +8,6 @@
     <div class="page">
         <h1>Web Checkers</h1>
 
-        <div class="navigation">
-            <a href="/">home</a>
-        </div>
-
         <div class="body">
             <h2>Signed Out</h2>
 
