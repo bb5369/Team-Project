@@ -9,11 +9,11 @@ public class CheckersGame {
 	private final Player playerWhite;
 	private final Player playerActive;
 	private final BoardView board;
-//	private PriorityQueue<Move> validMoves;
+	private PriorityQueue<Move> pendingValidMoves;
 
 	/**
 	 * Parameterized constructor
-	 * this is used to instantiate CheckerGame objects
+	 * Creation of a new checkers game between two places
 	 *
 	 * @param playerRed - Player one with red color pieces
 	 * @param playerWhite - Player 2 wit white color pieces
@@ -24,9 +24,11 @@ public class CheckersGame {
 
 		this.playerActive = this.playerRed;
 
-		this.board = new BoardView();
-//		validMoves = new PriorityQueue<>();
+		board = new BoardView();
+
+		pendingValidMoves = new PriorityQueue<>();
 	}
+
 	public Player getPlayerRed() {
 		return playerRed;
 	}
@@ -39,29 +41,31 @@ public class CheckersGame {
 		return playerActive;
 	}
 
-//	public void clearValidMoves()
-//	{
-//		validMoves = new PriorityQueue<>();
-//	}
-
-	// TODO: fix this return?
-	public Piece.Color getPlayerColor(Player currentPlayer){
-		if(currentPlayer.equals(playerRed)){
+	/**
+	 * What color is the given player?
+	 * @param player
+	 * @return Piece.Color
+	 */
+	public Piece.Color getPlayerColor(Player player) {
+		if(player.equals(playerRed)) {
 			return Piece.Color.RED;
 		}
-		else if (currentPlayer.equals(playerWhite)){
+		else if (player.equals(playerWhite)) {
 			return Piece.Color.WHITE;
 		}
-		else{
+		else {
 			return null;
 		}
 	}
+
 
 	public BoardView getBoard() {
 		return board;
 	}
 
-//	public BoardView getReverseBoard(){
-//		return board
-//	}
+	private void clearValidMoves() {
+		pendingValidMoves.clear();
+	}
+
+
 }

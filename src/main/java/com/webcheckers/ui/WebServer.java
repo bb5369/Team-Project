@@ -51,7 +51,6 @@ public class WebServer {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
-    private final MoveValidator moveValidator;
 
     //
     // Constructor
@@ -71,20 +70,17 @@ public class WebServer {
     public WebServer(final TemplateEngine templateEngine,
                      final GameManager gameManager,
                      final PlayerLobby playerLobby,
-                     final Gson gson,
-                     final MoveValidator moveValidator) {
+                     final Gson gson) {
 
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
-        Objects.requireNonNull(moveValidator, "moveValidator must not be null");
 
         this.templateEngine = templateEngine;
         this.gameManager = gameManager;
         this.playerLobby = playerLobby;
         this.gson = gson;
-        this.moveValidator = moveValidator;
     }
 
     //
@@ -145,7 +141,7 @@ public class WebServer {
         post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
 
         get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
-        post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(gson, gameManager, moveValidator));
+        post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(gson, gameManager));
 
         get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));
 
@@ -156,5 +152,4 @@ public class WebServer {
 
         LOG.config("WebServer is initialized.");
     }
-
 }

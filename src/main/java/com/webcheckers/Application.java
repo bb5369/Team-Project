@@ -55,14 +55,12 @@ public final class Application {
     final TemplateEngine templateEngine = new FreeMarkerEngine();
     final GameManager gameManager = new GameManager();
     final PlayerLobby playerLobby = new PlayerLobby();
-    final MoveValidator moveValidator = new MoveValidator();
 
     // Inject some dependencies
     final WebServer webServer = new WebServer(templateEngine,
                                               gameManager,
                                               playerLobby,
-                                              gson,
-                                              moveValidator);
+                                              gson);
     final Application app = new Application(webServer);
 
     app.initialize();
