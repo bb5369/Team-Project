@@ -10,6 +10,7 @@ public class CheckersGame {
 	private final Player playerActive;
 	private final BoardView board;
 	private PriorityQueue<Move> pendingValidMoves;
+	private Space[][] matrix;
 
 	/**
 	 * Parameterized constructor
@@ -19,14 +20,62 @@ public class CheckersGame {
 	 * @param playerWhite - Player 2 wit white color pieces
 	 */
 	public CheckersGame(Player playerRed, Player playerWhite) {
+
 		this.playerRed = playerRed;
 		this.playerWhite = playerWhite;
 
 		this.playerActive = this.playerRed;
 
+		matrix = new Space[8][8];
 		board = new BoardView();
 
 		pendingValidMoves = new PriorityQueue<>();
+
+		initializeMatrix();
+	}
+
+	public void initializeMatrix(){
+		//These constants are used in here in Row building and in Move validation for sanity
+		final Integer WHITE_BORDER_INDEX = 2;
+		final Integer RED_BORDER_INDEX = 5;
+
+		// Build row from Left to Right
+		for(int row = 0; row < matrix.length; row++) {
+
+			boolean startWhiteSquare = false;
+
+			// Alternating rows begin with a dark space
+			if(row % 2 == 0) {
+				startWhiteSquare = true;
+			}
+
+			for (int i = 0; i < matrix[0].length; i++) {
+
+				if (startWhiteSquare) {
+					// we use startWhiteSquare to indicate a square that player cannot land on
+					matrix[row][i] = new Space(i, Space.State.INVALID);
+
+				} else {
+					// A player can land on this Space, or Space filled with starting Piece
+
+					if (row <= WHITE_BORDER_INDEX) {
+						matrix[row][i] = new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
+
+					} else if (row >= RED_BORDER_INDEX) {
+						matrix[row][i] = new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+
+					} else {
+						matrix[row][i] = new Space(i, Space.State.OPEN);
+					}
+				}
+				// The next Space is inverted, ie a White wont follow a Black
+				startWhiteSquare = !startWhiteSquare;
+			}
+		}
+	}
+
+	public Space[][] getMatrix(){
+		return matrix;
 	}
 
 	public Player getPlayerRed() {

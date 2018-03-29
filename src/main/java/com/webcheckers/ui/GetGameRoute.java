@@ -1,10 +1,10 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.BoardView;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Message;
-import com.webcheckers.model.Piece;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -174,10 +174,12 @@ public class GetGameRoute implements Route {
 		vm.put("whitePlayer",whitePlayer);
 		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
+		BoardView board = new BoardView(game.getMatrix());
+
 		if(sessionPlayer.equals(redPlayer)) {
-			vm.put("board", game.getBoard());
+			vm.put("board", board);
 		} else {
-			vm.put("board", game.getBoard().getReverseBoard());
+			vm.put("board", board.getReverseBoard());
 		}
 
 		return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
