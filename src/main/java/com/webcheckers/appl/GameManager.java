@@ -133,4 +133,6 @@ public class GameManager {
 	public void clearGames() {
 		this.gameList.clear();
 	}
+
+	public void destoryGame(CheckersGame game){ this.gameList.remove(game);}
 }

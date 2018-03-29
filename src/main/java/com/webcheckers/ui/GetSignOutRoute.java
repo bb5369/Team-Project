@@ -1,6 +1,8 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.*;
 
@@ -19,15 +21,18 @@ public class GetSignOutRoute implements Route {
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
+    private final GameManager gameManager;
 
     /**
      * @param templateEngine
      */
-    GetSignOutRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby){
+    GetSignOutRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby,
+                    final GameManager gameManager){
         Objects.requireNonNull(templateEngine, "Template Engine must not be null.");
         Objects.requireNonNull(playerLobby, "Player Lobby must not be null");
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.gameManager = gameManager;
     }
 
     @Override
@@ -37,12 +42,16 @@ public class GetSignOutRoute implements Route {
         Player player = request.session().attribute("Player");
         String playerName = player.getName();
 
+        CheckersGame game = gameManager.getGame(player);
+
         playerLobby.destroyPlayer(playerName);
 
         if ( ! playerLobby.isPlayerInLobby(player)) {
             // Remove the player from the session
             request.session().removeAttribute(playerName);
             player = null;
+            gameManager.destoryGame(game);
+            game = null;
         }
         // Redirect to homepage which should show the Signed Out page
         response.redirect(WebServer.HOME_URL);
