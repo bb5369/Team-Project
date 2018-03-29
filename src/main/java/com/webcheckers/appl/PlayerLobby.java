@@ -10,6 +10,9 @@ import java.util.HashMap;
  */
 public class PlayerLobby {
 
+	private static final String MESSAGE_PLAYER_NAME_TAKEN = "Chosen name already exists in Lobby.";
+	private static final String MESSAGE_PLAYER_NAME_INVALID = "Chosen player name not valid. Please use only alphanumerics and spaces.";
+
 	// instance variable
 	private HashMap<String, Player> activePlayers;
 
@@ -68,11 +71,11 @@ public class PlayerLobby {
 	public Player newPlayer(String name) {
 
 		if (! isValidName(name)) {
-			throw new PlayerLobbyException("Chosen player name not valid. Please use only alphanumerics and spaces.");
+			throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_INVALID);
 		}
 
 		if (activePlayers.containsKey(name)) {
-			throw new PlayerLobbyException("Chosen name already exists in Lobby");
+			throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_TAKEN);
 		}
 
 		final Player newPlayer = new Player(name);

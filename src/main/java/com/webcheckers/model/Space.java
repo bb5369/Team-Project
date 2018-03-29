@@ -9,8 +9,7 @@ public class Space {
     public enum State {
 		INVALID,
 		OPEN,
-		WHITE_OCCUPIED,
-		RED_OCCUPIED
+        OCCUPIED
 	}
 
     //instance variables
@@ -27,15 +26,11 @@ public class Space {
      */
     public Space(int cellIdx, Piece currPiece){
         this.cellIdx = cellIdx;
-        this.currPiece = currPiece;
-
-        switch (currPiece.getColor()) {
-            case RED:
-                this.state = State.RED_OCCUPIED;
-                break;
-            case WHITE:
-                this.state = State.WHITE_OCCUPIED;
-                break;
+        if (currPiece != null) {
+            this.currPiece = currPiece;
+            this.state = State.OCCUPIED;
+        } else {
+            throw new NullPointerException("Piece constructor requires a non-null Piece");
         }
     }
 
@@ -74,7 +69,7 @@ public class Space {
     }
 
     public boolean isOccupied() {
-        return (this.state == State.WHITE_OCCUPIED || this.state == State.RED_OCCUPIED);
+        return this.state == State.OCCUPIED;
     }
 
     public boolean isOpen() {
