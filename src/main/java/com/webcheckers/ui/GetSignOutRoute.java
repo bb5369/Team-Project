@@ -34,8 +34,6 @@ public class GetSignOutRoute implements Route {
     public Object handle(Request request, Response response) {
         Map<String, Object> vm = new HashMap<>();
 
-        //String playerName = request.session().attribute("Player");
-
         Player player = request.session().attribute("Player");
         String playerName = player.getName();
 

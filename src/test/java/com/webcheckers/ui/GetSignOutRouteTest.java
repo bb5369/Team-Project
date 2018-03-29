@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.PlayerLobby;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
@@ -23,6 +24,7 @@ public class GetSignOutRouteTest {
     private Response response;
     private TemplateEngine templateEngine;
     private TemplateEngineTester testHelper;
+    private PlayerLobby playerLobby;
 
     @BeforeEach
     public void setup(){
@@ -33,7 +35,7 @@ public class GetSignOutRouteTest {
         response = mock(Response.class);
         testHelper = new TemplateEngineTester();
 
-        CuT = new GetSignOutRoute(templateEngine);
+        CuT = new GetSignOutRoute(templateEngine, playerLobby);
     }
 
     @Test
