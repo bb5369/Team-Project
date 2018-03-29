@@ -35,7 +35,7 @@ public class CheckersGame {
 	}
 
 	public void initializeMatrix(){
-		//These constants are used in here in Row building and in Move validation for sanity
+		//These constants are used in here in RowGen building and in Move validation for sanity
 		final Integer WHITE_BORDER_INDEX = 2;
 		final Integer RED_BORDER_INDEX = 5;
 
@@ -115,6 +115,5 @@ public class CheckersGame {
 	private void clearValidMoves() {
 		pendingValidMoves.clear();
 	}
-
 
 }

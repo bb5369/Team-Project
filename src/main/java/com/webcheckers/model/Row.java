@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * <p>Title: Row class</p>
+ * <p>Title: RowGen class</p>
  * <p>Description: This class represents a row on a checkers board</p>
  */
 public class Row implements Iterable {
@@ -23,7 +23,7 @@ public class Row implements Iterable {
 	 * R6: RED
 	 * R7: RED
 	 *
-	 * These constants are used in here in Row building and in Move validation for sanity
+	 * These constants are used in here in RowGen building and in Move validation for sanity
 	 */
 	public static final Integer WHITE_BORDER_INDEX = 2;
 	public static final Integer RED_BORDER_INDEX   = 5;
@@ -34,7 +34,7 @@ public class Row implements Iterable {
 
     /**
      * parameterized constructor
-     * This used to initialize the Row and each space in
+     * This used to initialize the RowGen and each space in
      * a row by assigning a index
      * @param index space intex
      */

@@ -1,6 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.appl.BoardView;
+import com.webcheckers.appl.BoardViewGen;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -174,7 +174,8 @@ public class GetGameRoute implements Route {
 		vm.put("whitePlayer",whitePlayer);
 		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
-		BoardView board = new BoardView(game.getMatrix());
+		//Generates a board with the stored matrix in the instance of CheckersGame for the view
+		BoardViewGen board = new BoardViewGen(game.getMatrix());
 
 		if(sessionPlayer.equals(redPlayer)) {
 			vm.put("board", board);

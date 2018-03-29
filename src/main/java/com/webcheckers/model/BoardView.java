@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * <p>Title: BoardView class</p>
+ * <p>Title: BoardViewGen class</p>
  * <p>Description: This class represents a checkers board</p></p>
  */
 public class BoardView implements Iterable{
@@ -72,7 +72,7 @@ public class BoardView implements Iterable{
 
     /**
      * <p>Title: RowIterator</p>
-     * <p>Description: This is implementation of Row iterator</p>
+     * <p>Description: This is implementation of RowGen iterator</p>
      */
     class RowIterator implements Iterator<Row> {
 

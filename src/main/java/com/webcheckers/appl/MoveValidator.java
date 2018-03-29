@@ -199,10 +199,10 @@ public class MoveValidator {
 	private void buildBoardMatrix() {
 		Space[][] matrix = new Space[8][8];
 
-		Iterator<Row> rowIterator = this.game.getBoard().iterator();
+		Iterator<RowGen> rowIterator = this.game.getBoard().iterator();
 
 		while (rowIterator.hasNext()) {
-			Row row = rowIterator.next();
+			RowGen row = rowIterator.next();
 			int rowId = row.getIndex(); // Y
 
 			Iterator<Space> spaceIterator = row.iterator();

@@ -19,7 +19,7 @@ public class Position {
 
 	public String toString()
 	{
-		return new String("Row: " + row+ " Column: " + cell);
+		return new String("RowGen: " + row+ " Column: " + cell);
 	}
 
 }
