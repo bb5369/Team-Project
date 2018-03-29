@@ -97,7 +97,6 @@ public class PlayerLobby {
 	/**
 	 * Validates alphanumeric property of a candidate name for a player
 	 * TODO: refactor out of PlayerLobby into util
-	 * @param String candidateName
 	 * @return Boolean
 	 */
 	public Boolean isValidName(String candidateName) {

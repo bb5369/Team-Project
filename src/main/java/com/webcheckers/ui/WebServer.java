@@ -139,7 +139,7 @@ public class WebServer {
 
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
 
-    get(SIGNOUT_URL, new GetSignOutRoute(templateEngine));
+    get(SIGNOUT_URL, new GetSignOutRoute(templateEngine, playerLobby));
     post(SIGNOUT_URL, new PostSignOutRoute(templateEngine, playerLobby));
 
     get("/clear", new GetClearRoute(playerLobby, gameManager));
