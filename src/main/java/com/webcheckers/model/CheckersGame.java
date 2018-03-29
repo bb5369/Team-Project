@@ -34,6 +34,9 @@ public class CheckersGame {
 		initializeMatrix();
 	}
 
+	/**
+	 * Initializes the matrix of spaces to contain an initial board state of checkers
+	 */
 	public void initializeMatrix(){
 		//These constants are used in here in RowGen building and in Move validation for sanity
 		final Integer WHITE_BORDER_INDEX = 2;
