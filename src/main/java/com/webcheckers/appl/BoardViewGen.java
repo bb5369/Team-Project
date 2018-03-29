@@ -13,6 +13,7 @@ public class BoardViewGen implements Iterable{
     private RowGen[] rows;
 
     public BoardViewGen(Space[][] spaces){
+        rows = new RowGen[8];
         matrix = spaces;
         for(int i = 0; i < rows.length; i++)
         {
