@@ -11,7 +11,7 @@
         <div class="body">
             <h2>Signed Out</h2>
 
-            <form action="/signout" method="POST">
+            <form action="/signout" method="GET">
             </form>
         </div>
 
