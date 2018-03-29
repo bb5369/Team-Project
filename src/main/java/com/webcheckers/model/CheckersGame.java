@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import com.webcheckers.util.DoublyLinkedQueue;
+
 import java.util.PriorityQueue;
 
 public class CheckersGame {
@@ -8,7 +10,7 @@ public class CheckersGame {
 	private final Player playerRed;
 	private final Player playerWhite;
 	private final Player playerActive;
-	private PriorityQueue<Move> pendingValidMoves;
+	private DoublyLinkedQueue<Move> validMoves;
 	private Space[][] matrix;
 
 	/**
@@ -25,9 +27,14 @@ public class CheckersGame {
 
 		this.playerActive = this.playerRed;
 
-		pendingValidMoves = new PriorityQueue<>();
+		validMoves = new DoublyLinkedQueue<>();
 
 		initializeMatrix();
+	}
+
+	public DoublyLinkedQueue getValidMoves()
+	{
+		return validMoves;
 	}
 
 	/**
@@ -110,7 +117,7 @@ public class CheckersGame {
 
 
 	private void clearValidMoves() {
-		pendingValidMoves.clear();
+		validMoves.removeAll();
 	}
 
 }

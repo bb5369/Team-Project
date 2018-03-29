@@ -44,12 +44,7 @@ public class PostValidateMoveRoute implements Route {
     	LOG.finer("PostValidateMoveRoute invoked");
 
         Player sessionPlayer = request.session().attribute("Player");
-        TurnController turnController = request.session().attribute("turnController");
-
-        if (turnController == null) {
-            turnController = gameManager.getTurnController(sessionPlayer);
-            request.session().attribute("turnController", turnController);
-        }
+        TurnController turnController = gameManager.getTurnController(sessionPlayer);
 
         String positionAsJson = request.body();
 

@@ -4,6 +4,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.DoublyLinkedQueue;
 
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
@@ -22,7 +23,7 @@ public class TurnController {
 	private Player player;
 	private MoveValidator moveValidator;
 
-	private PriorityQueue<Move> validMoves;
+	private DoublyLinkedQueue<Move> validMoves;
 
 
 	/** Parameterized constructor
@@ -34,7 +35,7 @@ public class TurnController {
 		this.game = game;
 		this.player = player;
 
-		validMoves = new PriorityQueue<>();
+		validMoves = game.getValidMoves();
 
 		moveValidator = new MoveValidator(game, player);
 
@@ -51,7 +52,7 @@ public class TurnController {
 		if (isMyTurn() && moveValidator.validateMove(move)) {
 			LOG.finest("Adding valid move to players turn history");
 
-			validMoves.add(move);
+			validMoves.enqueue(move);
 
 			LOG.finest(String.format("%s Player [%s] has %d queued moves",
 					game.getPlayerColor(player),
@@ -69,8 +70,14 @@ public class TurnController {
 	 * When planning a turn a player may wish to backup and try a new strategy
 	 * We will remove their last valid move from the queued moves
 	 */
-	public void backupMove() {
-		validMoves. // TODO: validate if this actually pulls the last valid move pushed
+	public boolean backupMove() {
+		if(!validMoves.isEmpty()) {
+			validMoves.removeFromRear(); // TODO: validate if this actually pulls the last valid move pushed
+		}
+		else {
+			return false;
+		}
+		return true;
 	}
 
 	/**

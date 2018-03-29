@@ -221,6 +221,16 @@ public class DoublyLinkedQueue<T> {
     }
 
     /**
+     * isEmpty method---
+     * this is method determines id the collection is empty
+     * @return true if the collection is empty, false otherwise
+     */
+    public boolean isEmpty()
+    {
+        return size()<1;
+    }
+
+    /**
      * toString method--
      * this method returns the state of the list.
      * @return a reference to a String containing the state of the object.
@@ -240,6 +250,11 @@ public class DoublyLinkedQueue<T> {
         return str;
     }
 
+    public void removeAll()
+    {
+        front = rear = null;
+        size = 0;
+    }
 
 
 }

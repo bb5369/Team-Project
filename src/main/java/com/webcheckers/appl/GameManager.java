@@ -22,7 +22,8 @@ public class GameManager {
 	 */
 	public GameManager()
 	{
-		gameList = new ArrayList<>();
+
+			gameList = new ArrayList<>();
 	}
 
 

@@ -96,7 +96,7 @@ public class PlayerLobby {
 
 	/**
 	 * Validates alphanumeric property of a candidate name for a player
-	 * TODO: refactor out of PlayerLobby into util
+	 * TODO: refactor out of PlayerLobby into com.webcheckers.util
 	 * @param String candidateName
 	 * @return Boolean
 	 */

@@ -41,6 +41,7 @@ public class WebServer {
     public static final String CLEAR_URL = "/clear";
     public static final String BACKUP_MOVE_URL = "/backupMove";
     public static final String SUBMIT_MOVE_URL = "/submitTurn";
+    public static final String CHECK_TURN_URL = "/checkTurn";
 
     //
     // Attributes
@@ -50,6 +51,7 @@ public class WebServer {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
+
 
     //
     // Constructor
@@ -146,8 +148,9 @@ public class WebServer {
 
 //        post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameManager));
 //        post(BACKUP_MOVE_URL, new PostBackupMoveRoute(templateEngine));
-        post(BACKUP_MOVE_URL, new PostBackupMoveRoute());
+        post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby,gameManager));
         post(SUBMIT_MOVE_URL, new PostSubmitTurnRoute());
+        post(CHECK_TURN_URL, new PostCheckTurnRoute(playerLobby, gameManager));
 
         LOG.config("WebServer is initialized.");
     }
