@@ -70,7 +70,7 @@ public class TurnController {
 	 * We will remove their last valid move from the queued moves
 	 */
 	public void backupMove() {
-		validMoves.poll(); // TODO: validate if this actually pulls the last valid move pushed
+		validMoves. // TODO: validate if this actually pulls the last valid move pushed
 	}
 
 	/**
