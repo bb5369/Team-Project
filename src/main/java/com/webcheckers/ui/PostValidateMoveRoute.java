@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.MoveValidator;
 import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.*;
 
@@ -9,12 +8,8 @@ import com.google.gson.Gson;
 
 import spark.*;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.logging.Logger;
-
-import static com.webcheckers.model.Message.MessageType.error;
 
 public class PostValidateMoveRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());

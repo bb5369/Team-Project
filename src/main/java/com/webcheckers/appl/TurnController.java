@@ -2,6 +2,7 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 
 import java.util.PriorityQueue;

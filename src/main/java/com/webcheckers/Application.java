@@ -6,9 +6,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
-import com.webcheckers.appl.MoveValidator;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.appl.GameManager;
 
