@@ -8,7 +8,6 @@ public class CheckersGame {
 	private final Player playerRed;
 	private final Player playerWhite;
 	private final Player playerActive;
-	private final BoardView board;
 	private PriorityQueue<Move> pendingValidMoves;
 	private Space[][] matrix;
 
@@ -26,9 +25,6 @@ public class CheckersGame {
 
 		this.playerActive = this.playerRed;
 
-		matrix = new Space[8][8];
-		board = new BoardView();
-
 		pendingValidMoves = new PriorityQueue<>();
 
 		initializeMatrix();
@@ -38,6 +34,8 @@ public class CheckersGame {
 	 * Initializes the matrix of spaces to contain an initial board state of checkers
 	 */
 	public void initializeMatrix(){
+		matrix = new Space[8][8];
+
 		//These constants are used in here in RowGen building and in Move validation for sanity
 		final Integer WHITE_BORDER_INDEX = 2;
 		final Integer RED_BORDER_INDEX = 5;
@@ -110,10 +108,6 @@ public class CheckersGame {
 		}
 	}
 
-
-	public BoardView getBoard() {
-		return board;
-	}
 
 	private void clearValidMoves() {
 		pendingValidMoves.clear();

@@ -27,7 +27,7 @@ public class MoveValidator {
 		this.game = game;
 		this.player = player;
 
-		buildBoardMatrix();
+		matrix = game.getMatrix();
 
 		LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
 	}
@@ -183,39 +183,6 @@ public class MoveValidator {
 	private boolean isMoveJump(Move move)
 	{
 		return false;
-	}
-
-
-
-	/**
-	 * BOARD MATRIX AND HELPERS
-	 */
-
-	/**
-	 * Because OO is sometimes hard we want our move algorithms to be able to directly translate cell,row coordinates
-	 * into actionable space states, which is what this matrix provides.
-	 * It gives a current view of the checkers board in a two-dimensional array of space state enums
-	 */
-	private void buildBoardMatrix() {
-		Space[][] matrix = new Space[8][8];
-
-		Iterator<RowGen> rowIterator = this.game.getBoard().iterator();
-
-		while (rowIterator.hasNext()) {
-			RowGen row = rowIterator.next();
-			int rowId = row.getIndex(); // Y
-
-			Iterator<Space> spaceIterator = row.iterator();
-
-			while (spaceIterator.hasNext()) {
-				Space space = spaceIterator.next();
-				int spaceId = space.getCellIdx(); // X
-
-				matrix[rowId][spaceId] = space;
-			}
-		}
-
-		this.matrix = matrix;
 	}
 
 	/**
