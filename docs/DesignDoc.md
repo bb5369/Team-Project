@@ -123,8 +123,7 @@ with the WebCheckers application.
 
 
 ### UI Tier
-> Provide a summary of the Server-side UI tier of your architecture.
-> Describe the types of components in the tier and describe their responsibilities.
+> GetSignOutRoute: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
 
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.

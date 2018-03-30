@@ -97,7 +97,6 @@ public class PlayerLobby {
 	/**
 	 * Validates alphanumeric property of a candidate name for a player
 	 * TODO: refactor out of PlayerLobby into util
-	 * @param String candidateName
 	 * @return Boolean
 	 */
 	public Boolean isValidName(String candidateName) {
@@ -109,5 +108,11 @@ public class PlayerLobby {
 		this.activePlayers.clear();
 	}
 
-
+	/**
+	 * Remove the given player from the map of active players
+	 * @param playerName
+	 */
+	public void destroyPlayer(String playerName){
+		this.activePlayers.remove(playerName);
+	}
 }
