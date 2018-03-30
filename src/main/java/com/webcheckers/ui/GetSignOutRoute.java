@@ -55,7 +55,6 @@ public class GetSignOutRoute implements Route {
         }
         // Redirect to homepage which should show the Signed Out page
         response.redirect(WebServer.HOME_URL);
-        halt();
 
         return null;
     }

@@ -67,11 +67,6 @@ public class GetSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
-
-        testHelper.assertViewModelExists();
-        testHelper.assertViewModelIsaMap();
-        testHelper.assertViewModelAttribute("title", GetSignOutRoute.TITLE);
-        testHelper.assertViewName(GetSignOutRoute.VIEW_NAME);
     }
 ;
 
@@ -86,11 +81,6 @@ public class GetSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
-
-        testHelper.assertViewModelExists();
-        testHelper.assertViewModelIsaMap();
-        testHelper.assertViewModelAttribute("title", GetSignOutRoute.TITLE);
-        testHelper.assertViewName(GetSignOutRoute.VIEW_NAME);
     }
 
 }
