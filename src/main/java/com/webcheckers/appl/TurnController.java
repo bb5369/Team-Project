@@ -1,9 +1,6 @@
 package com.webcheckers.appl;
 
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
-import com.webcheckers.model.MoveValidator;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 import com.webcheckers.util.DoublyLinkedQueue;
 
 import java.util.PriorityQueue;
@@ -17,12 +14,11 @@ import java.util.logging.Logger;
  * The turn controller is an expert at it all!
  */
 public class TurnController {
+	//instance variables
 	private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
-
 	private CheckersGame game;
 	private Player player;
 	private MoveValidator moveValidator;
-
 	private DoublyLinkedQueue<Move> validMoves;
 
 
@@ -45,7 +41,7 @@ public class TurnController {
 	/**
 	 * Validate an incoming move and add it to this turn's list of moves if its valid
 	 * @param move
-	 * @return
+	 * @return true the move was validated, otherwise false
 	 */
 	public boolean validateMove(Move move) {
 
@@ -63,6 +59,59 @@ public class TurnController {
 		}
 
 		return false;
+	}
+
+	/**
+	 * submitTurn method--
+	 * This method implement the submitMove logic
+	 * making the necessary changes to the board
+	 * @return true, it the submitMove was successful, otherwise false
+	 */
+	public boolean submitTurn()
+	{
+		//get the list of moves;
+		Space[][] matrix = game.getMatrix();
+		while(!validMoves.isEmpty())//goes through all the valid  moves
+		{
+			if(!makeMove(matrix,validMoves.removeFromFront()))
+			{
+				return false;
+			}
+		}
+		game.changeActivePlayer();
+		return true;
+	}
+
+	/**
+	 * makeMove method--
+	 * This method make moves pieces on the board
+	 * @param matrix - represents the checkers board
+	 * @param move - move to be made on the checkers board
+	 * @return true, if the pieces where moved successfully
+	 */
+	public boolean makeMove(Space[][] matrix, Move move)
+	{
+		//get the location
+		//get the piece
+		//move the piece to the location
+		// clear the piece in the path if it is a capture move
+		Position start = move.getStart();
+		Position end = move.getEnd();
+
+		if(move.isAJumpMoveAttempt())
+		{
+			//TODO jump move logic goes here
+		}
+		else //single move logic
+		{
+			Space startSpace = matrix[start.getRow()][start.getCell()];
+			Space endSpace = matrix[end.getRow()][end.getCell()];
+			if(!endSpace.movePieceToFrom(startSpace))
+				return false; // if the there was no piece to be moved
+		}
+
+
+		return true;
 	}
 
 

@@ -1,54 +1,53 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.TurnController;
 import com.webcheckers.model.Message;
 import com.webcheckers.model.Move;
 
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
+import com.webcheckers.model.Player;
 import spark.Route;
 import spark.Request;
 import spark.Response;
 
 public class PostSubmitTurnRoute implements Route {
-    private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());
+
     //need to update the board
     //need game to update board
     //need gameManager to get the game
     //need the player to get the specific game
+    private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());
+    private final GameManager gameManager;
+    private final PlayerLobby playerLobby;
 
-    PostSubmitTurnRoute() {
+    PostSubmitTurnRoute(PlayerLobby playerLobby, GameManager gameManager) {
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(gameManager, "gameManager must not be null");
 
-
+        this.gameManager = gameManager;
+        this.playerLobby = playerLobby;
         LOG.config("PostSubmitTurnRoute initialized");
     }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         LOG.finer("PostSubmitTurnRoute invoked");
 
-        PriorityQueue<Move> movesMadeList = request.session().attribute("movesMadeList");
-        PriorityQueue<Move> turnMovesList = request.session().attribute("turnMoveList");
+        Player sessionPlayer = request.session(). attribute("Player");
+        TurnController turnController = gameManager.getTurnController(sessionPlayer);
 
-        if(movesMadeList == null) //if its the first move
-        {
-            if(turnMovesList != null) { //making sure a move was actually made
-                request.session().attribute("movesMade", turnMovesList);
-                //update the board model here making it permanent
-            }
-            else {// error because no move was made
-                return (new Gson()).toJson(new Message("No move has been made", Message.MessageType.error));
-            }
+        if(turnController.submitTurn()) { //making sure a move was actually made
+            return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));
+            //update the board model here making it permanent
         }
-
-        //its not the first move
-        //go through every move in the turnMovesList
-        // and update the model
-        // also update the movesMadeList
-
-        //submit updated moves made to the sessions
-        request.session().attribute("movesMade", movesMadeList);
-
-        return (new Gson()).toJson(new Message("submit move failed", Message.MessageType.error));
+        else {// error because no move was made
+            return (new Gson()).toJson(new Message("No move has been made", Message.MessageType.error));
+        }
     }
 }

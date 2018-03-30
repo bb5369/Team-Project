@@ -9,7 +9,7 @@ public class CheckersGame {
 	//instance variables
 	private final Player playerRed;
 	private final Player playerWhite;
-	private final Player playerActive;
+	private Player playerActive;
 	private DoublyLinkedQueue<Move> validMoves;
 	private Space[][] matrix;
 
@@ -32,6 +32,11 @@ public class CheckersGame {
 		initializeMatrix();
 	}
 
+	/**
+	 * getValidMoves method--
+	 * Used to access the list of validMoves
+	 * @return a list of valid moves (DoublyLinkedQueue)
+	 */
 	public DoublyLinkedQueue getValidMoves()
 	{
 		return validMoves;
@@ -82,20 +87,56 @@ public class CheckersGame {
 		}
 	}
 
+	/**
+	 * getMatrix method--
+	 * space matrix representing a checkers board
+	 * @return space matrix
+	 */
 	public Space[][] getMatrix(){
 		return matrix;
 	}
 
+	/**
+	 * getPlayerRed method--
+	 * used to access the red player in the game
+	 * @return - Red player in the game
+	 */
 	public Player getPlayerRed() {
 		return playerRed;
 	}
 
+	/**
+	 * getWhitePlayer method--
+	 * Used to access the white player in the game
+	 * @return - White player in the game
+	 */
 	public Player getPlayerWhite() {
 		return playerWhite;
 	}
 
+	/**
+	 * getPlayerActive method--
+	 * Used to access player whose turn it is
+	 * @return player whose turn it is
+	 */
 	public Player getPlayerActive() {
 		return playerActive;
+	}
+
+	/**
+	 * changeActivePlayer method--
+	 * This method changes the state of active player
+	 */
+	public void changeActivePlayer()
+	{
+		if(playerActive.equals(playerRed))
+		{
+			playerActive = playerWhite;
+		}
+		else
+		{
+			playerActive = playerRed;
+		}
 	}
 
 	/**
@@ -116,6 +157,10 @@ public class CheckersGame {
 	}
 
 
+	/**
+	 * clearValidMoves method--
+	 * This method clears all the valid moves list
+	 */
 	private void clearValidMoves() {
 		validMoves.removeAll();
 	}

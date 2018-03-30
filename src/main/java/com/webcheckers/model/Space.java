@@ -55,12 +55,53 @@ public class Space {
         return this.cellIdx;
     }
 
+    /**
+     * getState method--
+     * to access the state of the space
+     * @return state enum inside the space
+     */
     public State getState() {
         return this.state;
     }
 
+
     /**
-     * isValid method
+     * movePieceToFrom method--
+     * This method move the piece to the Space on which this method
+     * is being called from the Space that is pass as param
+     * @param from the Space from where the piece will be moved
+     * @return true if the piece was moved, false otherwise
+     */
+    public boolean movePieceToFrom(Space from)
+    {
+        if(from.currPiece == null)
+            return false;
+        this.currPiece = from.currPiece;
+        this.state = State.OCCUPIED;
+        from.currPiece = null;
+        from.state = State.OPEN;
+        return true;
+    }
+
+    /**
+     * removePiece method--
+     * This method removes the piece from the Space
+     * and marks it as open
+     * @return turns true if the space had a piece and was removed, false otherwise
+     */
+    public boolean removePiece()
+    {
+        if(this.state == State.OPEN)
+        {
+            return false;
+        }
+        this.currPiece = null;
+        this.state = State.OPEN;
+        return true;
+    }
+
+    /**
+     * isValid method--
      * This method checks if the space is valid
      * @return
      */
@@ -68,10 +109,20 @@ public class Space {
 		return (this.state != State.INVALID);
     }
 
+    /**
+     * isOccupied method--
+     * Determines whether the space is occupied or not
+     * @return true if the space is occupied
+     */
     public boolean isOccupied() {
         return this.state == State.OCCUPIED;
     }
 
+    /**
+     * isOpen method--
+     * Determines if the space is open or not
+     * @return true if the space is open, otherwise false
+     */
     public boolean isOpen() {
         return (this.state == State.OPEN);
     }
