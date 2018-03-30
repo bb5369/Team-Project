@@ -13,8 +13,7 @@ import spark.*;
 import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Tag("UI-tier")
 public class GetSignOutRouteTest {
@@ -67,6 +66,8 @@ public class GetSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
+
+        verify(response, times(1)).redirect(WebServer.HOME_URL);
     }
 ;
 
@@ -81,6 +82,8 @@ public class GetSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
+
+        verify(response, times(1)).redirect(WebServer.HOME_URL);
     }
 
 }
