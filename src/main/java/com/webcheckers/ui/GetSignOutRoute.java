@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
  * @author Alexis Halbur
  */
@@ -37,8 +39,6 @@ public class GetSignOutRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) {
-        Map<String, Object> vm = new HashMap<>();
-
         Player player = request.session().attribute("Player");
         String playerName = player.getName();
 
@@ -55,9 +55,8 @@ public class GetSignOutRoute implements Route {
         }
         // Redirect to homepage which should show the Signed Out page
         response.redirect(WebServer.HOME_URL);
+        halt();
 
-        vm.put("title", TITLE);
-
-        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+        return null;
     }
 }
