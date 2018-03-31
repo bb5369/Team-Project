@@ -15,6 +15,7 @@ public class GameManager {
 
 	// A list of all active games
 	private ArrayList<CheckersGame> gameList;
+	private ArrayList<CheckersGame> resignedGames;
 
 
 	/**
@@ -24,6 +25,7 @@ public class GameManager {
 	public GameManager()
 	{
 		gameList = new ArrayList<>();
+		resignedGames = new ArrayList<>();
 	}
 
 
@@ -130,21 +132,53 @@ public class GameManager {
 		return newGame;
 	}
 
-	public void resignGame(Player player){
-		CheckersGame game = getGame(player);
-		//To Do create a null game with each player
-		gameList.remove(game);
-		CheckersGame copy = game.remove(game, game.getOtherPlayer(player));
-		game = game.remove(game, player);
-		gameList.add(game);
-		gameList.add(copy);
+	public CheckersGame getResignedGame(Player currentPlayer){
+		for (CheckersGame game: resignedGames) {
+			if (isPlayerInThisGame(game, currentPlayer)) {
+				LOG.finer(String.format("getGame(Player: '%s') Found resigned game in progerss",
+						currentPlayer.getName()));
+				return game;
+			}
+		}
+
+		return null;
 	}
 
+	public void resignGame(Player player){
+		CheckersGame game = getGame(player);
+		gameList.remove(game);
+	 	game = new CheckersGame(game, player);
+		resignedGames.add(game);
+
+	}
+
+	public boolean isPlayerInAResignedGame(Player player){
+
+		if (resignedGames == null || player == null ) return false;
+
+		for (CheckersGame game : resignedGames) {
+			if(isPlayerInThisGame(game, player)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isPlayerInAnyGame(Player player){
+		return isPlayerInAGame(player) || isPlayerInAResignedGame(player);
+	}
 	public void clearGame(Player player){
 		gameList.remove(getGame(player));
 	}
 
+	public void clearResigned(Player player){
+		if(!getResignedGame(player).isResignedPlayer(player))
+			resignedGames.remove(getResignedGame(player));
+	}
+
+
 	public void clearGames() {
 		this.gameList.clear();
+		this.resignedGames.clear();
 	}
 }

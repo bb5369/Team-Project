@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import static spark.Spark.halt;
+
 public class GetGameRoute implements Route {
 
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
@@ -66,16 +68,20 @@ public class GetGameRoute implements Route {
 
 		final Player currentPlayer = request.session().attribute("Player");
 
-		if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
-			// We are playing an existing game
-			if(!gameManager.getGame(currentPlayer).getOtherPlayer(currentPlayer).equals(new Player("null")))
-				return playGameWith(currentPlayer);
-			else {
+		if (currentPlayer != null && gameManager.isPlayerInAnyGame(currentPlayer)) {
+			if(gameManager.isPlayerInAResignedGame(currentPlayer)) {
 				gameManager.clearGame(currentPlayer);
+				gameManager.clearResigned(currentPlayer);
 				redirectWithError(request, response, "The other player is not in the game", WebServer.HOME_URL);
+				halt();
+			}
+			else{
+				return playGameWith(currentPlayer);
 			}
 
-        } else if (haveParam(request,"whitePlayer")) {
+			//return renderGame(game, currentPlayer);
+		}
+			else if (currentPlayer != null && haveParam(request,"whitePlayer")) {
 			// We are setting up a new game
 
 			// NOTE: The player initiating the game will ALWAYS be the red player, therefore the opponent is white
@@ -97,6 +103,7 @@ public class GetGameRoute implements Route {
 			return playGameBetween(redPlayer, whitePlayer);
 		} else {
 			response.redirect(WebServer.HOME_URL);
+			halt();
 		}
 
 		// We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design

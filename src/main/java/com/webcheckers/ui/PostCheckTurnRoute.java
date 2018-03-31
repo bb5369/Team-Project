@@ -37,18 +37,17 @@ public class PostCheckTurnRoute implements Route {
         LOG.finer("PostCheckTurnRoute is invoked.");
 
         Player currrentPlayer = request.session().attribute("Player");
-
-        CheckersGame game = gameManager.getGame(currrentPlayer);
-
-        if(game != null && (game.getPlayerRed().equals(null) || game.getPlayerWhite().equals(null))){
+        CheckersGame game;
+        if(gameManager.isPlayerInAResignedGame(currrentPlayer))
+            game = gameManager.getResignedGame(currrentPlayer);
+        else
+            game = null;
+        if(game != null){
             response.body("Opponent resigned");
             gameManager.clearGame(currrentPlayer);
+            gameManager.clearResigned(currrentPlayer);
             response.redirect(WebServer.HOME_URL);
         }
-        else if (game == null)
-            response.redirect(WebServer.HOME_URL);
-        else
-        response.redirect(WebServer.HOME_URL);
         return null;
     }
 }
