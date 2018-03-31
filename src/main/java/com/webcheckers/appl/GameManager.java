@@ -146,4 +146,8 @@ public class GameManager {
 		return new TurnController(game, player);
 	}
 
+	public void destoryGame(CheckersGame game){
+		this.gameList.remove(game);
+	}
+
 }

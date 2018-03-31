@@ -12,13 +12,20 @@
     
     <div class="navigation">
         <a href="/">home</a>
+        <#if currentPlayer??>
+                <a href="/signout" style="float: right";>sign out</a>
+        </#if>
     </div>
-    
+
+
     <div class="body">
         <#if currentPlayer??>
+
             <p>Welcome, ${currentPlayer.name}.</p>
 
             <h2>Online Players</h2>
+
+
 
             <#if message??>
             <div id="message" class="${message.type}">${message.text}</div>
