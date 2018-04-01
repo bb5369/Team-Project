@@ -181,29 +181,4 @@ public class GameManager {
 		this.resignedGames.clear();
 	}
 
-	public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, String viewTitle){
-		LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
-				game.getPlayerRed().getName(),
-				game.getPlayerWhite().getName(),
-				sessionPlayer.getName()));
-
-		Map<String, Object> vm = new HashMap();
-
-		final Player redPlayer = game.getPlayerRed();
-		final Player whitePlayer = game.getPlayerWhite();
-
-		vm.put("title", viewTitle);
-		vm.put("currentPlayer", sessionPlayer);
-		vm.put("viewMode", "PLAY");
-		vm.put("redPlayer", redPlayer);
-		vm.put("whitePlayer",whitePlayer);
-		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
-
-		if(sessionPlayer.equals(whitePlayer)) {
-			vm.put("board", game.getBoard());
-		} else {
-			vm.put("board", game.getBoard().getReverseBoard());
-		}
-		return vm;
-	}
 }
