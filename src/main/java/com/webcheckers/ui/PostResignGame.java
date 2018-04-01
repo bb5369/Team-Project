@@ -20,7 +20,6 @@ public class PostResignGame implements Route {
 
     private final GameManager gameManager;
     private final String info_Message = "Resign the current player from the game";
-    private final String error_Message = "This player cannot currently resign";
     private final Gson gson;
 
     public PostResignGame(TemplateEngine templateEngine, GameManager gameManager, final Gson gson){
@@ -38,17 +37,18 @@ public class PostResignGame implements Route {
         LOG.finer("PostResignGame is invoked.");
 
         Player currentPlayer = request.session().attribute("Player");
-        Message goodMessage, errorMessage;
-        goodMessage = new Message(info_Message, Message.MessageType.info);
-        errorMessage = new Message(error_Message, Message.MessageType.error);
+
         gameManager.resignGame(currentPlayer);
-        return formatMessageJson(goodMessage);
+
+        // TODO: If we can't resign from the game then return that message
+        return formatMessageJson(Message.MessageType.info, info_Message);
     }
     /**
      * formatMessageJson - Format text and a message type as JSON for use in returning to the frontend
      * @return gson Message object
      */
-    public Object formatMessageJson(Message message) {
+    public Object formatMessageJson(Message.MessageType messageType, String messageText) {
+        Message message = new Message(messageText, messageType);
         return gson.toJson(message);
     }
 }
