@@ -9,7 +9,6 @@ public class CheckersGame {
 	private final Player playerWhite;
 	private final Player resignedPlayer;
 	private Player playerActive;
-	private DoublyLinkedQueue<Move> validMoves;
 	private Space[][] matrix;
 
 	/**
@@ -35,17 +34,6 @@ public class CheckersGame {
 
 		this.resignedPlayer = player;
 	}
-
-	/**
-	 * getValidMoves method--
-	 * Used to access the list of validMoves
-	 * @return a list of valid moves (DoublyLinkedQueue)
-	 */
-	public DoublyLinkedQueue getValidMoves()
-	{
-		return validMoves;
-	}
-
 
 
 	/**
@@ -135,13 +123,6 @@ public class CheckersGame {
 		}
 	}
 
-	/**
-	 * clearValidMoves method--
-	 * This method clears all the valid moves list
-	 */
-	private void clearValidMoves() {
-		validMoves.removeAll();
-	}
 
 	/**
 	 * Uses our static BoardBuilder to generate the starting Checkers Board

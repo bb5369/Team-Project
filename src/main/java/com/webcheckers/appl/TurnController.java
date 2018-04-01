@@ -31,7 +31,7 @@ public class TurnController {
 		this.game = game;
 		this.player = player;
 
-		validMoves = game.getValidMoves();
+		validMoves = new DoublyLinkedQueue<>();
 
 		moveValidator = new MoveValidator(game, player);
 
