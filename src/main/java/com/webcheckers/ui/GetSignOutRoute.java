@@ -13,26 +13,18 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 /**
- * @author Alexis Halbur
+ * UI Controller to GET the sign out route
  */
 public class GetSignOutRoute implements Route {
 
-    // Values used in view model to render sign out page
-    static final String TITLE = "Player Sign-Out";
-    static final String VIEW_NAME = "signout.ftl";
-
-    private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
 
     /**
-     * @param templateEngine
      */
-    GetSignOutRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby,
-                    final GameManager gameManager){
-        Objects.requireNonNull(templateEngine, "Template Engine must not be null.");
+    GetSignOutRoute(final PlayerLobby playerLobby, final GameManager gameManager){
         Objects.requireNonNull(playerLobby, "Player Lobby must not be null");
-        this.templateEngine = templateEngine;
+        Objects.requireNonNull(gameManager, "Game Manager must not be null");
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
     }
