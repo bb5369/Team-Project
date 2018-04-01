@@ -112,7 +112,7 @@ public class WebServer {
 		post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby, gameManager));
 		post(SUBMIT_MOVE_URL, new PostSubmitTurnRoute(playerLobby, gameManager));
 		post(CHECK_TURN_URL, new PostCheckTurnRoute(templateEngine, playerLobby, gameManager, gson));
-		post(RESIGN_URL, new PostResignGame(gameManager));
+		post(RESIGN_URL, new PostResignGameRoute(gameManager));
 
 		// Admin functionality
 		get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));

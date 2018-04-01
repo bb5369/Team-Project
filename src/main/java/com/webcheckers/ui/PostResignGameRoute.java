@@ -12,15 +12,14 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.TemplateEngine;
 
 
-public class PostResignGame implements Route {
-    private static final Logger LOG = Logger.getLogger(PostResignGame.class.getName());
+public class PostResignGameRoute implements Route {
+    private static final Logger LOG = Logger.getLogger(PostResignGameRoute.class.getName());
 
     private final GameManager gameManager;
 
-    public PostResignGame(GameManager gameManager) {
+    public PostResignGameRoute(GameManager gameManager) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
 
         this.gameManager = gameManager;
@@ -29,7 +28,7 @@ public class PostResignGame implements Route {
 
     @Override
     public Object handle(Request request, Response response) {
-        LOG.finer("PostResignGame is invoked.");
+        LOG.finer("PostResignGameRoute is invoked.");
 
         Player sessionPlayer = request.session().attribute("Player");
 
