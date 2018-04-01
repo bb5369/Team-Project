@@ -18,7 +18,7 @@ public class PostBackupMoveRoute implements Route{
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
 
-    private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(PostBackupMoveRoute.class.getName());
 
     PostBackupMoveRoute(PlayerLobby playerLobby, GameManager gameManager) {
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");

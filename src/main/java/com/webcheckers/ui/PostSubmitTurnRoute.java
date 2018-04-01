@@ -22,7 +22,7 @@ public class PostSubmitTurnRoute implements Route {
     //need game to update board
     //need gameManager to get the game
     //need the player to get the specific game
-    private static final Logger LOG = Logger.getLogger(PostValidateMoveRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(PostSubmitTurnRoute.class.getName());
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
 
