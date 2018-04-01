@@ -41,11 +41,24 @@ public class PostResignGame implements Route {
         LOG.finer("PostResignGame is invoked.");
 
         Player currentPlayer = request.session().attribute("Player");
-        Message message;
-        message = new Message(info_Message, Message.MessageType.info);
-        response.body(message.getText());
+        Message goodMessage, errorMessage;
+        goodMessage = new Message(info_Message, Message.MessageType.info);
+        errorMessage = new Message(error_Message, Message.MessageType.error);
         gameManager.resignGame(currentPlayer);
-        response.redirect(WebServer.HOME_URL);
+        redirectWithType(request, response, goodMessage,WebServer.HOME_URL);
         return null;
+    }
+    /**
+     * Helper function used to redirect to a route and show the user an message
+     * @param request
+     * @param response
+     * @param message
+     * @param destination
+     */
+    private void redirectWithType(Request request, Response response, Message message, String destination) {
+        LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message.getType(), message.getText()));
+
+        request.session().attribute("message", message);
+        response.redirect(destination);
     }
 }

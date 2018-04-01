@@ -10,7 +10,6 @@ public class Player {
 	//instance variable
 	public final String name;
 
-	private PlayerState state;
 
 	/**
 	 * Parameterize constructor
@@ -19,11 +18,6 @@ public class Player {
 	 */
 	public Player(String name) {
 		this.name = name;
-	}
-
-	public Player(String name, PlayerState state){
-		this.name = name;
-		this.state = state;
 	}
 
 	/**
@@ -50,14 +44,6 @@ public class Player {
 		return (this.name).equals(otherPlayer.getName());
 	}
 
-	public boolean checkState(PlayerState playerState) {
-		return this.state == playerState;
-	}
-
-	public Player changeStae(Player player, PlayerState newState){
-		Player newPlayerState = new Player(player.getName(), newState);
-		return newPlayerState;
-	}
 	/**
 	 * hashCode method
 	 * This generates Player object's hashcode

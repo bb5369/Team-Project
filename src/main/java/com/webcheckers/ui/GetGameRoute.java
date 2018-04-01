@@ -70,9 +70,13 @@ public class GetGameRoute implements Route {
 
 		if (currentPlayer != null && gameManager.isPlayerInAnyGame(currentPlayer)) {
 			if(gameManager.isPlayerInAResignedGame(currentPlayer)) {
+				CheckersGame game = gameManager.getResignedGame(currentPlayer);
 				gameManager.clearGame(currentPlayer);
 				gameManager.clearResigned(currentPlayer);
-				redirectWithError(request, response, "The other player is not in the game", WebServer.HOME_URL);
+				if(!gameManager.isPlayerInAResignedGame(currentPlayer))
+					redirectWithInfo(request, response, "The other player is not in the game", WebServer.HOME_URL);
+				else
+					response.redirect(WebServer.HOME_URL);
 				halt();
 			}
 			else{
@@ -133,9 +137,17 @@ public class GetGameRoute implements Route {
 	 * @param destination
 	 */
 	private void redirectWithError(Request request, Response response, String message, String destination) {
-		LOG.fine(String.format("Redirecting to %s with error [%s]", destination, message));
+		LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message));
 
 		Message messageObj = new Message(message, Message.MessageType.error);
+		request.session().attribute("message", messageObj);
+		response.redirect(destination);
+	}
+
+	private void redirectWithInfo(Request request, Response response, String message, String destination) {
+		LOG.fine(String.format("Redirecting to %s with info [%s]", destination, message));
+
+		Message messageObj = new Message(message, Message.MessageType.info);
 		request.session().attribute("message", messageObj);
 		response.redirect(destination);
 	}
@@ -168,31 +180,7 @@ public class GetGameRoute implements Route {
 	 * @return
 	 */
 	private Object renderGame(CheckersGame game, Player sessionPlayer) {
-		LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
-				game.getPlayerRed().getName(),
-				game.getPlayerWhite().getName(),
-				sessionPlayer.getName()));
-
-        Map<String, Object> vm = new HashMap();
-
-		final Player redPlayer = game.getPlayerRed();
-		final Player whitePlayer = game.getPlayerWhite();
-
-		vm.put("title", VIEW_TITLE);
-		vm.put("currentPlayer", sessionPlayer);
-		vm.put("viewMode", "PLAY");
-		vm.put("redPlayer", redPlayer);
-		vm.put("whitePlayer",whitePlayer);
-		vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
-
-		if(sessionPlayer.equals(whitePlayer)) {
-			vm.put("board", game.getBoard());
-		} else {
-			vm.put("board", game.getBoard().getReverseBoard());
-		}
-
-		return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
-
+		return templateEngine.render(new ModelAndView(gameManager.renderGame(game, sessionPlayer, VIEW_TITLE), VIEW_NAME));
 	}
 }
 

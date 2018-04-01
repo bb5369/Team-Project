@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 import spark.TemplateEngine;
 import spark.Response;
@@ -18,6 +19,8 @@ public class PostCheckTurnRoute implements Route {
 
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
+
+    private final String opponentResigned = "Your opponent has resigned From the game";
 
     public PostCheckTurnRoute(TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
         // validation
@@ -43,11 +46,27 @@ public class PostCheckTurnRoute implements Route {
         else
             game = null;
         if(game != null){
-            response.body("Opponent resigned");
+            Message message = new Message(opponentResigned, Message.MessageType.info);
             gameManager.clearGame(currrentPlayer);
             gameManager.clearResigned(currrentPlayer);
-            response.redirect(WebServer.HOME_URL);
+            if(game.isResignedPlayer(currrentPlayer))
+                response.redirect(WebServer.HOME_URL);
+            else
+                redirectWithType(request, response, message, WebServer.HOME_URL);
         }
         return null;
+    }
+    /**
+     * Helper function used to redirect to a route and show the user an message
+     * @param request
+     * @param response
+     * @param message
+     * @param destination
+     */
+    private void redirectWithType(Request request, Response response, Message message, String destination) {
+        LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message.getType(), message.getText()));
+
+        request.session().attribute("message", message);
+        response.redirect(destination);
     }
 }
