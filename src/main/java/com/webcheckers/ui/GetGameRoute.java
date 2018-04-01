@@ -30,6 +30,7 @@ public class GetGameRoute implements Route {
     private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
     private static String PLAYER_INVALID_SELECT = "You cannot play a game with yourself";
+    private static String PLAYER_LEFT_GAME = "The other player is not in the game";
 
     /**
      * Create the Spark Route (UI controller) for the
@@ -75,7 +76,7 @@ public class GetGameRoute implements Route {
 				gameManager.clearGame(currentPlayer);
 				gameManager.clearResigned(currentPlayer);
 				if(!gameManager.isPlayerInAResignedGame(currentPlayer))
-					redirectWithInfo(request, response, "The other player is not in the game", WebServer.HOME_URL);
+					redirectWithType(request, response, new Message(PLAYER_LEFT_GAME, Message.MessageType.info), WebServer.HOME_URL);
 				else
 					response.redirect(WebServer.HOME_URL);
 				halt();
@@ -94,15 +95,15 @@ public class GetGameRoute implements Route {
 			final Player whitePlayer = playerLobby.getPlayer(request.queryParams("whitePlayer"));
 
 			if (redPlayer.equals(whitePlayer)) {
-				redirectWithError(request, response, PLAYER_INVALID_SELECT, WebServer.HOME_URL);
+				redirectWithType(request, response, new Message(PLAYER_INVALID_SELECT, Message.MessageType.error), WebServer.HOME_URL);
 			}
 
 			if (whitePlayer == null) {
-				redirectWithError(request, response, PLAYER_NOT_EXIST_MESSAGE, WebServer.HOME_URL);
+				redirectWithType(request, response, new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
 			}
 
 			if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer)) {
-				redirectWithError(request, response, PLAYER_IN_GAME_MESSAGE, WebServer.HOME_URL);
+				redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
 			}
 
 			return renderGame(redPlayer, whitePlayer);//playGameBetween(redPlayer, whitePlayer);
@@ -131,32 +132,16 @@ public class GetGameRoute implements Route {
 	}
 
 	/**
-	 * Helper function used to redirect to a route and show the user an error
+	 * Helper function used to redirect to a route and show the user an message
 	 * @param request
 	 * @param response
 	 * @param message
 	 * @param destination
 	 */
-	private void redirectWithError(Request request, Response response, String message, String destination) {
-		LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message));
+	private void redirectWithType(Request request, Response response, Message message, String destination) {
+		LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message.getType(), message.getText()));
 
-		Message messageObj = new Message(message, Message.MessageType.error);
-		request.session().attribute("message", messageObj);
-		response.redirect(destination);
-	}
-
-	/**
-	 * Helper function used to redirect to a route and show the user an info
-	 * @param request
-	 * @param response
-	 * @param message
-	 * @param destination
-	 */
-	private void redirectWithInfo(Request request, Response response, String message, String destination) {
-		LOG.fine(String.format("Redirecting to %s with info [%s]", destination, message));
-
-		Message messageObj = new Message(message, Message.MessageType.info);
-		request.session().attribute("message", messageObj);
+		request.session().attribute("message", message);
 		response.redirect(destination);
 	}
 
