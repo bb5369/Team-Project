@@ -7,10 +7,10 @@ package com.webcheckers.model;
 public class Space {
 
     public enum State {
-		INVALID,
-		OPEN,
+        INVALID,
+        OPEN,
         OCCUPIED
-	}
+    }
 
     //instance variables
     private int cellIdx;
@@ -21,10 +21,11 @@ public class Space {
      * Parameterized constructor
      * This intializes cellIdx and currPiece to
      * the the value passed as a variable
+     *
      * @param cellIdx
      * @param currPiece
      */
-    public Space(int cellIdx, Piece currPiece){
+    public Space(int cellIdx, Piece currPiece) {
         this.cellIdx = cellIdx;
         if (currPiece != null) {
             this.currPiece = currPiece;
@@ -37,6 +38,7 @@ public class Space {
     /**
      * Custom space constructor
      * Used in practice to build an open space
+     *
      * @param cellIdx
      * @param state
      */
@@ -49,15 +51,17 @@ public class Space {
     /**
      * getCellIdx method
      * This method returns a cell index
+     *
      * @return cell index
      */
-    public int getCellIdx(){
+    public int getCellIdx() {
         return this.cellIdx;
     }
 
     /**
      * getState method--
      * to access the state of the space
+     *
      * @return state enum inside the space
      */
     public State getState() {
@@ -65,7 +69,6 @@ public class Space {
     }
 
     /**
-     *
      * @param source
      * @return
      */
@@ -90,6 +93,7 @@ public class Space {
 
     /**
      * Add a piece to this Space
+     *
      * @param piece
      * @return
      */
@@ -109,6 +113,7 @@ public class Space {
      * removePiece method--
      * This method removes the piece from the Space
      * and marks it as open
+     *
      * @return turns true if the space had a piece and was removed, false otherwise
      */
     public State removePiece() {
@@ -124,15 +129,17 @@ public class Space {
     /**
      * isValid method--
      * This method checks if the space is valid
+     *
      * @return
      */
-    public boolean isValid(){
-		return (state != State.INVALID);
+    public boolean isValid() {
+        return (state != State.INVALID);
     }
 
     /**
      * isOccupied method--
      * Determines whether the space is occupied or not
+     *
      * @return true if the space is occupied
      */
     public boolean isOccupied() {
@@ -142,6 +149,7 @@ public class Space {
     /**
      * isOpen method--
      * Determines if the space is open or not
+     *
      * @return true if the space is open, otherwise false
      */
     public boolean isOpen() {
@@ -151,9 +159,10 @@ public class Space {
     /**
      * getPiece method
      * This method returns curPiece on the space
+     *
      * @return
      */
-    public Piece getPiece(){
+    public Piece getPiece() {
         return currPiece;
     }
 
