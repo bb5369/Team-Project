@@ -16,8 +16,8 @@ public class BoardBuilder {
      * buildRow builds a single row of a board
      * The first row of the board starts with a black square
      *
-     * @param rowId
-     * @return Space[] representing a row of Spaces
+     * @param rowId - the row being built
+     * @return  - Space[] representing a row of Spaces
      */
     private static Space[] buildRow(int rowId) {
 
@@ -40,10 +40,10 @@ public class BoardBuilder {
     /**
      * Build a Space given a row and cell ID context
      *
-     * @param rowId
-     * @param cellId
-     * @param invalidSpace
-     * @return
+     * @param rowId - ID of the row being built
+     * @param cellId - ID of the cell being built
+     * @param invalidSpace  - Whether or not a space is invalid
+     * @return  - A valid space
      */
     private static Space buildSpace(int rowId, int cellId, boolean invalidSpace) {
 
@@ -70,7 +70,7 @@ public class BoardBuilder {
      * We build it from the top down. Checkers rules says that there must be a black space
      * in the corner. So startRowBlackSquare = true;
      *
-     * @return Default checkers board matrix
+     * @return - Default checkers board matrix
      */
     public static Space[][] buildBoard() {
 
