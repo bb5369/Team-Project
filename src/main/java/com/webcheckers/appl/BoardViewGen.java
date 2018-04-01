@@ -77,9 +77,9 @@ public class BoardViewGen implements Iterable {
         }
 
         /**
-         * If there is next space, return it
+         * If there is next row, return it
          *
-         * @return - the next space in the row
+         * @return - the next row in the array
          */
         @Override
         public RowGen next() {

@@ -102,8 +102,8 @@ public class PlayerLobby {
      * Validates alphanumeric property of a candidate name for a player
      * TODO: refactor out of PlayerLobby into com.webcheckers.util
      *
-     * @param String candidateName - name attempting to be entered
-     * @return Boolean - true if it is a valid name, false otherwise
+     * @param candidateName - name attempting to be entered
+     * @return - true if it is a valid name, false otherwise
      */
     public Boolean isValidName(String candidateName) {
         return candidateName.matches("[a-zA-Z0-9 ]+");
