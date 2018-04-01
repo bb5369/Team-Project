@@ -26,7 +26,7 @@ public class GetSignInRoute implements Route {
     /**
      * Initializes the GetSignInRoute
      *
-     * @param templateEngine
+     * @param templateEngine - template engine used to render view model
      */
     GetSignInRoute(final TemplateEngine templateEngine) {
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
