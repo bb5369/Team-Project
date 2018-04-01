@@ -50,8 +50,11 @@ public class GetSignOutRoute implements Route {
             // Remove the player from the session
             request.session().removeAttribute(playerName);
             player = null;
-            gameManager.destoryGame(game);
-            game = null;
+            if(game != null) {
+                gameManager.resignGame(new Player(playerName));
+                gameManager.destoryGame(game);
+                game = null;
+            }
         }
         // Redirect to homepage which should show the Signed Out page
         response.redirect(WebServer.HOME_URL);
