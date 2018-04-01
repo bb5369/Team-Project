@@ -70,20 +70,8 @@ public class GetGameRoute implements Route {
 
 		final Player currentPlayer = request.session().attribute("Player");
 
-		if (currentPlayer != null && gameManager.isPlayerInAnyGame(currentPlayer)) {
-			if(gameManager.isPlayerInAResignedGame(currentPlayer) && !gameManager.getResignedGame(currentPlayer).isResignedPlayer(currentPlayer)) {
-				gameManager.clearGame(currentPlayer);
-				gameManager.clearResigned(currentPlayer);
-				redirectWithType(request, response, new Message(PLAYER_LEFT_GAME, Message.MessageType.info), WebServer.HOME_URL);
-				halt();
-			}
-			else if (gameManager.isPlayerInAGame(currentPlayer)){
+		if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
 				return renderGame(currentPlayer, null);//playGameWith(currentPlayer);
-			}
-			else{
-				response.redirect(WebServer.HOME_URL);
-				halt();
-			}
 
 			//return renderGame(game, currentPlayer);
 		}
