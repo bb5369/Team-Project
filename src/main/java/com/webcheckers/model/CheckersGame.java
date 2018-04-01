@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.util.DoublyLinkedQueue;
-
 public class CheckersGame {
 
 	//instance variables
@@ -13,10 +11,10 @@ public class CheckersGame {
 
 	/**
 	 * Parameterized constructor
-	 * Creation of a new checkers game between two places
+	 * Creation of a new checkers game between two players
 	 *
-	 * @param playerRed - Player one with red color pieces
-	 * @param playerWhite - Player 2 wit white color pieces
+	 * @param playerRed - Player one
+	 * @param playerWhite - Player two
 	 */
 	public CheckersGame(Player playerRed, Player playerWhite) {
 		this.playerRed = playerRed;
@@ -28,7 +26,15 @@ public class CheckersGame {
 		generateStartingBoard();
 	}
 
-	public CheckersGame(CheckersGame game, Player player){
+	/**
+	 * Parameterized constructor
+	 * Creates a resigned game, given the player resigning and
+	 * the game being resigned from
+	 *
+	 * @param game - Game being resigned from
+	 * @param player - Player resigning
+	 */
+	public CheckersGame(CheckersGame game, Player player) {
 		this.playerRed = game.getPlayerRed();
 		this.playerWhite = game.getPlayerWhite();
 
@@ -37,8 +43,7 @@ public class CheckersGame {
 
 
 	/**
-	 * getMatrix method--
-	 * space matrix representing a checkers board
+	 * Space matrix representing a checkers board
 	 * @return space matrix
 	 */
 	public Space[][] getMatrix(){
@@ -46,8 +51,7 @@ public class CheckersGame {
 	}
 
 	/**
-	 * getPlayerRed method--
-	 * used to access the red player in the game
+	 * Used to access the red player in the game
 	 * @return - Red player in the game
 	 */
 	public Player getPlayerRed() {
@@ -63,6 +67,11 @@ public class CheckersGame {
 		return playerWhite;
 	}
 
+	/**
+	 * Accesses the opponent player to the player passed in
+	 * @param player - Player whose opponent is being returned
+	 * @return - Player not passed in
+	 */
 	public Player getOtherPlayer(Player player){
 		if(playerRed.equals(player)){
 			return playerWhite;
@@ -73,7 +82,6 @@ public class CheckersGame {
 	}
 
 	/**
-	 * getPlayerActive method--
 	 * Used to access player whose turn it is
 	 * @return player whose turn it is
 	 */
@@ -82,11 +90,9 @@ public class CheckersGame {
 	}
 
 	/**
-	 * changeActivePlayer method--
-	 * This method changes the state of active player
+	 * Changes the player who is active from red to white or vice versa
 	 */
-	public void changeActivePlayer()
-	{
+	public void changeActivePlayer() {
 		if(playerActive.equals(playerRed))
 		{
 			playerActive = playerWhite;
@@ -99,8 +105,8 @@ public class CheckersGame {
 
 	/**
 	 * What color is the given player?
-	 * @param player
-	 * @return Piece.Color
+	 * @param player - Player whose color is being requested
+	 * @return Piece.Color - color of the Player
 	 */
 	public Piece.Color getPlayerColor(Player player) {
 		if(player.equals(playerRed)) {
@@ -114,7 +120,12 @@ public class CheckersGame {
 		}
 	}
 
-	public boolean isResignedPlayer (Player player){
+	/**
+	 * Returns whether or not a player has resigned from the game
+	 * @param player - Player being checked if resigned
+	 * @return - false if there is no resigned player, true if player is resigned
+	 */
+	public boolean isResignedPlayer (Player player) {
 		if(resignedPlayer == null){
 			return false;
 		}
