@@ -28,7 +28,7 @@ public class Message {
      * getText method
      * This method is a getter of text
      *
-     * @return reference to the text
+     * @return - reference to the text
      */
     public String getText() {
         return text;
@@ -38,7 +38,7 @@ public class Message {
      * getType method
      * This method is a getter of type
      *
-     * @return enum type
+     * @return - enum type
      */
     public MessageType getType() {
         return type;

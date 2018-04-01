@@ -17,7 +17,7 @@ public class BoardBuilder {
      * The first row of the board starts with a black square
      *
      * @param rowId - the row being built
-     * @return  - Space[] representing a row of Spaces
+     * @return - Space[] representing a row of Spaces
      */
     private static Space[] buildRow(int rowId) {
 
@@ -40,10 +40,10 @@ public class BoardBuilder {
     /**
      * Build a Space given a row and cell ID context
      *
-     * @param rowId - ID of the row being built
-     * @param cellId - ID of the cell being built
-     * @param invalidSpace  - Whether or not a space is invalid
-     * @return  - A valid space
+     * @param rowId        - ID of the row being built
+     * @param cellId       - ID of the cell being built
+     * @param invalidSpace - Whether or not a space is invalid
+     * @return - A valid space
      */
     private static Space buildSpace(int rowId, int cellId, boolean invalidSpace) {
 
