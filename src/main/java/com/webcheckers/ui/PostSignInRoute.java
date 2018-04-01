@@ -7,6 +7,7 @@ import com.webcheckers.model.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import spark.TemplateEngine;
 import spark.Route;
@@ -15,6 +16,7 @@ import spark.Request;
 import spark.Response;
 
 public class PostSignInRoute implements Route {
+    private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
     static final String TITLE = "Player Sign-In";
     static final String VIEW_NAME = "signin.ftl";
@@ -27,10 +29,12 @@ public class PostSignInRoute implements Route {
 
     PostSignInRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby){
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        Objects.requireNonNull(playerLobby, "templateEngine must not be null");
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+
+        LOG.config("PostSignInRoute is initialized");
     }
 
     /**
@@ -42,6 +46,7 @@ public class PostSignInRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        LOG.fine("PostSignInRoute is invoked.");
         // TODO: redirect to home if player session exists
 
         Map<String, Object> vm = new HashMap<>();
@@ -56,10 +61,13 @@ public class PostSignInRoute implements Route {
 			// Add the new Player's model to their session
 			request.session().attribute("Player", newPlayer);
 
+			LOG.info(String.format("Player [%s] has signed in!", playerName));
+
 			// Redirect to the homepage, which should now render the player lobby
 			response.redirect(WebServer.HOME_URL);
 
         } catch (PlayerLobbyException e) {
+            LOG.warning(e.getMessage());
             vm.put("message", e.getMessage());
 		}
 

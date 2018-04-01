@@ -52,4 +52,9 @@ public class Player {
 	public int hashCode() {
 		return Objects.hash(this.name);
 	}
+
+	public String toString()
+	{
+		return new String("Player Name: "+ name);
+	}
 }

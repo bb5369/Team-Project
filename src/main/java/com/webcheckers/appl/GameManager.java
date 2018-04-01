@@ -21,8 +21,7 @@ public class GameManager {
 	 * default construct
 	 * Initializes gameList on instantiation
 	 */
-	public GameManager()
-	{
+	public GameManager() {
 		gameList = new ArrayList<>();
 		resignedGames = new ArrayList<>();
 	}
@@ -31,15 +30,16 @@ public class GameManager {
 	/**
 	 * isPlayerInAGame
 	 * Determines whether or not a given player is in a game
+	 *
 	 * @param player: player that the method checks if in game
 	 * @return: true if player is ingame, false if not
 	 */
-	public boolean isPlayerInAGame(Player player){
+	public boolean isPlayerInAGame(Player player) {
 
-		if (gameList == null || player == null ) return false;
+		if (gameList == null || player == null) return false;
 
 		for (CheckersGame game : gameList) {
-			if(isPlayerInThisGame(game, player)) {
+			if (isPlayerInThisGame(game, player)) {
 				return true;
 			}
 		}
@@ -50,12 +50,12 @@ public class GameManager {
 	/**
 	 * isPlayerInThisGame
 	 * This is a private method that checks if the player is in a game
-	 * @param game - game to checkin
+	 *
+	 * @param game   - game to checkin
 	 * @param player - player to check for
 	 * @return true if the player is in the game
 	 */
-	private boolean isPlayerInThisGame(CheckersGame game, Player player)
-	{
+	private boolean isPlayerInThisGame(CheckersGame game, Player player) {
 		return player.equals(game.getPlayerRed()) || player.equals(game.getPlayerWhite());
 	}
 
@@ -64,6 +64,7 @@ public class GameManager {
 	 * Get a game between two players - Existing or New game
 	 * This is used to fetch the game that player is currently in
 	 * If there isn't a game, it will make one
+	 *
 	 * @param player1 - the first player
 	 * @param player2 - the second player
 	 * @return - CheckerGame reference to the game that the player is in
@@ -71,8 +72,8 @@ public class GameManager {
 	public CheckersGame getGame(Player player1, Player player2) {
 		CheckersGame aGame = null;
 
-		for (CheckersGame game: gameList) {
-			if(isPlayerInThisGame(game, player1) && isPlayerInThisGame(game, player2)) {
+		for (CheckersGame game : gameList) {
+			if (isPlayerInThisGame(game, player1) && isPlayerInThisGame(game, player2)) {
 				LOG.finer(String.format("getGame(Player: '%s', Player: '%s') Found a game in progress",
 						player1.getName(),
 						player2.getName()));
@@ -87,11 +88,12 @@ public class GameManager {
 
 	/**
 	 * Get the game that a given player is currently in
+	 *
 	 * @param currentPlayer
 	 * @return CheckersGame
 	 */
 	public CheckersGame getGame(Player currentPlayer) {
-		for (CheckersGame game: gameList) {
+		for (CheckersGame game : gameList) {
 			if (isPlayerInThisGame(game, currentPlayer)) {
 				LOG.finer(String.format("getGame(Player: '%s') Found game in progress",
 						currentPlayer.getName()));
@@ -107,7 +109,8 @@ public class GameManager {
 	 * getNewGame method
 	 * This method is used to creating and adding a new CheckerGame
 	 * into the gameList
-	 * @param playerRed - player 1
+	 *
+	 * @param playerRed   - player 1
 	 * @param playerWhite - player 2
 	 * @return reference to newly created CheckerGame game
 	 */
@@ -131,8 +134,8 @@ public class GameManager {
 		return newGame;
 	}
 
-	public CheckersGame getResignedGame(Player currentPlayer){
-		for (CheckersGame game: resignedGames) {
+	public CheckersGame getResignedGame(Player currentPlayer) {
+		for (CheckersGame game : resignedGames) {
 			if (isPlayerInThisGame(game, currentPlayer)) {
 				LOG.finer(String.format("getGame(Player: '%s') Found resigned game in progerss",
 						currentPlayer.getName()));
@@ -143,35 +146,36 @@ public class GameManager {
 		return null;
 	}
 
-	public void resignGame(Player player){
+	public void resignGame(Player player) {
 		CheckersGame game = getGame(player);
 		gameList.remove(game);
-	 	game = new CheckersGame(game, player);
+		game = new CheckersGame(game, player);
 		resignedGames.add(game);
 
 	}
 
-	public boolean isPlayerInAResignedGame(Player player){
+	public boolean isPlayerInAResignedGame(Player player) {
 
-		if (resignedGames == null || player == null ) return false;
+		if (resignedGames == null || player == null) return false;
 
 		for (CheckersGame game : resignedGames) {
-			if(isPlayerInThisGame(game, player)) {
+			if (isPlayerInThisGame(game, player)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isPlayerInAnyGame(Player player){
+	public boolean isPlayerInAnyGame(Player player) {
 		return isPlayerInAGame(player) || isPlayerInAResignedGame(player);
 	}
-	public void clearGame(Player player){
+
+	public void clearGame(Player player) {
 		gameList.remove(getGame(player));
 	}
 
-	public void clearResigned(Player player){
-		if(!getResignedGame(player).isResignedPlayer(player))
+	public void clearResigned(Player player) {
+		if (!getResignedGame(player).isResignedPlayer(player))
 			resignedGames.remove(getResignedGame(player));
 	}
 
@@ -181,4 +185,19 @@ public class GameManager {
 		this.resignedGames.clear();
 	}
 
+	/**
+	 * Factory method for creating a new TurnController for a player if they are in a game
+	 *
+	 * @param player
+	 * @return
+	 */
+	public TurnController getTurnController(Player player) {
+		final CheckersGame game = getGame(player);
+
+		return new TurnController(game, player);
+	}
+
+	public void destoryGame(CheckersGame game) {
+		this.gameList.remove(game);
+	}
 }

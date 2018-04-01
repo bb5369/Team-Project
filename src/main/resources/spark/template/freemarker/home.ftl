@@ -12,13 +12,20 @@
     
     <div class="navigation">
         <a href="/">home</a>
+        <#if currentPlayer??>
+                <a href="/signout" style="float: right";>sign out</a>
+        </#if>
     </div>
-    
+
+
     <div class="body">
         <#if currentPlayer??>
+
             <p>Welcome, ${currentPlayer.name}.</p>
 
             <h2>Online Players</h2>
+
+
 
             <#if message??>
             <div id="message" class="${message.type}">${message.text}</div>
@@ -44,7 +51,7 @@
 
         <#if ! currentPlayer??>
         <div class="signin">
-            <button class="sign_btn" onclick="window.location.href='signin'" type="button" >Sign-in to play a game!</button>
+            <button class="sign_btn" onclick="window.location.href='${signInUrl}'" type="button" >Sign-in to play a game!</button>
         </div>
         </#if>
 
