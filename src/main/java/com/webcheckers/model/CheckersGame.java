@@ -32,26 +32,11 @@ public class CheckersGame {
 		initializeMatrix();
 	}
 
-	public CheckersGame(Player playerRed, Player playerWhite, Player playerActive, Space[][] matrix){
-		this.playerRed = playerRed;
-		this.playerWhite = playerWhite;
-
-		this.playerActive = playerActive;
-		this.resignedPlayer = null;
-
-		initializeMatrix();
-	}
-
 	public CheckersGame(CheckersGame game, Player player){
 		this.playerRed = game.getPlayerRed();
 		this.playerWhite = game.getPlayerWhite();
 
-		this.playerActive = game.getPlayerActive();
-
 		this.resignedPlayer = player;
-		validMoves = new DoublyLinkedQueue<>();
-
-		initializeMatrix();
 	}
 
 	/**
@@ -153,25 +138,6 @@ public class CheckersGame {
 	public Player getPlayerActive() {
 		return playerActive;
 	}
-
-	public CheckersGame remove(CheckersGame game, Player player){
-		Player active;
-		if(playerRed.equals(player)){
-			if(game.getPlayerActive().equals(player))
-				active = player;
-			else
-				active = game.getPlayerWhite();
-			return new CheckersGame(new Player("null"), game.getPlayerWhite(), active, matrix);
-		}
-		else {
-			if(game.getPlayerActive().equals(player))
-				active = player;
-			else
-				active = game.getPlayerWhite();
-			return new CheckersGame(game.getPlayerRed(), new Player("null"), active, matrix);
-		}
-	}
-
 
 	/**
 	 * changeActivePlayer method--
