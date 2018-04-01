@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.model.PlayerState;
 
 /**
  * Coordinates the state of active games across the entire application

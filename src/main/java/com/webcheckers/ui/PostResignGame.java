@@ -1,7 +1,5 @@
 package com.webcheckers.ui;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -10,8 +8,6 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 
-import com.webcheckers.model.PlayerState;
-import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Route;
