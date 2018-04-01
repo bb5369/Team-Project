@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.Turn;
 
 /**
  * Coordinates the state of active games across the entire application
@@ -223,15 +224,15 @@ public class GameManager {
     }
 
     /**
-     * Factory method for creating a new TurnController for a player if they are in a game
+     * Factory method for creating a new Turn for a player if they are in a game
      *
-     * @param player - player whose game a TurnController is being made for
-     * @return - a new TurnController
+     * @param player - player whose game a Turn is being made for
+     * @return - a new Turn
      */
-    public TurnController getTurnController(Player player) {
+    public Turn getTurnController(Player player) {
         final CheckersGame game = getGame(player);
 
-        return new TurnController(game, player);
+        return new Turn(game, player);
     }
 
     /**

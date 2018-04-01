@@ -2,7 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.appl.TurnController;
+import com.webcheckers.model.Turn;
 import com.webcheckers.model.Message;
 import com.google.gson.Gson;
 
@@ -34,9 +34,9 @@ public class PostBackupMoveRoute implements Route{
     public Object handle(Request request, Response response) throws Exception {
         LOG.finer("PostBackupMoveRoute invoked");
         Player sessionPlayer = request.session().attribute("Player");
-        TurnController turnController = gameManager.getTurnController(sessionPlayer);
+        Turn turn = gameManager.getTurnController(sessionPlayer);
 
-        if(turnController.backupMove()){
+        if(turn.backupMove()){
             return (new Gson()).toJson(new Message("Backed a move", Message.MessageType.info));
         }
         else{

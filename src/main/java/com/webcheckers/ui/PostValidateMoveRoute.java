@@ -1,7 +1,7 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.TurnController;
+import com.webcheckers.model.Turn;
 import com.webcheckers.model.*;
 
 import com.google.gson.Gson;
@@ -44,7 +44,7 @@ public class PostValidateMoveRoute implements Route {
     	LOG.finer("PostValidateMoveRoute invoked");
 
         Player sessionPlayer = request.session().attribute("Player");
-        TurnController turnController = gameManager.getTurnController(sessionPlayer);
+        Turn turn = gameManager.getTurnController(sessionPlayer);
 
         String positionAsJson = request.body();
 
@@ -56,7 +56,7 @@ public class PostValidateMoveRoute implements Route {
 
         Move requestedMove = gson.fromJson(positionAsJson, Move.class);
 
-        boolean isValidMove = turnController.validateMove(requestedMove);
+        boolean isValidMove = turn.validateMove(requestedMove);
 
         if (isValidMove) {
         	LOG.fine("Move was found to be valid!");

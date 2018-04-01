@@ -1,9 +1,7 @@
-package com.webcheckers.appl;
+package com.webcheckers.model;
 
-import com.webcheckers.model.*;
 import com.webcheckers.util.DoublyLinkedQueue;
 
-import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 /**
@@ -13,9 +11,9 @@ import java.util.logging.Logger;
  * to submitting a list of moves and completing their turn
  * The turn controller is an expert at it all!
  */
-public class TurnController {
+public class Turn {
     //instance variables
-    private static final Logger LOG = Logger.getLogger(TurnController.class.getName());
+    private static final Logger LOG = Logger.getLogger(Turn.class.getName());
     private CheckersGame game;
     private Player player;
     private MoveValidator moveValidator;
@@ -26,10 +24,10 @@ public class TurnController {
      * Parameterized constructor
      * A turn is identified by a game and a player
      *
-     * @param game   - game the TurnController is being made for
-     * @param player - player the TurnController is being made for
+     * @param game   - game the Turn is being made for
+     * @param player - player the Turn is being made for
      */
-    TurnController(CheckersGame game, Player player) {
+    Turn(CheckersGame game, Player player) {
         this.game = game;
         this.player = player;
 
@@ -37,7 +35,7 @@ public class TurnController {
 
         moveValidator = new MoveValidator(game, player);
 
-        LOG.fine(String.format("TurnController initialized for Player [%s]", player.getName()));
+        LOG.fine(String.format("Turn initialized for Player [%s]", player.getName()));
     }
 
     /**

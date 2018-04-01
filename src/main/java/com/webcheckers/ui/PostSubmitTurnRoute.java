@@ -3,12 +3,10 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.appl.TurnController;
+import com.webcheckers.model.Turn;
 import com.webcheckers.model.Message;
-import com.webcheckers.model.Move;
 
 import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Player;
@@ -40,9 +38,9 @@ public class PostSubmitTurnRoute implements Route {
         LOG.finer("PostSubmitTurnRoute invoked");
 
         Player sessionPlayer = request.session(). attribute("Player");
-        TurnController turnController = gameManager.getTurnController(sessionPlayer);
+        Turn turn = gameManager.getTurnController(sessionPlayer);
 
-        if(turnController.submitTurn()) { //making sure a move was actually made
+        if(turn.submitTurn()) { //making sure a move was actually made
             return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));
             //update the board model here making it permanent
         }

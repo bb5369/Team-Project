@@ -1,8 +1,8 @@
 package com.webcheckers.model;
 
 /**
- * Builder pattern that generates a checkers board
- * We aren't instantiating objects here but we're creating a Spaces[][] board
+ * How to build a Checkers Board
+ * This is a static class used in the setup of a CheckersGame
  */
 public class BoardBuilder {
 
