@@ -146,12 +146,12 @@ public class GameManager {
 		return null;
 	}
 
-	public void resignGame(Player player) {
+	public boolean resignGame(Player player) {
 		CheckersGame game = getGame(player);
 		gameList.remove(game);
 		game = new CheckersGame(game, player);
 		resignedGames.add(game);
-
+		return true;
 	}
 
 	public boolean isPlayerInAResignedGame(Player player) {

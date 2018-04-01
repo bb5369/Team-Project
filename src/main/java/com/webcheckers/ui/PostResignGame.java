@@ -19,16 +19,15 @@ public class PostResignGame implements Route {
     private static final Logger LOG = Logger.getLogger(PostResignGame.class.getName());
 
     private final GameManager gameManager;
-    private final String info_Message = "Resign the current player from the game";
-    private final Gson gson;
+//    private final String info_Message = "Resign the current player from the game";
 
-    public PostResignGame(TemplateEngine templateEngine, GameManager gameManager, final Gson gson){
+    public PostResignGame(GameManager gameManager){
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+//        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gameManager, "gameManager must not be null");
 
         this.gameManager = gameManager;
-        this.gson = gson;
+//        this.gson = gson;
         LOG.config("PostResignRoute is initialized");
     }
 
@@ -36,19 +35,23 @@ public class PostResignGame implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("PostResignGame is invoked.");
 
-        Player currentPlayer = request.session().attribute("Player");
+        Player sessionPlayer = request.session().attribute("Player");
 
-        gameManager.resignGame(currentPlayer);
+        boolean resignWorked = gameManager.resignGame(sessionPlayer);
 
-        // TODO: If we can't resign from the game then return that message
-        return formatMessageJson(Message.MessageType.info, info_Message);
+        if(resignWorked)
+            return (new Gson()).toJson(new Message(sessionPlayer.name + "Resigned", Message.MessageType.info));
+
+        else
+            return (new Gson()).toJson(new Message(sessionPlayer.name + "'s Resign failed", Message.MessageType.error));
+
     }
     /**
-     * formatMessageJson - Format text and a message type as JSON for use in returning to the frontend
-     * @return gson Message object
-     */
-    public Object formatMessageJson(Message.MessageType messageType, String messageText) {
-        Message message = new Message(messageText, messageType);
-        return gson.toJson(message);
-    }
+//     * formatMessageJson - Format text and a message type as JSON for use in returning to the frontend
+//     * @return gson Message object
+//     */
+//    public Object formatMessageJson(Message.MessageType messageType, String messageText) {
+//        Message message = new Message(messageText, messageType);
+//        return gson.toJson(message);
+//    }
 }
