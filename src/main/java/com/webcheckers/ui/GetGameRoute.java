@@ -71,18 +71,18 @@ public class GetGameRoute implements Route {
 		final Player currentPlayer = request.session().attribute("Player");
 
 		if (currentPlayer != null && gameManager.isPlayerInAnyGame(currentPlayer)) {
-			if(gameManager.isPlayerInAResignedGame(currentPlayer)) {
-				//CheckersGame game = gameManager.getResignedGame(currentPlayer);
+			if(gameManager.isPlayerInAResignedGame(currentPlayer) && !gameManager.getResignedGame(currentPlayer).isResignedPlayer(currentPlayer)) {
 				gameManager.clearGame(currentPlayer);
 				gameManager.clearResigned(currentPlayer);
-				if(!gameManager.isPlayerInAResignedGame(currentPlayer))
-					redirectWithType(request, response, new Message(PLAYER_LEFT_GAME, Message.MessageType.info), WebServer.HOME_URL);
-				else
-					response.redirect(WebServer.HOME_URL);
+				redirectWithType(request, response, new Message(PLAYER_LEFT_GAME, Message.MessageType.info), WebServer.HOME_URL);
 				halt();
 			}
-			else{
+			else if (gameManager.isPlayerInAGame(currentPlayer)){
 				return renderGame(currentPlayer, null);//playGameWith(currentPlayer);
+			}
+			else{
+				response.redirect(WebServer.HOME_URL);
+				halt();
 			}
 
 			//return renderGame(game, currentPlayer);
@@ -152,10 +152,14 @@ public class GetGameRoute implements Route {
 	 */
 	private Object renderGame(Player sessionPlayer, Player opponentPlayer) {
 		CheckersGame game;
-			if(opponentPlayer == null)
+			if(opponentPlayer == null) {
+				LOG.fine(String.format("Playing game with [%s]", sessionPlayer.getName()));
 				game = gameManager.getGame(sessionPlayer);
-			else
+			}
+			else {
+				LOG.fine(String.format("Playing game between [%s] and [%s]", sessionPlayer.getName(), opponentPlayer.getName()));
 				game = gameManager.getGame(sessionPlayer, opponentPlayer);
+			}
 		return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, VIEW_TITLE), VIEW_NAME));
 	}
 

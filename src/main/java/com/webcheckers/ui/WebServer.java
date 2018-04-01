@@ -142,9 +142,9 @@ public class WebServer {
 
     get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));
 
-    post(RESIGN_URL, new PostResignGame(templateEngine, playerLobby, gameManager));
+    post(RESIGN_URL, new PostResignGame(templateEngine, gameManager, gson));
 
-    post(CHECK_URL, new PostCheckTurnRoute(templateEngine, playerLobby, gameManager));
+    post(CHECK_URL, new PostCheckTurnRoute(templateEngine, playerLobby, gameManager, gson));
 
     LOG.config("WebServer is initialized.");
   }

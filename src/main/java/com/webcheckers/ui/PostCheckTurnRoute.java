@@ -10,6 +10,8 @@ import spark.Response;
 import spark.Route;
 import spark.Request;
 
+import com.google.gson.Gson;
+
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -20,17 +22,21 @@ public class PostCheckTurnRoute implements Route {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
 
-    private final String opponentResigned = "Your opponent has resigned From the game";
+    private final String opponentResigned = "true"/*"Your opponent has resigned From the game"*/;
 
-    public PostCheckTurnRoute(TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
+    private final Gson gson;
+
+    public PostCheckTurnRoute(TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager, Gson gson) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(playerLobby, "player must not be null");
         Objects.requireNonNull(gameManager, "gameManager must not be null");
+        Objects.requireNonNull(gson, "gson must not be null");
 
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
+        this.gson = gson;
 
         LOG.config("PostCheckTurnRoute is initialized");
     }
@@ -52,21 +58,16 @@ public class PostCheckTurnRoute implements Route {
             if(game.isResignedPlayer(currrentPlayer))
                 response.redirect(WebServer.HOME_URL);
             else
-                redirectWithType(request, response, message, WebServer.HOME_URL);
+                return formatMessageJson(message);
         }
         return null;
     }
-    /**
-     * Helper function used to redirect to a route and show the user an message
-     * @param request
-     * @param response
-     * @param message
-     * @param destination
-     */
-    private void redirectWithType(Request request, Response response, Message message, String destination) {
-        LOG.fine(String.format("Redirecting to %s with %s [%s]", destination, message.getType(), message.getText()));
 
-        request.session().attribute("message", message);
-        response.redirect(destination);
+    /**
+     * formatMessageJson - Format text and a message type as JSON for use in returning to the frontend
+     * @return gson Message object
+     */
+    public Object formatMessageJson(Message message) {
+        return gson.toJson(message);
     }
 }
