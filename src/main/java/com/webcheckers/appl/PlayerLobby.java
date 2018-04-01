@@ -10,113 +10,118 @@ import java.util.HashMap;
  */
 public class PlayerLobby {
 
-	private static final String MESSAGE_PLAYER_NAME_TAKEN = "Chosen name already exists in Lobby.";
-	private static final String MESSAGE_PLAYER_NAME_INVALID = "Chosen player name not valid. Please use only alphanumerics and spaces.";
+    private static final String MESSAGE_PLAYER_NAME_TAKEN = "Chosen name already exists in Lobby.";
+    private static final String MESSAGE_PLAYER_NAME_INVALID = "Chosen player name not valid. Please use only alphanumerics and spaces.";
 
-	// instance variable
-	private HashMap<String, Player> activePlayers;
+    // instance variable
+    private HashMap<String, Player> activePlayers;
 
-	/**
-	 * default constructor
-	 * This initializes the activePlayers HashMap on instantiation
-	 */
-	public PlayerLobby() {
-		activePlayers = new HashMap<String, Player>();
-	}
+    /**
+     * default constructor
+     * This initializes the activePlayers HashMap on instantiation
+     */
+    public PlayerLobby() {
+        activePlayers = new HashMap<String, Player>();
+    }
 
-	// Behaviors
-	/**
-	 * getActivePlayers method
-	 * This may be an interim method.
-	 * @return Hashmap containing all the active players
-	 */
-	public HashMap<String, Player> getActivePlayers() {
-		return activePlayers;
-	}
+    // Behaviors
 
-	/**
-	 * getActivePlayerCount method
-	 * Returns a count of the number of active players in the lobby
-	 * @return Integer activePlayerCount
-	 */
-	public Integer getActivePlayerCount() {
-		return this.activePlayers.size();
-	}
+    /**
+     * This may be an interim method.
+     *
+     * @return - Hashmap containing all the active players
+     */
+    public HashMap<String, Player> getActivePlayers() {
+        return activePlayers;
+    }
 
-	/**
-	 * isPlayerInLobby method
-	 * Returns true/false if a player value object is in the lobby
-	 * @param player
-	 * @return
-	 */
-	public boolean isPlayerInLobby(Player player) {
-		if (getActivePlayerCount() == 0) {
-			return false;
-		}
+    /**
+     * Returns a count of the number of active players in the lobby
+     *
+     * @return - Integer activePlayerCount
+     */
+    public Integer getActivePlayerCount() {
+        return this.activePlayers.size();
+    }
 
-		if (player == null) {
-			return false;
-		}
+    /**
+     * Returns true/false if a player value object is in the lobby
+     *
+     * @param player - player being checked
+     * @return - returns true if the player is in the lobby, false otherwise
+     */
+    public boolean isPlayerInLobby(Player player) {
+        if (getActivePlayerCount() == 0) {
+            return false;
+        }
 
-		return activePlayers.containsKey(player.getName());
-	}
+        if (player == null) {
+            return false;
+        }
 
-
-	/**
-	 * newPlayer method
-	 * Create a new Player given a name and returns that player
-	 * @param name of the new player
-	 * @return a new Player
-	 */
-	public Player newPlayer(String name) {
-
-		if (! isValidName(name)) {
-			throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_INVALID);
-		}
-
-		if (activePlayers.containsKey(name)) {
-			throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_TAKEN);
-		}
-
-		final Player newPlayer = new Player(name);
-
-		// Add the player to our lobby
-		this.activePlayers.put(name, newPlayer);
-
-		return newPlayer;
-	}
-
-	/**
-	 * getPlayer method
-	 * This method returns a player of
-	 * @param name
-	 * @return
-	 */
-	public Player getPlayer(String name) {
-			return activePlayers.get(name);
-	}
+        return activePlayers.containsKey(player.getName());
+    }
 
 
-	/**
-	 * Validates alphanumeric property of a candidate name for a player
-	 * TODO: refactor out of PlayerLobby into com.webcheckers.util
-	 * @param String candidateName
-	 * @return Boolean
-	 */
-	public Boolean isValidName(String candidateName) {
-		return candidateName.matches("[a-zA-Z0-9 ]+");
-	}
+    /**
+     * Create a new Player given a name and returns that player
+     *
+     * @param name - name of the new player
+     * @return - a new Player
+     */
+    public Player newPlayer(String name) {
+
+        if (!isValidName(name)) {
+            throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_INVALID);
+        }
+
+        if (activePlayers.containsKey(name)) {
+            throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_TAKEN);
+        }
+
+        final Player newPlayer = new Player(name);
+
+        // Add the player to our lobby
+        this.activePlayers.put(name, newPlayer);
+
+        return newPlayer;
+    }
+
+    /**
+     * Returns an active player
+     *
+     * @param name - Name of the player being searched for
+     * @return - Player being searched for
+     */
+    public Player getPlayer(String name) {
+        return activePlayers.get(name);
+    }
 
 
-	public void clearLobby() {
-		this.activePlayers.clear();
-	}
+    /**
+     * Validates alphanumeric property of a candidate name for a player
+     * TODO: refactor out of PlayerLobby into com.webcheckers.util
+     *
+     * @param candidateName - name attempting to be entered
+     * @return - true if it is a valid name, false otherwise
+     */
+    public Boolean isValidName(String candidateName) {
+        return candidateName.matches("[a-zA-Z0-9 ]+");
+    }
 
-	/**
-	 * Remove the given player from the map of active players
-	 * @param playerName
-	 */
-	public void destroyPlayer(String playerName){
-		this.activePlayers.remove(playerName);
-	}
+    /**
+     * Clears the list of active players
+     */
+    public void clearLobby() {
+        this.activePlayers.clear();
+    }
+
+    /**
+     * Remove the given player from the map of active players
+     *
+     * @param playerName - Player being removed
+     */
+    public void destroyPlayer(String playerName) {
+        this.activePlayers.remove(playerName);
+    }
 }
