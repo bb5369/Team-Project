@@ -2,7 +2,6 @@ package com.webcheckers.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -18,7 +17,7 @@ public class MoveValidatorTest {
 	private static Player player;
 	private static Piece piece;
 
-	private static BoardBuilder boardBuilder;
+	private static TestBoardBuilder testBoardBuilder;
 
 	private static MoveValidator moveValidator;
 
@@ -34,7 +33,7 @@ public class MoveValidatorTest {
 		game = mock(CheckersGame.class);
 
 		// build board matrix we'll be testing
-		boardBuilder = new BoardBuilder();
+		testBoardBuilder = new TestBoardBuilder();
 
 		// Setup behaviors
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
@@ -45,7 +44,7 @@ public class MoveValidatorTest {
 
 	//@Test
 	public void test_aDiagonalMove() {
-		when(game.getMatrix()).thenReturn(boardBuilder.build());
+		when(game.getMatrix()).thenReturn(testBoardBuilder.build());
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
@@ -64,7 +63,7 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = boardBuilder.withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = testBoardBuilder.withPieceAt(king, kingPosition).build();
 
 		when(game.getMatrix()).thenReturn(boardWithKing);
 

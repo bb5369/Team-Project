@@ -2,8 +2,6 @@ package com.webcheckers.model;
 
 import com.webcheckers.util.DoublyLinkedQueue;
 
-import java.util.PriorityQueue;
-
 public class CheckersGame {
 
 	//instance variables
@@ -29,7 +27,7 @@ public class CheckersGame {
 		this.playerActive = this.playerRed;
 
 		this.resignedPlayer = null;
-		initializeMatrix();
+		generateStartingBoard();
 	}
 
 	public CheckersGame(CheckersGame game, Player player){
@@ -49,50 +47,7 @@ public class CheckersGame {
 		return validMoves;
 	}
 
-	/**
-	 * Initializes the matrix of spaces to contain an initial board state of checkers
-	 */
-	public void initializeMatrix(){
-		matrix = new Space[8][8];
 
-		//These constants are used in here in RowGen building and in Move validation for sanity
-		final Integer WHITE_BORDER_INDEX = 2;
-		final Integer RED_BORDER_INDEX = 5;
-
-		// Build row from Left to Right
-		for(int row = 0; row < matrix.length; row++) {
-
-			boolean startWhiteSquare = false;
-
-			// Alternating rows begin with a dark space
-			if(row % 2 == 0) {
-				startWhiteSquare = true;
-			}
-
-			for (int i = 0; i < matrix[0].length; i++) {
-
-				if (startWhiteSquare) {
-					// we use startWhiteSquare to indicate a square that player cannot land on
-					matrix[row][i] = new Space(i, Space.State.INVALID);
-
-				} else {
-					// A player can land on this Space, or Space filled with starting Piece
-
-					if (row <= WHITE_BORDER_INDEX) {
-						matrix[row][i] = new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
-
-					} else if (row >= RED_BORDER_INDEX) {
-						matrix[row][i] = new Space(i, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
-
-					} else {
-						matrix[row][i] = new Space(i, Space.State.OPEN);
-					}
-				}
-				// The next Space is inverted, ie a White wont follow a Black
-				startWhiteSquare = !startWhiteSquare;
-			}
-		}
-	}
 
 	/**
 	 * getMatrix method--
@@ -187,5 +142,12 @@ public class CheckersGame {
 	 */
 	private void clearValidMoves() {
 		validMoves.removeAll();
+	}
+
+	/**
+	 * Uses our static BoardBuilder to generate the starting Checkers Board
+	 */
+	private void generateStartingBoard() {
+		this.matrix = BoardBuilder.buildBoard();
 	}
 }
