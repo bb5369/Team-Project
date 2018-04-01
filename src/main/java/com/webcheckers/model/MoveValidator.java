@@ -18,8 +18,8 @@ public class MoveValidator {
     /**
      * MoveValidator constructor for seeding info needed for the algorithm
      *
-     * @param game
-     * @param player
+     * @param game   - Game being played
+     * @param player - Player whose turn it is
      */
     public MoveValidator(CheckersGame game, Player player) {
 
@@ -34,7 +34,7 @@ public class MoveValidator {
     /**
      * Entrypoint to move validation algorithm - kicks off the process
      *
-     * @return
+     * @return - true if the move is valid
      */
     public boolean validateMove(Move move) {
 
@@ -51,7 +51,7 @@ public class MoveValidator {
     /**
      * Facade of move validation steps
      *
-     * @return boolean if the given move is a valid one or not
+     * @return - boolean if the given move is a valid one or not
      */
     private boolean validateMoveByStep(Move move) {
 
@@ -80,7 +80,7 @@ public class MoveValidator {
     /**
      * Logs the move as a pair of coordinates
      *
-     * @param move
+     * @param move - Move being made
      */
     private void logMoveCoordinates(Move move) {
         // "RED Player [username] wants to move from <0,1> to <1,2>"
@@ -110,8 +110,8 @@ public class MoveValidator {
     /**
      * Given a move is the end position open
      *
-     * @param move
-     * @return
+     * @param move - Move being made
+     * @return - true if the space being moved to is a valid, unoccupied space
      */
     private boolean isEndSpaceOpen(Move move) {
         Space endSpace = getSpace(move.getEnd());
@@ -122,8 +122,8 @@ public class MoveValidator {
     /**
      * Determines if the piece is moved in the right direction
      *
-     * @param move
-     * @return True, if it does, false otherwise
+     * @param move - Move being made
+     * @return - True, if it does, false otherwise
      */
     private boolean isMoveInRightDirection(Move move) {
         Piece piece = getSpace(move.getStart()).getPiece();
@@ -153,8 +153,8 @@ public class MoveValidator {
     /**
      * Checks to see if we are only moving one space away
      *
-     * @param move
-     * @return boolean
+     * @param move - Move being made
+     * @return boolean - true if the move is moving one space away from start position, false otherwise
      */
     private boolean isMoveSingleSpace(Move move) {
         int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
@@ -169,8 +169,8 @@ public class MoveValidator {
     /**
      * All moves must be diagonal, therefore rise==run
      *
-     * @param move
-     * @return boolean
+     * @param move - Move being made
+     * @return boolean - true if the move being made is diagonal from the starting position
      */
     private boolean isMoveDiagonal(Move move) {
         int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
@@ -184,7 +184,7 @@ public class MoveValidator {
      * :TODO implement is a valid jump move, For now return false for test
      * purposes assuming no valid jump move will me made
      *
-     * @return
+     * @return - true if the move is a jump move, false otherwise
      */
     private boolean isMoveJump(Move move) {
         return false;
@@ -193,8 +193,8 @@ public class MoveValidator {
     /**
      * Matrix lookup function - given a position it will return the enumerated state
      *
-     * @param pos
-     * @return SpaceState
+     * @param pos - end position of the move
+     * @return SpaceState - current state of the position being moved to
      */
     private Space getSpace(Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
