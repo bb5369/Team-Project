@@ -20,7 +20,6 @@ public class CheckersGame {
 	 * @param playerWhite - Player 2 wit white color pieces
 	 */
 	public CheckersGame(Player playerRed, Player playerWhite) {
-
 		this.playerRed = playerRed;
 		this.playerWhite = playerWhite;
 
