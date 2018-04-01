@@ -45,7 +45,7 @@ public class CheckersGame {
     /**
      * Space matrix representing a checkers board
      *
-     * @return space matrix
+     * @return  - space matrix
      */
     public Space[][] getMatrix() {
         return matrix;
@@ -54,7 +54,7 @@ public class CheckersGame {
     /**
      * Used to access the red player in the game
      *
-     * @return - Red player in the game
+     * @return  - Red player in the game
      */
     public Player getPlayerRed() {
         return playerRed;
@@ -64,7 +64,7 @@ public class CheckersGame {
      * getWhitePlayer method--
      * Used to access the white player in the game
      *
-     * @return - White player in the game
+     * @return  - White player in the game
      */
     public Player getPlayerWhite() {
         return playerWhite;
@@ -73,8 +73,8 @@ public class CheckersGame {
     /**
      * Accesses the opponent player to the player passed in
      *
-     * @param player - Player whose opponent is being returned
-     * @return - Player not passed in
+     * @param player    - Player whose opponent is being returned
+     * @return  - Player not passed in
      */
     public Player getOtherPlayer(Player player) {
         if (playerRed.equals(player)) {
@@ -87,7 +87,7 @@ public class CheckersGame {
     /**
      * Used to access player whose turn it is
      *
-     * @return player whose turn it is
+     * @return  - player whose turn it is
      */
     public Player getPlayerActive() {
         return playerActive;
@@ -107,8 +107,8 @@ public class CheckersGame {
     /**
      * What color is the given player?
      *
-     * @param player - Player whose color is being requested
-     * @return Piece.Color - color of the Player
+     * @param player    - Player whose color is being requested
+     * @return Piece.Color  - color of the Player
      */
     public Piece.Color getPlayerColor(Player player) {
         if (player.equals(playerRed)) {
@@ -123,8 +123,8 @@ public class CheckersGame {
     /**
      * Returns whether or not a player has resigned from the game
      *
-     * @param player - Player being checked if resigned
-     * @return - false if there is no resigned player, true if player is resigned
+     * @param player    - Player being checked if resigned
+     * @return  - false if there is no resigned player, true if player is resigned
      */
     public boolean isResignedPlayer(Player player) {
         if (resignedPlayer == null) {
