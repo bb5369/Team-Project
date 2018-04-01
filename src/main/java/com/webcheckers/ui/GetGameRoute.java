@@ -29,6 +29,7 @@ public class GetGameRoute implements Route {
 
     private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
+    private static String PLAYER_INVALID_SELECT = "You cannot play a game with yourself";
 
     /**
      * Create the Spark Route (UI controller) for the
@@ -70,7 +71,7 @@ public class GetGameRoute implements Route {
 
 		if (currentPlayer != null && gameManager.isPlayerInAnyGame(currentPlayer)) {
 			if(gameManager.isPlayerInAResignedGame(currentPlayer)) {
-				CheckersGame game = gameManager.getResignedGame(currentPlayer);
+				//CheckersGame game = gameManager.getResignedGame(currentPlayer);
 				gameManager.clearGame(currentPlayer);
 				gameManager.clearResigned(currentPlayer);
 				if(!gameManager.isPlayerInAResignedGame(currentPlayer))
@@ -80,7 +81,7 @@ public class GetGameRoute implements Route {
 				halt();
 			}
 			else{
-				return playGameWith(currentPlayer);
+				return renderGame(currentPlayer, null);//playGameWith(currentPlayer);
 			}
 
 			//return renderGame(game, currentPlayer);
@@ -93,7 +94,7 @@ public class GetGameRoute implements Route {
 			final Player whitePlayer = playerLobby.getPlayer(request.queryParams("whitePlayer"));
 
 			if (redPlayer.equals(whitePlayer)) {
-				redirectWithError(request, response, "You cannot play a game with yourself", WebServer.HOME_URL);
+				redirectWithError(request, response, PLAYER_INVALID_SELECT, WebServer.HOME_URL);
 			}
 
 			if (whitePlayer == null) {
@@ -104,7 +105,7 @@ public class GetGameRoute implements Route {
 				redirectWithError(request, response, PLAYER_IN_GAME_MESSAGE, WebServer.HOME_URL);
 			}
 
-			return playGameBetween(redPlayer, whitePlayer);
+			return renderGame(redPlayer, whitePlayer);//playGameBetween(redPlayer, whitePlayer);
 		} else {
 			response.redirect(WebServer.HOME_URL);
 			halt();
@@ -144,6 +145,13 @@ public class GetGameRoute implements Route {
 		response.redirect(destination);
 	}
 
+	/**
+	 * Helper function used to redirect to a route and show the user an info
+	 * @param request
+	 * @param response
+	 * @param message
+	 * @param destination
+	 */
 	private void redirectWithInfo(Request request, Response response, String message, String destination) {
 		LOG.fine(String.format("Redirecting to %s with info [%s]", destination, message));
 
@@ -152,34 +160,17 @@ public class GetGameRoute implements Route {
 		response.redirect(destination);
 	}
 
-	private Object playGameBetween(Player currentPlayer, Player opponentPlayer) {
-		LOG.fine(String.format("Playing game between [%s] and [%s]", currentPlayer.getName(), opponentPlayer.getName()));
-
-		final CheckersGame game = gameManager.getGame(currentPlayer, opponentPlayer);
-
-		return renderGame(game, currentPlayer);
-	}
-
-	/**
-	 * Given a player we will render the template for the player's current game
-	 * @param currentPlayer
-	 * @return Rendered template engine template game.ftl
-	 */
-	private Object playGameWith(Player currentPlayer) {
-		LOG.fine(String.format("Playing game with [%s]", currentPlayer.getName()));
-
-		final CheckersGame game = gameManager.getGame(currentPlayer);
-
-		return renderGame(game, currentPlayer);
-	}
-
 	/**
 	 * Render a given checkers game from the perspective of the session player
-	 * @param game
 	 * @param sessionPlayer
 	 * @return
 	 */
-	private Object renderGame(CheckersGame game, Player sessionPlayer) {
+	private Object renderGame(Player sessionPlayer, Player opponentPlayer) {
+		CheckersGame game;
+			if(opponentPlayer == null)
+				game = gameManager.getGame(sessionPlayer);
+			else
+				game = gameManager.getGame(sessionPlayer, opponentPlayer);
 		return templateEngine.render(new ModelAndView(gameManager.renderGame(game, sessionPlayer, VIEW_TITLE), VIEW_NAME));
 	}
 }
