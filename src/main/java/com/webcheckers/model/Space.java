@@ -7,10 +7,10 @@ package com.webcheckers.model;
 public class Space {
 
     public enum State {
-		INVALID,
-		OPEN,
+        INVALID,
+        OPEN,
         OCCUPIED
-	}
+    }
 
     //instance variables
     private int cellIdx;
@@ -21,10 +21,11 @@ public class Space {
      * Parameterized constructor
      * This intializes cellIdx and currPiece to
      * the the value passed as a variable
-     * @param cellIdx
-     * @param currPiece
+     *
+     * @param cellIdx   - index within the row of the space
+     * @param currPiece - piece on the space
      */
-    public Space(int cellIdx, Piece currPiece){
+    public Space(int cellIdx, Piece currPiece) {
         this.cellIdx = cellIdx;
         if (currPiece != null) {
             this.currPiece = currPiece;
@@ -36,9 +37,10 @@ public class Space {
 
     /**
      * Custom space constructor
-     * Used in practice to build an open space
-     * @param cellIdx
-     * @param state
+     * Used in practice to build a space without a piece
+     *
+     * @param cellIdx - index within the row of the space
+     * @param state   - state of the space
      */
     public Space(int cellIdx, State state) {
         this.cellIdx = cellIdx;
@@ -47,27 +49,26 @@ public class Space {
     }
 
     /**
-     * getCellIdx method
      * This method returns a cell index
-     * @return cell index
+     *
+     * @return - cell index
      */
-    public int getCellIdx(){
+    public int getCellIdx() {
         return this.cellIdx;
     }
 
     /**
-     * getState method--
      * to access the state of the space
-     * @return state enum inside the space
+     *
+     * @return - state enum inside the space
      */
     public State getState() {
         return this.state;
     }
 
     /**
-     *
-     * @param source
-     * @return
+     * @param source - starting space that is being moved from
+     * @return - returns true if source is not null, is occupied, or has no piece
      */
     public boolean movePieceFrom(Space source) {
         if (source == null) {
@@ -90,8 +91,9 @@ public class Space {
 
     /**
      * Add a piece to this Space
-     * @param piece
-     * @return
+     *
+     * @param piece - piece being moved onto the space
+     * @return - the changed state of the space
      */
     public State addPiece(Piece piece) {
         if (state == State.OPEN) {
@@ -106,10 +108,10 @@ public class Space {
 
 
     /**
-     * removePiece method--
-     * This method removes the piece from the Space
+     * Removes the piece from the Space
      * and marks it as open
-     * @return turns true if the space had a piece and was removed, false otherwise
+     *
+     * @return - turns true if the space had a piece and was removed, false otherwise
      */
     public State removePiece() {
         if (state == State.OCCUPIED) {
@@ -122,38 +124,38 @@ public class Space {
     }
 
     /**
-     * isValid method--
      * This method checks if the space is valid
-     * @return
+     *
+     * @return - true if space is valid, false otherwise
      */
-    public boolean isValid(){
-		return (state != State.INVALID);
+    public boolean isValid() {
+        return (state != State.INVALID);
     }
 
     /**
-     * isOccupied method--
      * Determines whether the space is occupied or not
-     * @return true if the space is occupied
+     *
+     * @return - true if the space is occupied, false otherwise
      */
     public boolean isOccupied() {
         return this.state == State.OCCUPIED;
     }
 
     /**
-     * isOpen method--
      * Determines if the space is open or not
-     * @return true if the space is open, otherwise false
+     *
+     * @return - true if the space is open, false otherwise
      */
     public boolean isOpen() {
         return (this.state == State.OPEN);
     }
 
     /**
-     * getPiece method
      * This method returns curPiece on the space
-     * @return
+     *
+     * @return - Piece occupying the space
      */
-    public Piece getPiece(){
+    public Piece getPiece() {
         return currPiece;
     }
 
