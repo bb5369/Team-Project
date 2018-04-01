@@ -64,24 +64,46 @@ public class Space {
         return this.state;
     }
 
-
     /**
-     * movePieceToFrom method--
-     * This method move the piece to the Space on which this method
-     * is being called from the Space that is pass as param
-     * @param from the Space from where the piece will be moved
-     * @return true if the piece was moved, false otherwise
+     *
+     * @param source
+     * @return
      */
-    public boolean movePieceToFrom(Space from)
-    {
-        if(from.currPiece == null)
+    public boolean movePieceFrom(Space source) {
+        if (source == null) {
             return false;
-        this.currPiece = from.currPiece;
-        this.state = State.OCCUPIED;
-        from.currPiece = null;
-        from.state = State.OPEN;
+        }
+
+        if (state != State.OPEN) {
+            return false;
+        }
+
+        if (source.getPiece() == null) {
+            return false;
+        }
+
+        addPiece(source.getPiece());
+        source.removePiece();
+
         return true;
     }
+
+    /**
+     * Add a piece to this Space
+     * @param piece
+     * @return
+     */
+    public State addPiece(Piece piece) {
+        if (state == State.OPEN) {
+            currPiece = piece;
+            state = State.OCCUPIED;
+            return state;
+
+        } else {
+            return state;
+        }
+    }
+
 
     /**
      * removePiece method--
@@ -89,15 +111,14 @@ public class Space {
      * and marks it as open
      * @return turns true if the space had a piece and was removed, false otherwise
      */
-    public boolean removePiece()
-    {
-        if(this.state == State.OPEN)
-        {
-            return false;
+    public State removePiece() {
+        if (state == State.OCCUPIED) {
+            currPiece = null;
+            state = State.OPEN;
+            return state;
+        } else {
+            return state;
         }
-        this.currPiece = null;
-        this.state = State.OPEN;
-        return true;
     }
 
     /**
@@ -106,7 +127,7 @@ public class Space {
      * @return
      */
     public boolean isValid(){
-		return (this.state != State.INVALID);
+		return (state != State.INVALID);
     }
 
     /**
@@ -135,7 +156,5 @@ public class Space {
     public Piece getPiece(){
         return currPiece;
     }
-
-    // TODO: Add setter for moving a piece onto a Space
 
 }

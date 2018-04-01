@@ -15,12 +15,17 @@ public class BoardBuilder {
 
 	private Space[][] board;
 
+	/**
+	 * Allows for placing a piece on a space in the matrix
+	 * @param piece
+	 * @param pos
+	 * @return
+	 */
 	public BoardBuilder withPieceAt(Piece piece, Position pos) {
+		Space target = board[pos.getRow()][pos.getCell()];
 
-		// fix this when Space's move method is refactored
-		Space shell = new Space(0, piece);
-
-		this.board[pos.getRow()][pos.getCell()].movePieceToFrom(shell);
+		target.removePiece();
+		target.addPiece(piece);
 
 		return this;
 	}
@@ -81,13 +86,18 @@ public class BoardBuilder {
 	 * We build it from the top down. Checkers rules says that there must be a black space
 	 * in the corner. So startRowBlackSquare = true;
 	 * @return
+	 * @param boardBuilder
 	 */
-	public Space[][] buildBoard() {
+	public static Space[][] buildBoard(BoardBuilder boardBuilder) {
+
+		if (boardBuilder.board != null) {
+			return boardBuilder.board;
+		}
 
 		Space[][] board = new Space[rows][cells];
 
 		for (int rowId=0; rowId < rows; rowId++) {
-			board[rowId] = buildRow(rowId);
+			board[rowId] = boardBuilder.buildRow(rowId);
 		}
 
 		return board;
@@ -95,8 +105,10 @@ public class BoardBuilder {
 
 
 	public Space[][] build() {
+
+		// This is only used if we don't add things to the default board
 		if (this.board == null) {
-			this.board = buildBoard();
+			this.board = buildBoard(this);
 		}
 		return this.board;
 	}

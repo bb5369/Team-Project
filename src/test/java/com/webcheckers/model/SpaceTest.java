@@ -59,6 +59,7 @@ public class SpaceTest {
 		Space testSpace = new Space(SPACE_ID, Space.State.INVALID);
 
 		assertFalse(testSpace.isValid());
+
 	}
 
 	/**
@@ -139,5 +140,79 @@ public class SpaceTest {
 		Space testSpace = new Space(SPACE_ID, mockPiece);
 
 		assertSame(Space.State.OCCUPIED, testSpace.getState());
+	}
+
+	/**
+	 * Test that a Piece can be added to a Space
+	 */
+	@Test
+	public void addPiece() {
+		Space testSpace = new Space(SPACE_ID, Space.State.OPEN);
+
+		testSpace.addPiece(mockPiece);
+
+		assertSame(mockPiece, testSpace.getPiece());
+	}
+
+	@Test
+	public void addPiece_invalid() {
+		Space testSpace = new Space(SPACE_ID, Space.State.INVALID);
+
+		Space.State result = testSpace.addPiece(mockPiece);
+
+		assertEquals(Space.State.INVALID, result);
+	}
+
+	@Test
+	public void removePiece() {
+		Space testSpace = new Space(SPACE_ID, mockPiece);
+
+		testSpace.removePiece();
+
+		assertEquals(Space.State.OPEN, testSpace.getState());
+		assertNull(testSpace.getPiece());
+	}
+
+	@Test
+	public void removePiece_alreadyEmpty() {
+		Space testSpace = new Space(SPACE_ID, Space.State.OPEN);
+
+		assertEquals(Space.State.OPEN, testSpace.removePiece());
+
+	}
+
+	@Test
+	public void movePieceFrom_nullSource() {
+		Space sourceSpace = null;
+		Space testSpace = new Space(SPACE_ID, mockPiece);
+
+		assertFalse(testSpace.movePieceFrom(sourceSpace));
+	}
+
+	@Test
+	public void movePieceFrom_destinationNotOpen() {
+		Space sourceSpace = new Space(SPACE_ID, mockPiece);
+
+		Space testSpace = new Space(SPACE_ID, Space.State.INVALID);
+
+		assertFalse(testSpace.movePieceFrom(sourceSpace));
+	}
+
+	@Test
+	public void movePieceFrom_sourceNoPiece() {
+		Space sourceSpace = new Space(SPACE_ID, Space.State.OPEN);
+
+		Space testSpace = new Space(SPACE_ID, Space.State.OPEN);
+
+		assertFalse(testSpace.movePieceFrom(sourceSpace));
+	}
+
+	@Test
+	public void movePieceFrom() {
+		Space sourceSpace = new Space(SPACE_ID, mockPiece);
+
+		Space testSpace = new Space(SPACE_ID, Space.State.OPEN);
+
+		assertTrue(testSpace.movePieceFrom(sourceSpace));
 	}
 }

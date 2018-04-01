@@ -106,8 +106,8 @@ public class TurnController {
 		{
 			Space startSpace = matrix[start.getRow()][start.getCell()];
 			Space endSpace = matrix[end.getRow()][end.getCell()];
-			if(!endSpace.movePieceToFrom(startSpace))
-				return false; // if the there was no piece to be moved
+
+			return endSpace.movePieceFrom(startSpace);
 		}
 
 
