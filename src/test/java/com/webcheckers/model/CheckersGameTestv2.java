@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Tag("Model-tier")
-public class CheckersGameTest {
+public class CheckersGameTestv2 {
 
     private CheckersGame CuT;
 
