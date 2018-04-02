@@ -119,6 +119,8 @@ with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](WebCheckers-UI-State-Behavior.png)
 
+![The WebCheckers In-Game Web Interface Statechart](WebCheckers-UI-InGame-State-Behavior.png)
+
 > Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.
 
 
