@@ -141,12 +141,20 @@ with the WebCheckers application.
 
 > GetSignOutRoute: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
 
+> PostBackupMoveRoute: When a player has made a move, but not confirmed their turn, they can backup a previous move. This UI controller handles the interaction with the frontend AJAX request.
+
+> PostCheckTurnRoute: On an interval the frontend for both players checks to see if it is their turn. This UI controller gets the game Turn status and returns true/false to the frontend.
+
 > PostResignGameRoute: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
 	are given a "Resign failed" message.
 
 > PostSignInRoute: This route opens up to a page with a Textfield, that the user uses to enter their username. They get an error
 	message when the name already exists in the PlayerLobby or their are invalid characters. When the name is valid, the
 	player gets sent back to the homepage.
+	
+> PostSubmitTurnRoute: When a player has plotted their moves they can submit their turn. This UI controller interacts with the player's Turn to execute their move.
+
+> PostValidateMoveRoute: When a player drags and drops a piece on their board view the validateMove UI controller is called in order to check whether the move is to a valid position.
 
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
@@ -154,6 +162,7 @@ with the WebCheckers application.
 #### Dynamic models
 > Provide any dynamic models, such as state and sequence diagrams, as is relevant to a particularly significant user story.
 > For example, in WebCheckers you might create a sequence diagram of the `POST /validateMove` HTTP request processing or you might use a state diagram if the Game component uses a state machine to manage the game.
+
 
 
 ### Application Tier
@@ -167,12 +176,42 @@ with the WebCheckers application.
 > Provide any dynamic model, such as state and sequence diagrams, as is relevant to a particularly significant user story.
 
 
+
 ### Model Tier
-> Provide a summary of the Model tier of your architecture.
-> Describe the types of components in the tier and describe their responsibilities.
+
+> BoardBuilder
+
+> CheckersGame
+
+> Message
+
+> Move
+
+> MoveValidator
+
+> Piece
+
+> Player
+
+> Position
+
+> Space
+
+> Turn
 
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
 
 #### Dynamic models
-> Provide any dynamic model, such as state and sequence diagrams, as is relevant to a particularly significant user story.
+
+**Turn: Backup Move**
+![Turn - backup move](sequence-diagrams/Turn_BackupMove.png)
+
+**Turn: Make Move**
+![Turn - Make Move](sequence-diagrams/Turn_MakeMove.png)
+
+**Turn: Validate Move**
+![Turn - Validate Move](sequence-diagrams/Turn_ValidateMove.png)
+
+**Turn: Submit**
+![Turn - Submimt](sequence-diagrams/Turn_Submit.png)
