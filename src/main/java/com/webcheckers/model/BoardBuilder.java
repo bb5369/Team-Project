@@ -4,13 +4,13 @@ package com.webcheckers.model;
  * How to build a Checkers Board
  * This is a static class used in the setup of a CheckersGame
  */
-public class BoardBuilder {
+public final class BoardBuilder {
 
-    private final static int WHITE_BORDER_INDEX = 2;
-    private final static int RED_BORDER_INDEX = 5;
+    public final static int WHITE_BORDER_INDEX = 2;
+    public final static int RED_BORDER_INDEX = 5;
 
-    private static int rows = 8;
-    private static int cells = 8;
+    public static int rows = 8;
+    public static int cells = 8;
 
     /**
      * buildRow builds a single row of a board

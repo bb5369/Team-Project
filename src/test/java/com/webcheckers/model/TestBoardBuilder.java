@@ -2,7 +2,11 @@ package com.webcheckers.model;
 
 /**
  * Builder pattern that generates a checkers board
- * We aren't instantiating objects here but we're creating a Spaces[][] board
+ * We use the static component `BoardBuilder` to generate the default starting board
+ * and then use method chaining to mutate the board state to create specific test cases.
+ *
+ * Not to be confused with `BoardBuilderTest` which is what tests the real component.
+ * This Builder is only used in the model test tier to setup a non-starting game state.
  */
 public class TestBoardBuilder {
 
