@@ -9,10 +9,6 @@ public class CheckersGame {
     private Turn activeTurn;
 
 
-
-    // to remove
-    private final Player resignedPlayer;
-
     /**
      * Parameterized constructor
      * Creation of a new checkers game between two players
@@ -29,25 +25,7 @@ public class CheckersGame {
 
         this.activeTurn = new Turn(this, matrix, playerRed);
 
-        // to remove
-        this.resignedPlayer = null;
     }
-
-    /**
-     * Parameterized constructor
-     * Creates a resigned game, given the player resigning and
-     * the game being resigned from
-     *
-     * @param game   - Game being resigned from
-     * @param player - Player resigning
-     */
-    public CheckersGame(CheckersGame game, Player player) {
-        this.playerRed = game.getPlayerRed();
-        this.playerWhite = game.getPlayerWhite();
-
-        this.resignedPlayer = player;
-    }
-
 
     /**
      * Space matrix representing a checkers board
@@ -134,20 +112,6 @@ public class CheckersGame {
             return Piece.Color.WHITE;
         } else {
             return null;
-        }
-    }
-
-    /**
-     * Returns whether or not a player has resigned from the game
-     *
-     * @param player - Player being checked if resigned
-     * @return - false if there is no resigned player, true if player is resigned
-     */
-    public boolean isResignedPlayer(Player player) {
-        if (resignedPlayer == null) {
-            return false;
-        } else {
-            return this.resignedPlayer.equals(player);
         }
     }
 
