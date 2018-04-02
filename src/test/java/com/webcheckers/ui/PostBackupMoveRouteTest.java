@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import spark.Request;
 import spark.Response;
 import spark.Session;
-import spark.TemplateEngine;
 
-import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +21,6 @@ public class PostBackupMoveRouteTest {
     private Request request;
     private Response response;
     private Session session;
-    private TemplateEngine templateEngine;
 
     private GameManager gameManager;
     private Player currPlayer;
@@ -34,7 +31,6 @@ public class PostBackupMoveRouteTest {
         request = mock(Request.class);
         session = mock(Session.class);
         when(request.session()).thenReturn(session);
-        templateEngine = mock(TemplateEngine.class);
         response = mock(Response.class);
 
         gameManager = mock(GameManager.class);
@@ -62,5 +58,5 @@ public class PostBackupMoveRouteTest {
 
         CuT.handle(request, response);
     }
-    
+
 }
