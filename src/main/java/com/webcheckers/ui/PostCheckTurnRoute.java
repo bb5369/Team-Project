@@ -31,7 +31,7 @@ public class PostCheckTurnRoute implements Route {
      * Initializes the PostCheckTurnRoute
      *
      * @param gameManager - used to find a game
-     * @param gson - used to transmit messages to AJAX
+     * @param gson        - used to transmit messages to AJAX
      */
     public PostCheckTurnRoute(GameManager gameManager, Gson gson) {
         // validation
@@ -47,7 +47,7 @@ public class PostCheckTurnRoute implements Route {
     /**
      * Determines if a player is resigning
      *
-     * @param request - the HTTP request
+     * @param request  - the HTTP request
      * @param response - the HTTP response
      * @return - null or a Json message
      */
