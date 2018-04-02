@@ -179,25 +179,25 @@ with the WebCheckers application.
 
 ### Model Tier
 
-> BoardBuilder
+> BoardBuilder: Generates a Checkers Board with Board-Row-Space-Piece setup
 
-> CheckersGame
+> CheckersGame: Creates a CheckersGame between two Players
 
-> Message
+> Message: Passes a text message of either type info or error
 
-> Move
+> Move: Two positions, a start and an end, that a Piece is being moved to and from
 
-> MoveValidator
+> MoveValidator: Validates that a move being made is a valid one by checking that the piece is moving in the proper direction, and to an unoccupied valid space.
 
-> Piece
+> Piece: Represents a checkers piece
 
-> Player
+> Player: Plays the game
 
-> Position
+> Position: A set of coordinates on the board; a location
 
-> Space
+> Space: Within a row, can contain a piece and is in state invalid, open, or occupied
 
-> Turn
+> Turn: Runs a Player's turn, either in state empty turn, stable turn, or turn submitted
 
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
