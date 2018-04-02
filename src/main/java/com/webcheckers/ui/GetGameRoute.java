@@ -96,7 +96,7 @@ public class GetGameRoute implements Route {
             return renderGame(redPlayer, whitePlayer);//playGameBetween(redPlayer, whitePlayer);
         } else {
             response.redirect(WebServer.HOME_URL);
-            halt();
+            //halt();
         }
 
         // We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design
