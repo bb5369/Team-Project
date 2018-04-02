@@ -104,15 +104,15 @@ public class WebServer {
 		get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby, gameManager));
 		get(SIGNIN_URL, new GetSignInRoute(templateEngine));
 		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
-		get(SIGNOUT_URL, new GetSignOutRoute(templateEngine, playerLobby, gameManager));
+		get(SIGNOUT_URL, new GetSignOutRoute(playerLobby, gameManager));
 
 		// Game operation
 		get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
 		post(VALIDATE_MOVE_URL, new PostValidateMoveRoute(gson, gameManager));
-		post(BACKUP_MOVE_URL, new PostBackupMoveRoute(playerLobby, gameManager));
-		post(SUBMIT_MOVE_URL, new PostSubmitTurnRoute(playerLobby, gameManager));
-		post(CHECK_TURN_URL, new PostCheckTurnRoute(templateEngine, playerLobby, gameManager, gson));
-		post(RESIGN_URL, new PostResignGame(templateEngine, gameManager, gson));
+		post(BACKUP_MOVE_URL, new PostBackupMoveRoute(gameManager));
+		post(SUBMIT_MOVE_URL, new PostSubmitTurnRoute(gameManager));
+		post(CHECK_TURN_URL, new PostCheckTurnRoute(gameManager, gson));
+		post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
 		// Admin functionality
 		get(CLEAR_URL, new GetClearRoute(playerLobby, gameManager));
