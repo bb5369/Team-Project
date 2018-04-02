@@ -191,4 +191,13 @@ public class Turn {
     public Player getPlayer() {
         return this.player;
     }
+
+
+    /**
+     * Used in testing to inspect component state
+     * @return Turn State
+     */
+    public State getState() {
+        return this.state;
+    }
 }
