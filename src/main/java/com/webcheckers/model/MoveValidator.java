@@ -134,8 +134,8 @@ public class MoveValidator {
             return true;
         }
 
-        // row for white player must increase
-        // row for red player must decrease
+        // White players start at top, move down board
+        // Red players start at bottom, move up board
 
         Piece.Color playerColor = game.getPlayerColor(player);
         int startRow = move.getStartRow();

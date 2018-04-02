@@ -160,9 +160,14 @@ with the WebCheckers application.
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
 
 #### Dynamic models
-> Provide any dynamic models, such as state and sequence diagrams, as is relevant to a particularly significant user story.
-> For example, in WebCheckers you might create a sequence diagram of the `POST /validateMove` HTTP request processing or you might use a state diagram if the Game component uses a state machine to manage the game.
 
+**PostResignGameRoute**
+
+![PostResignGameRoute](sequence-diagrams/PostResignGameRoute.png)
+
+**PostSignInRoute**
+
+![PostSignInRoute](sequence-diagrams/PostSignInRoute.png)
 
 
 ### Application Tier
@@ -170,11 +175,16 @@ with the WebCheckers application.
 > Describe the types of components in the tier and describe their responsibilities.
 
 #### Static models
-> Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
+
+**BoardViewGen**
+
+![BoardViewGen](static/appl/BoardViewGen.png)
+
+**RowGen**
+
+![RowGen](static/appl/RowGen.png)
 
 #### Dynamic models
-> Provide any dynamic model, such as state and sequence diagrams, as is relevant to a particularly significant user story.
-
 
 
 ### Model Tier
@@ -200,18 +210,45 @@ with the WebCheckers application.
 > Turn
 
 #### Static models
-> Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
+
+**Move**
+
+![Move](static/model/Move.png)
+
+**MoveValidator**
+
+![MoveValidator](static/model/MoveValidator.png)
+
+**Piece**
+
+![Piece](static/model/Piece.png)
+
+**Space**
+
+![Space](static/model/Space.png)
+
+**Turn**
+
+![Turn](static/model/Turn.png)
 
 #### Dynamic models
 
+**BoardBuilder**
+
+![BoardBuilder](sequence-diagrams/BoardBuilder.png)
+
 **Turn: Backup Move**
+
 ![Turn - backup move](sequence-diagrams/Turn_BackupMove.png)
 
 **Turn: Make Move**
+
 ![Turn - Make Move](sequence-diagrams/Turn_MakeMove.png)
 
 **Turn: Validate Move**
+
 ![Turn - Validate Move](sequence-diagrams/Turn_ValidateMove.png)
 
 **Turn: Submit**
+
 ![Turn - Submimt](sequence-diagrams/Turn_Submit.png)
