@@ -33,6 +33,6 @@ public class PlayerTest {
 
     @Test
     public void test5(){
-        assertEquals(player.toString(), "Player name: " + player.getName());
+        assertEquals(player.toString(), "Player Name: " + player.getName());
     }
 }
