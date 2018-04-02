@@ -142,83 +142,7 @@ public class DoublyLinkedQueue<T> {
 
     }
 
-    /**
-     * insertAtPosition method--
-     * This method can add new items from (0 to size) positions in the queue,
-     * since 0 based position is used
-     * @param data - reference to the data to be stored
-     * @param pos - int value representing the 0 based position of where
-     *  item needs to be added
-     */
-    public void insertAtPosition(T data,int pos)
-    {
-        if(pos > size || pos < 0)
-            throw new NoSuchElementException("Inserting at position " + pos + " failed.");
 
-        if (pos == 0)
-            addToFront(data);
-        else if(pos == size)
-            addToRear(data);
-        else
-        {
-            Node<T> target = front;
-
-            for (int i = 1; i < pos; i++)
-                target = target.getNext();
-
-            Node<T> temp = new Node<T>(data, target.getNext(), target);
-            temp.getPrev().setNext(temp);
-            temp.getNext().setPrev(temp);
-            size++;
-        }
-
-    }
-
-    /**
-     * getPos method--
-     * This method returns the items at the 0 based entered position,
-     * It  throws an exception if invalid position is entered
-     * @param pos -- 0 based position
-     * @return - the item
-     */
-    public T getPos(int pos)
-    {
-        if(pos >= size || pos < 0)
-        {
-            throw new NoSuchElementException("Invalid Position");
-        }
-        Node<T> target = front;
-
-        for (int i = 0; i < pos; i++)
-            target = target.getNext();
-
-        return target.getData();
-    }
-
-    /**
-     * reverseString method--
-     * this method returns a reference to a string containing the state of
-     *  the list in reverse order
-     * @return - reference to a string containing the state of the object in the reverse order
-     */
-    public String reverseString()
-    {
-        String str ="";
-
-        Node<T> target = rear;
-
-        while(target != null)
-        {
-            str+= target.getData().toString() + "\n";
-
-            //	if(target.getPrev() == null)
-            //	System.out.println("some problemo");
-
-            target = target.getPrev();
-        }
-
-        return str;
-    }
 
     /**
      * isEmpty method---
@@ -250,11 +174,6 @@ public class DoublyLinkedQueue<T> {
         return str;
     }
 
-    public void removeAll()
-    {
-        front = rear = null;
-        size = 0;
-    }
 
 
 }
