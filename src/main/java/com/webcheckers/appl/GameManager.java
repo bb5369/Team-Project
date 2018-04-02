@@ -16,8 +16,6 @@ public class GameManager {
 
     // A list of all active games
     private ArrayList<CheckersGame> gameList;
-    private ArrayList<CheckersGame> resignedGames;
-
 
     /**
      * default construct
@@ -25,7 +23,6 @@ public class GameManager {
      */
     public GameManager() {
         gameList = new ArrayList<>();
-        resignedGames = new ArrayList<>();
     }
 
 
@@ -134,93 +131,18 @@ public class GameManager {
         return newGame;
     }
 
-    /**
-     * Searches for the resigned game and returns the game
-     *
-     * @param currentPlayer - Plaer in the resigned game
-     * @return - resigned game
-     */
-    public CheckersGame getResignedGame(Player currentPlayer) {
-        for (CheckersGame game : resignedGames) {
-            if (isPlayerInThisGame(game, currentPlayer)) {
-                LOG.finer(String.format("getGame(Player: '%s') Found resigned game in progerss",
-                        currentPlayer.getName()));
-                return game;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes a game being resigned from the list of games,
-     * adds the reigned game to the listed of designed games
-     *
-     * @param player - Player in the game being resigned
-     */
-    public void resignGame(Player player) {
+    public boolean resignGame(Player player) {
         CheckersGame game = getGame(player);
-        gameList.remove(game);
-        game = new CheckersGame(game, player);
-        resignedGames.add(game);
 
+        return gameList.remove(game);
     }
 
-    /**
-     * Determines whether or not a player is in a game on the
-     * resigned games list
-     *
-     * @param player - player whose game is being searched for
-     * @return - true if the player is in a resigned game, false otherwise
-     */
-    public boolean isPlayerInAResignedGame(Player player) {
-
-        if (resignedGames == null || player == null) return false;
-
-        for (CheckersGame game : resignedGames) {
-            if (isPlayerInThisGame(game, player)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Determines whether or not a player is in a game,
-     * resigned or otherwise
-     *
-     * @param player - play whose game is being searched for
-     * @return - true if a player is in an active or resigned game, false otherwise
-     */
-    public boolean isPlayerInAnyGame(Player player) {
-        return isPlayerInAGame(player) || isPlayerInAResignedGame(player);
-    }
-
-    /**
-     * Removes an active game from the game list
-     *
-     * @param player - player whose game is being removed
-     */
     public void clearGame(Player player) {
         gameList.remove(getGame(player));
     }
 
-    /**
-     * Removes a resigned game from the resigned games list
-     *
-     * @param player - player whose game is being removed
-     */
-    public void clearResigned(Player player) {
-        if (!getResignedGame(player).isResignedPlayer(player))
-            resignedGames.remove(getResignedGame(player));
-    }
-
-    /**
-     * Clears the active and resigned games list
-     */
     public void clearGames() {
         this.gameList.clear();
-        this.resignedGames.clear();
     }
 
     /**

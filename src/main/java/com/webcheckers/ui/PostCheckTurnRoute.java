@@ -55,20 +55,13 @@ public class PostCheckTurnRoute implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("PostCheckTurnRoute is invoked.");
 
-        Player currentPlayer = request.session().attribute("Player");
-        CheckersGame game;
-        if (gameManager.isPlayerInAResignedGame(currentPlayer))
-            game = gameManager.getResignedGame(currentPlayer);
-        else
-            game = null;
-        if (game != null) {
+        Player currrentPlayer = request.session().attribute("Player");
+        CheckersGame game = gameManager.getGame(currrentPlayer);
+        if(game != null){
             Message message = new Message(opponentResigned, Message.MessageType.info);
-            gameManager.clearGame(currentPlayer);
-            gameManager.clearResigned(currentPlayer);
-            if (game.isResignedPlayer(currentPlayer))
-                response.redirect(WebServer.HOME_URL);
-            else
-                return formatMessageJson(message);
+            gameManager.clearGame(currrentPlayer);
+            //gameManager.clearResigned(currrentPlayer);
+            return formatMessageJson(message);
         }
         return null;
     }
