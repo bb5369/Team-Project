@@ -56,13 +56,13 @@ public class Turn {
      * @return - true if move was validated, otherwise false
      */
     public boolean validateMove(Move move) {
-		LOG.finer(String.format("%s Player [%s] is validing move %s",
-                    game.getPlayerColor(player),
-                    player.getName(),
-                    move.toString()));
+        LOG.finer(String.format("%s Player [%s] is validing move %s",
+                game.getPlayerColor(player),
+                player.getName(),
+                move.toString()));
 
         if (moveValidator.validateMove(move)) {
-        	LOG.finer("Move has been validated successfully");
+            LOG.finer("Move has been validated successfully");
 
             pendingMoves.enqueue(move);
 
@@ -113,7 +113,7 @@ public class Turn {
      * @return - true if the pieces where moved successfully
      */
     public boolean makeMove(Space[][] matrix, Move move) {
-    	LOG.finer(String.format("%s Player [%s] turn - executing move %s",
+        LOG.finer(String.format("%s Player [%s] turn - executing move %s",
                 game.getPlayerColor(player),
                 player.getName(),
                 move.toString()));
@@ -147,8 +147,8 @@ public class Turn {
             Move badMove = pendingMoves.removeFromRear();
 
             LOG.finest(String.format("Removing move %s from %s's history",
-                                    badMove.toString(),
-                                    player.getName()));
+                    badMove.toString(),
+                    player.getName()));
 
             // Return Turn state to EMPTY_TURN if they have no pending moves
             if (pendingMoves.isEmpty()) {
@@ -170,10 +170,21 @@ public class Turn {
         return this.player.equals(player);
     }
 
+    /**
+     * Returns whether or not the turn has been submitted
+     *
+     * @return - true if the turn has been submitted, false otherwise
+     */
     public boolean isSubmitted() {
         return (this.state == State.TURN_SUBMITTED);
     }
 
+
+    /**
+     * Return the player whose turn it is
+     *
+     * @return - the player
+     */
     public Player getPlayer() {
         return this.player;
     }
