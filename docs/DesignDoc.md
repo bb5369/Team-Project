@@ -125,6 +125,8 @@ with the WebCheckers application.
 ### UI Tier
 > GetSignOutRoute: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
 
+> PostResignGameRoute: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
+	are given a "Resign failed" message.
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
 
