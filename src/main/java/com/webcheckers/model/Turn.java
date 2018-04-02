@@ -123,6 +123,8 @@ public class Turn {
 
         if (move.isAJumpMoveAttempt()) {
             //TODO jump move logic goes here
+            return true;
+
         } else //single move logic
         {
             Space startSpace = matrix[start.getRow()][start.getCell()];
