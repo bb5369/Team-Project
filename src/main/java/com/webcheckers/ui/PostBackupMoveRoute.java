@@ -41,7 +41,7 @@ public class PostBackupMoveRoute implements Route {
      * @throws Exception
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         LOG.finer("PostBackupMoveRoute invoked");
         Player sessionPlayer = request.session().attribute("Player");
 
