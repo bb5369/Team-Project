@@ -30,4 +30,9 @@ public class PlayerTest {
     public void test4(){
         assertTrue(player.equals(player));
     }
+
+    @Test
+    public void test5(){
+        assertEquals(player.toString(), "Player name: " + player.getName());
+    }
 }
