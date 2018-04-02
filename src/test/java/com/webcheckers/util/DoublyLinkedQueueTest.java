@@ -11,10 +11,9 @@ public class DoublyLinkedQueueTest {
     DoublyLinkedQueue<String> list = new DoublyLinkedQueue();
 
     @Test
-    public void test1()
+    public void testSize()
     {
-
+        assertEquals(0, (new DoublyLinkedQueue()).size());
     }
-
 
 }
