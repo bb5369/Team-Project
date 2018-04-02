@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.GameManager;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 
@@ -22,6 +23,7 @@ public class PostResignGame implements Route {
 
     private final GameManager gameManager;
     private final String infoMessage = "Resign the current player from the game";
+    private final String errorMessage = "The current play cannot resign from the game";
     private final Gson gson;
 
     /**
@@ -51,11 +53,16 @@ public class PostResignGame implements Route {
         LOG.finer("PostResignGame is invoked.");
 
         Player currentPlayer = request.session().attribute("Player");
+        CheckersGame game = gameManager.getGame(currentPlayer);
+        if(false && !game.getTurn().isMyTurn(currentPlayer) || (game.getTurn().isMyTurn(currentPlayer) && !game.getTurn().isSubmitted())) {
+            gameManager.resignGame(currentPlayer);
 
-        gameManager.resignGame(currentPlayer);
-
-        // TODO: If we can't resign from the game then return that message
-        return formatMessageJson(Message.MessageType.info, infoMessage);
+            // TODO: If we can't resign from the game then return that message
+            return formatMessageJson(Message.MessageType.info, infoMessage);
+        }
+        else{
+            return formatMessageJson(Message.MessageType.error, errorMessage);
+        }
     }
 
     /**
