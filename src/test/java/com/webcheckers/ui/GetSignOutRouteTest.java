@@ -48,7 +48,7 @@ public class GetSignOutRouteTest {
         playerLobby = mock(PlayerLobby.class);
         gameManager = mock(GameManager.class);
 
-        CuT = new GetSignOutRoute(templateEngine, playerLobby, gameManager);
+        CuT = new GetSignOutRoute(playerLobby, gameManager);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class GetSignOutRouteTest {
         when(gameManager.getGame(playerRed)).thenReturn(game);
         when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(false);
 
-        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        //when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
 
@@ -79,7 +79,7 @@ public class GetSignOutRouteTest {
         when(gameManager.getGame(playerRed)).thenReturn(game);
         when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(true);
 
-        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        //when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
 
