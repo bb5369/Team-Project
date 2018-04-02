@@ -92,6 +92,10 @@ public class Turn {
                 player.getName(),
                 pendingMoves.size()));
 
+        if (pendingMoves.isEmpty()) {
+            return false;
+        }
+
         while (!pendingMoves.isEmpty()) {
             if (!makeMove(matrix, pendingMoves.removeFromFront())) {
                 return false;
@@ -123,6 +127,8 @@ public class Turn {
 
         if (move.isAJumpMoveAttempt()) {
             //TODO jump move logic goes here
+            return true;
+
         } else //single move logic
         {
             Space startSpace = matrix[start.getRow()][start.getCell()];
@@ -130,9 +136,6 @@ public class Turn {
 
             return endSpace.movePieceFrom(startSpace);
         }
-
-
-        return true;
     }
 
 
@@ -187,5 +190,14 @@ public class Turn {
      */
     public Player getPlayer() {
         return this.player;
+    }
+
+
+    /**
+     * Used in testing to inspect component state
+     * @return Turn State
+     */
+    public State getState() {
+        return this.state;
     }
 }

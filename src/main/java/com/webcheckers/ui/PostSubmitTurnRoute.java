@@ -47,10 +47,10 @@ public class PostSubmitTurnRoute implements Route {
      * @throws Exception
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         LOG.finer("PostSubmitTurnRoute invoked");
 
-        Player sessionPlayer = request.session(). attribute("Player");
+        Player sessionPlayer = request.session().attribute("Player");
         Turn turn = gameManager.getPlayerTurn(sessionPlayer);
 
         if(turn.submitTurn()) { //making sure a move was actually made
