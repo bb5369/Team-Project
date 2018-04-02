@@ -26,9 +26,10 @@ public class MoveValidator {
         this.game = game;
         this.player = player;
 
-        matrix = game.getMatrix();
+        this.matrix = game.getMatrix();
 
         LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
+        LOG.finest(String.format("matrix is: %s", this.matrix));
     }
 
     /**

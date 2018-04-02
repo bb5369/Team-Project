@@ -5,37 +5,48 @@ import com.webcheckers.util.DoublyLinkedQueue;
 import java.util.logging.Logger;
 
 /**
- * Turn controller handles the lifecycle of a player's turn
+ * Turn handles the lifecycle of a player's turn
  * From validating moves
  * to backing up those moves
  * to submitting a list of moves and completing their turn
  * The turn controller is an expert at it all!
  */
 public class Turn {
-    //instance variables
     private static final Logger LOG = Logger.getLogger(Turn.class.getName());
-    private CheckersGame game;
-    private Player player;
-    private MoveValidator moveValidator;
-    private DoublyLinkedQueue<Move> validMoves;
 
+    public enum State {
+        EMPTY_TURN,
+        STABLE_TURN,
+        TURN_SUBMITTED
+    }
+
+    private CheckersGame game;
+    private Space[][] matrix;
+    private Player player;
+    private DoublyLinkedQueue<Move> pendingMoves;
+    private State state;
+
+    private MoveValidator moveValidator;
 
     /**
      * Parameterized constructor
      * A turn is identified by a game and a player
      *
      * @param game   - game the Turn is being made for
+     * @param matrix - The checkers board matrix
      * @param player - player the Turn is being made for
      */
-    Turn(CheckersGame game, Player player) {
+    Turn(CheckersGame game, Space[][] matrix, Player player) {
         this.game = game;
+        this.matrix = matrix;
         this.player = player;
 
-        validMoves = new DoublyLinkedQueue<>();
+        this.pendingMoves = new DoublyLinkedQueue<>();
+        this.state = State.EMPTY_TURN;
 
-        moveValidator = new MoveValidator(game, player);
+        this.moveValidator = new MoveValidator(game, player);
 
-        LOG.fine(String.format("Turn initialized for Player [%s]", player.getName()));
+        LOG.fine(String.format("Turn initialized for Player [%s] in [%s] state", player.getName(), this.state));
     }
 
     /**
@@ -45,16 +56,23 @@ public class Turn {
      * @return - true if move was validated, otherwise false
      */
     public boolean validateMove(Move move) {
-
-        if (isMyTurn() && moveValidator.validateMove(move)) {
-            LOG.finest("Adding valid move to players turn history");
-
-            validMoves.enqueue(move);
-
-            LOG.finest(String.format("%s Player [%s] has %d queued moves",
+		LOG.finer(String.format("%s Player [%s] is validing move %s",
                     game.getPlayerColor(player),
                     player.getName(),
-                    validMoves.size()));
+                    move.toString()));
+
+        if (moveValidator.validateMove(move)) {
+        	LOG.finer("Move has been validated successfully");
+
+            pendingMoves.enqueue(move);
+
+            state = State.STABLE_TURN;
+
+            LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
+                    game.getPlayerColor(player),
+                    player.getName(),
+                    pendingMoves.size(),
+                    state));
 
             return true;
         }
@@ -69,15 +87,21 @@ public class Turn {
      * @return - true if the submitMove was successful, false otherwise
      */
     public boolean submitTurn() {
-        //get the list of moves;
-        Space[][] matrix = game.getMatrix();
-        while (!validMoves.isEmpty())//goes through all the valid  moves
-        {
-            if (!makeMove(matrix, validMoves.removeFromFront())) {
+        LOG.finer(String.format("%s Player [%s] is submitting their turn of %d moves.",
+                game.getPlayerColor(player),
+                player.getName(),
+                pendingMoves.size()));
+
+        while (!pendingMoves.isEmpty()) {
+            if (!makeMove(matrix, pendingMoves.removeFromFront())) {
                 return false;
             }
         }
-        game.changeActivePlayer();
+
+        this.state = State.TURN_SUBMITTED;
+
+        game.nextTurn();
+
         return true;
     }
 
@@ -89,10 +113,11 @@ public class Turn {
      * @return - true if the pieces where moved successfully
      */
     public boolean makeMove(Space[][] matrix, Move move) {
-        //get the location
-        //get the piece
-        //move the piece to the location
-        // clear the piece in the path if it is a capture move
+    	LOG.finer(String.format("%s Player [%s] turn - executing move %s",
+                game.getPlayerColor(player),
+                player.getName(),
+                move.toString()));
+
         Position start = move.getStart();
         Position end = move.getEnd();
 
@@ -118,21 +143,38 @@ public class Turn {
      * @return - true if there are valid moves, false otherwise
      */
     public boolean backupMove() {
-        if (!validMoves.isEmpty()) {
-            validMoves.removeFromRear(); // TODO: validate if this actually pulls the last valid move pushed
-        } else {
-            return false;
+        if (!pendingMoves.isEmpty()) {
+            Move badMove = pendingMoves.removeFromRear();
+
+            LOG.finest(String.format("Removing move %s from %s's history",
+                                    badMove.toString(),
+                                    player.getName()));
+
+            // Return Turn state to EMPTY_TURN if they have no pending moves
+            if (pendingMoves.isEmpty()) {
+                this.state = State.EMPTY_TURN;
+            }
+
+            return true;
         }
-        return true;
+
+        return false;
     }
 
     /**
-     * Is the player who owns this object the active player in the game?
+     * Is the given player in an active turn?
      *
      * @return - true if player is active player
      */
-    public boolean isMyTurn() {
-        return game.getPlayerActive().equals(player);
+    public boolean isMyTurn(Player player) {
+        return this.player.equals(player);
     }
 
+    public boolean isSubmitted() {
+        return (this.state == State.TURN_SUBMITTED);
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
 }

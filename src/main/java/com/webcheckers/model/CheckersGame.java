@@ -5,9 +5,13 @@ public class CheckersGame {
     //instance variables
     private final Player playerRed;
     private final Player playerWhite;
-    private final Player resignedPlayer;
-    private Player playerActive;
     private Space[][] matrix;
+    private Turn activeTurn;
+
+
+
+    // to remove
+    private final Player resignedPlayer;
 
     /**
      * Parameterized constructor
@@ -20,10 +24,13 @@ public class CheckersGame {
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
 
-        this.playerActive = this.playerRed;
 
-        this.resignedPlayer = null;
         generateStartingBoard();
+
+        this.activeTurn = new Turn(this, matrix, playerRed);
+
+        // to remove
+        this.resignedPlayer = null;
     }
 
     /**
@@ -71,37 +78,47 @@ public class CheckersGame {
     }
 
     /**
-     * Accesses the opponent player to the player passed in
-     *
-     * @param player - Player whose opponent is being returned
-     * @return - Player not passed in
-     */
-    public Player getOtherPlayer(Player player) {
-        if (playerRed.equals(player)) {
-            return playerWhite;
-        } else {
-            return playerRed;
-        }
-    }
-
-    /**
      * Used to access player whose turn it is
      *
      * @return - player whose turn it is
      */
     public Player getPlayerActive() {
-        return playerActive;
+        return this.activeTurn.getPlayer();
     }
 
     /**
      * Changes the player who is active from red to white or vice versa
      */
-    public void changeActivePlayer() {
-        if (playerActive.equals(playerRed)) {
-            playerActive = playerWhite;
-        } else {
-            playerActive = playerRed;
+    private void changeActivePlayer() {
+        Player activePlayer = activeTurn.getPlayer();
+
+        if (activePlayer.equals(playerRed)) {
+            activeTurn = new Turn(this, matrix, playerWhite);
+
+        } else if (activePlayer.equals(playerWhite)) {
+        	activeTurn = new Turn(this, matrix, playerRed);
         }
+    }
+
+    /**
+     * Advance the game to the next turn using the new player
+     */
+	 public void nextTurn() {
+        // makes sure Turn is SUBMITTED state
+        // create new turn with other player
+
+        if (activeTurn.isSubmitted()) {
+            changeActivePlayer();
+        }
+    }
+
+
+    /**
+     * Get the active turn from the game
+     * @return
+     */
+    public Turn getTurn() {
+	     return activeTurn;
     }
 
     /**
@@ -141,4 +158,7 @@ public class CheckersGame {
     private void generateStartingBoard() {
         this.matrix = BoardBuilder.buildBoard();
     }
+
+
+
 }

@@ -34,7 +34,8 @@ public class PostBackupMoveRoute implements Route{
     public Object handle(Request request, Response response) throws Exception {
         LOG.finer("PostBackupMoveRoute invoked");
         Player sessionPlayer = request.session().attribute("Player");
-        Turn turn = gameManager.getTurnController(sessionPlayer);
+
+        Turn turn = gameManager.getPlayerTurn(sessionPlayer);
 
         if(turn.backupMove()){
             return (new Gson()).toJson(new Message("Backed a move", Message.MessageType.info));

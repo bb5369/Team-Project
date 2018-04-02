@@ -38,7 +38,7 @@ public class PostSubmitTurnRoute implements Route {
         LOG.finer("PostSubmitTurnRoute invoked");
 
         Player sessionPlayer = request.session(). attribute("Player");
-        Turn turn = gameManager.getTurnController(sessionPlayer);
+        Turn turn = gameManager.getPlayerTurn(sessionPlayer);
 
         if(turn.submitTurn()) { //making sure a move was actually made
             return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));

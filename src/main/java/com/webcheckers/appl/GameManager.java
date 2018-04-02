@@ -224,15 +224,15 @@ public class GameManager {
     }
 
     /**
-     * Factory method for creating a new Turn for a player if they are in a game
+     * Get the Turn of the given player
      *
      * @param player - player whose game a Turn is being made for
      * @return - a new Turn
      */
-    public Turn getTurnController(Player player) {
+    public Turn getPlayerTurn(Player player) {
         final CheckersGame game = getGame(player);
 
-        return new Turn(game, player);
+        return game.getTurn();
     }
 
     /**
