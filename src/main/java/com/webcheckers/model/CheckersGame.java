@@ -115,7 +115,7 @@ public class CheckersGame {
 
     /**
      * Get the active turn from the game
-     * @return
+     * @return - the active turn
      */
     public Turn getTurn() {
 	     return activeTurn;
