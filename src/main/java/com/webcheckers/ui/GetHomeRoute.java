@@ -88,6 +88,7 @@ public class GetHomeRoute implements Route {
             }
         } else {
             vm.put("activePlayerCount", this.playerLobby.getActivePlayerCount());
+            vm.put("signInUrl", WebServer.SIGNIN_URL);
         }
 
         if (request.session().attribute("message") != null) {

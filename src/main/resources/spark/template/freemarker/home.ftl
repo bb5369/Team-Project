@@ -51,7 +51,7 @@
 
         <#if ! currentPlayer??>
         <div class="signin">
-            <button class="sign_btn" onclick="window.location.href='signin'" type="button" >Sign-in to play a game!</button>
+            <button class="sign_btn" onclick="window.location.href='${signInUrl}'" type="button" >Sign-in to play a game!</button>
         </div>
         </#if>
 
