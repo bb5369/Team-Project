@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
-@Tag("Model-tier")
+@Tag("Application-tier")
 public class RowGenTest {
 
     private static final Space[] spaces = new Space[8];
