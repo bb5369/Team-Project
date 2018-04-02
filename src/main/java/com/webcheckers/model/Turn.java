@@ -92,6 +92,10 @@ public class Turn {
                 player.getName(),
                 pendingMoves.size()));
 
+        if (pendingMoves.isEmpty()) {
+            return false;
+        }
+
         while (!pendingMoves.isEmpty()) {
             if (!makeMove(matrix, pendingMoves.removeFromFront())) {
                 return false;
@@ -132,9 +136,6 @@ public class Turn {
 
             return endSpace.movePieceFrom(startSpace);
         }
-
-
-        return true;
     }
 
 
