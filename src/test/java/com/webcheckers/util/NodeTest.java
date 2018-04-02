@@ -16,15 +16,16 @@ public class NodeTest {
     Node<String> next = new Node(NEXT_NODE_DATA, null, null);
     Node<String> prev = new Node(PREV_NODE_DATA, null, null);
     Node<String> current = new Node(CURRENT_NODE_DATA, next, prev );
+
     @Test
-    public void test1()
+    public void testGetData()
     {
         final String data= current.getData();
         assertEquals(data,CURRENT_NODE_DATA);
     }
 
     @Test
-    public void test2()
+    public void testSetData()
     {
         current.setData(UPDATE_CURRENT_NODE_DATA);
         final String updatedData = current.getData();
@@ -32,22 +33,28 @@ public class NodeTest {
     }
 
     @Test
-    public void test3()
+    public void testGetNext()
     {
         assertEquals(next, current.getNext());
     }
 
     @Test
-    public void test4()
+    public void testGetPrev()
     {
         assertEquals(prev, prev.getPrev());
     }
 
     @Test
-    public void test5()
+    public void testSetNext()
     {
         current.setNext(prev);
-        current.setPrev(next);
         assertEquals(current.getNext(),prev);
+    }
+
+    @Test
+    public void testSetPrev()
+    {
+        current.setPrev(next);
+        assertEquals(current.getPrev(),next);
     }
  }
