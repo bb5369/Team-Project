@@ -52,18 +52,12 @@ public class GetSignOutRouteTest {
     }
 
     @Test
-    public void run() {
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-        Objects.requireNonNull(gameManager, "gameManager must not be null");
-
+    public void notInPlayerLobbyGameNotNull() {
         when(playerRed.getName()).thenReturn("red");
         game = new CheckersGame(playerRed, playerWhite);
         when(session.attribute("Player")).thenReturn(playerRed);
         when(gameManager.getGame(playerRed)).thenReturn(game);
         when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(false);
-
-        //when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         CuT.handle(request, response);
 
@@ -72,14 +66,38 @@ public class GetSignOutRouteTest {
 ;
 
     @Test
-    public void runNotWork(){
+    public void inPlayerLobbyGameNotNull(){
         when(playerRed.getName()).thenReturn("red");
         game = new CheckersGame(playerRed, playerWhite);
         when(session.attribute("Player")).thenReturn(playerRed);
         when(gameManager.getGame(playerRed)).thenReturn(game);
         when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(true);
 
-        //when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+        CuT.handle(request, response);
+
+        verify(response, times(1)).redirect(WebServer.HOME_URL);
+    }
+
+    @Test
+    public void notInPlayerLobbyGameNull() {
+        when(playerRed.getName()).thenReturn("red");
+        game = null;
+        when(session.attribute("Player")).thenReturn(playerRed);
+        when(gameManager.getGame(playerRed)).thenReturn(game);
+        when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(false);
+
+        CuT.handle(request, response);
+
+        verify(response, times(1)).redirect(WebServer.HOME_URL);
+    }
+
+    @Test
+    public void inPlayerLobbyGameNull(){
+        when(playerRed.getName()).thenReturn("red");
+        game = null;
+        when(session.attribute("Player")).thenReturn(playerRed);
+        when(gameManager.getGame(playerRed)).thenReturn(game);
+        when(playerLobby.isPlayerInLobby(playerRed)).thenReturn(true);
 
         CuT.handle(request, response);
 

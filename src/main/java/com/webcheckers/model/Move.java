@@ -78,7 +78,7 @@ public class Move {
      */
     public boolean isAJumpMoveAttempt() {
         Position diff = Position.absoluteDifference(end, start);
-        return diff.getCell() > 1 || diff.getRow() > 1;
+        return diff.getCell() == 2 && diff.getRow() == 2;
     }
 
     /**
