@@ -123,10 +123,29 @@ with the WebCheckers application.
 
 
 ### UI Tier
+> Webserver: This links all the route togethers, so that the Player can travel to different pages.
+
+> GetClearRoute: Players with the name "admin", not case sensistive, can clear the active games in session.
+	This route is used for primarly testing.
+
+> GetGameRoute:This route either creates or retrieves a game for the player and their opponent,
+	or it redirects the player to home if they try to start a game with an invalid player or their opponent leaves the game.
+
+> GetHomeRoute: The home route shows the players not signed in a page with a sign-in button that redirects to a sign in page.
+	If the player is signed in and not in a game, they are shown a list of players available in the playerLobby, if they 
+	are in a game, then they are redirected to the page to play a game.
+
+> GetSignInRoute:In this route the player is on a page with a button that allows them to sign-in.
+
 > GetSignOutRoute: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
 
 > PostResignGameRoute: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
 	are given a "Resign failed" message.
+
+> PostSignInRoute: This route opens up to a page with a Textfield, that the user uses to enter their username. They get an error
+	message when the name already exists in the PlayerLobby or their are invalid characters. When the name is valid, the
+	player gets sent back to the homepage.
+
 #### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
 
