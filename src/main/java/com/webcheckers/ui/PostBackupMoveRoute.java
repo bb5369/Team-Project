@@ -12,24 +12,34 @@ import spark.*;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class PostBackupMoveRoute implements Route{
-//    private final GameManager gameManager;
-//    private final TemplateEngine templateEngine;
-    private final GameManager gameManager;
-    private final PlayerLobby playerLobby;
-
+/**
+ * UI controller for POSTing a move backup
+ */
+public class PostBackupMoveRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostBackupMoveRoute.class.getName());
 
-    PostBackupMoveRoute(PlayerLobby playerLobby, GameManager gameManager) {
-        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+    private final GameManager gameManager;
+
+    /**
+     * Initializes the PostBackupMoveRoute
+     *
+     * @param gameManager - used to get the turn controller
+     */
+    PostBackupMoveRoute(GameManager gameManager) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         this.gameManager = gameManager;
-        this.playerLobby = playerLobby;
 
         LOG.config("PostBackupMoveRoute initialized");
     }
 
-
+    /**
+     * Backs up the move
+     *
+     * @param request  - the HTTP request
+     * @param response - the HTTP response
+     * @return - Json message
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         LOG.finer("PostBackupMoveRoute invoked");
@@ -39,8 +49,7 @@ public class PostBackupMoveRoute implements Route{
 
         if(turn.backupMove()){
             return (new Gson()).toJson(new Message("Backed a move", Message.MessageType.info));
-        }
-        else{
+        } else {
             return (new Gson()).toJson(new Message("Backup failed", Message.MessageType.error));
         }
     }
