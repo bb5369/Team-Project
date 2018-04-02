@@ -16,6 +16,9 @@ import spark.Route;
 import spark.Request;
 import spark.Response;
 
+/**
+ * UI Controller for POSTing when a turn is submitted
+ */
 public class PostSubmitTurnRoute implements Route {
 
     //need to update the board
@@ -24,29 +27,38 @@ public class PostSubmitTurnRoute implements Route {
     //need the player to get the specific game
     private static final Logger LOG = Logger.getLogger(PostSubmitTurnRoute.class.getName());
     private final GameManager gameManager;
-    private final PlayerLobby playerLobby;
 
-    PostSubmitTurnRoute(PlayerLobby playerLobby, GameManager gameManager) {
-        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+    /**
+     * Initializes the PostSubmitTurnRoute
+     *
+     * @param gameManager - used to get the TurnController
+     */
+    PostSubmitTurnRoute(GameManager gameManager) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
 
         this.gameManager = gameManager;
-        this.playerLobby = playerLobby;
         LOG.config("PostSubmitTurnRoute initialized");
     }
 
+    /**
+     * Submits completed turns
+     *
+     * @param request  - the HTTP request
+     * @param response - the HTTP response
+     * @return - Json message
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         LOG.finer("PostSubmitTurnRoute invoked");
 
-        Player sessionPlayer = request.session(). attribute("Player");
+        Player sessionPlayer = request.session().attribute("Player");
         TurnController turnController = gameManager.getTurnController(sessionPlayer);
 
-        if(turnController.submitTurn()) { //making sure a move was actually made
+        if (turnController.submitTurn()) { //making sure a move was actually made
             return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));
             //update the board model here making it permanent
-        }
-        else {// error because no move was made
+        } else {// error because no move was made
             return (new Gson()).toJson(new Message("No move has been made", Message.MessageType.error));
         }
     }
