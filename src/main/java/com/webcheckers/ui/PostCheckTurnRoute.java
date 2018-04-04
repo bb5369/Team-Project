@@ -48,7 +48,7 @@ public class PostCheckTurnRoute implements Route {
         Player currentPlayer = request.session().attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Message message;
-        if(game == null){
+        if(game.isResignedPlayer(game.getOtherPlayer(currentPlayer))){
             message = new Message(opponentResigned, Message.MessageType.info);
             //gameManager.clearGame(currrentPlayer);
             //gameManager.clearResigned(currrentPlayer);
