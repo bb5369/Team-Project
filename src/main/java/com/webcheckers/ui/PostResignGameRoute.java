@@ -19,6 +19,11 @@ public class PostResignGameRoute implements Route {
 
     private final GameManager gameManager;
 
+    /**
+     * Initializes PostResignGame
+     *
+     * @param gameManager - used to resign from the game
+     */
     public PostResignGameRoute(GameManager gameManager) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
 
@@ -26,6 +31,13 @@ public class PostResignGameRoute implements Route {
         LOG.config("PostResignRoute is initialized");
     }
 
+    /**
+     * Resigns the game
+     *
+     * @param request  - the HTTP request
+     * @param response - the HTTP response
+     * @return - Json message
+     */
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("PostResignGameRoute is invoked.");

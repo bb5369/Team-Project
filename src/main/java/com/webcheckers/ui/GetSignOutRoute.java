@@ -13,30 +13,33 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 /**
- * @author Alexis Halbur
+ * UI Controller to GET the sign out route
  */
 public class GetSignOutRoute implements Route {
 
-    // Values used in view model to render sign out page
-    static final String TITLE = "Player Sign-Out";
-    static final String VIEW_NAME = "signout.ftl";
-
-    private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
 
     /**
-     * @param templateEngine
+     * Initializes the GetSignOutRoute
+     *
+     * @param playerLobby - player lobby used to access players
+     * @param gameManager - game manager used to access games
      */
-    GetSignOutRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby,
-                    final GameManager gameManager){
-        Objects.requireNonNull(templateEngine, "Template Engine must not be null.");
+    GetSignOutRoute(final PlayerLobby playerLobby, final GameManager gameManager) {
         Objects.requireNonNull(playerLobby, "Player Lobby must not be null");
-        this.templateEngine = templateEngine;
+        Objects.requireNonNull(gameManager, "Game Manager must not be null");
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
     }
 
+    /**
+     * Removes the player from the player lobby and destroys the game
+     *
+     * @param request  - the HTTP request
+     * @param response - the HTTP response
+     * @return - null
+     */
     @Override
     public Object handle(Request request, Response response) {
         Player player = request.session().attribute("Player");
@@ -46,7 +49,7 @@ public class GetSignOutRoute implements Route {
 
         playerLobby.destroyPlayer(playerName);
 
-        if ( ! playerLobby.isPlayerInLobby(player)) {
+        if (!playerLobby.isPlayerInLobby(player)) {
             // Remove the player from the session
             request.session().removeAttribute(playerName);
             player = null;

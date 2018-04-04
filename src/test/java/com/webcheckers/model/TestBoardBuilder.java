@@ -2,9 +2,13 @@ package com.webcheckers.model;
 
 /**
  * Builder pattern that generates a checkers board
- * We aren't instantiating objects here but we're creating a Spaces[][] board
+ * We use the static component `BoardBuilder` to generate the default starting board
+ * and then use method chaining to mutate the board state to create specific test cases.
+ *
+ * Not to be confused with `BoardBuilderTest` which is what tests the real component.
+ * This Builder is only used in the model test tier to setup a non-starting game state.
  */
-public class BoardBuilder {
+public class TestBoardBuilder {
 
 	final static int WHITE_BORDER_INDEX = 2;
 	final static int RED_BORDER_INDEX = 5;
@@ -21,7 +25,7 @@ public class BoardBuilder {
 	 * @param pos
 	 * @return
 	 */
-	public BoardBuilder withPieceAt(Piece piece, Position pos) {
+	public TestBoardBuilder withPieceAt(Piece piece, Position pos) {
 		Space target = board[pos.getRow()][pos.getCell()];
 
 		target.removePiece();
@@ -86,18 +90,18 @@ public class BoardBuilder {
 	 * We build it from the top down. Checkers rules says that there must be a black space
 	 * in the corner. So startRowBlackSquare = true;
 	 * @return
-	 * @param boardBuilder
+	 * @param testBoardBuilder
 	 */
-	public static Space[][] buildBoard(BoardBuilder boardBuilder) {
+	public static Space[][] buildBoard(TestBoardBuilder testBoardBuilder) {
 
-		if (boardBuilder.board != null) {
-			return boardBuilder.board;
+		if (testBoardBuilder.board != null) {
+			return testBoardBuilder.board;
 		}
 
 		Space[][] board = new Space[rows][cells];
 
 		for (int rowId=0; rowId < rows; rowId++) {
-			board[rowId] = boardBuilder.buildRow(rowId);
+			board[rowId] = testBoardBuilder.buildRow(rowId);
 		}
 
 		return board;
