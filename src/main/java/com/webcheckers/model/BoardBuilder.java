@@ -6,8 +6,8 @@ package com.webcheckers.model;
  */
 public final class BoardBuilder {
 
-    public final static int WHITE_BORDER_INDEX = 2;
-    public final static int RED_BORDER_INDEX = 5;
+    protected final static int WHITE_BORDER_INDEX = 2;
+    protected final static int RED_BORDER_INDEX = 5;
 
     protected static int ROWS = 8;
     protected static int CELLS = 8;
