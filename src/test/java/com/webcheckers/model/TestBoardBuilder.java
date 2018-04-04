@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.StringJoiner;
+
 /**
  * Builder pattern that generates a checkers board
  * We use the static component `BoardBuilder` to generate the default starting board
@@ -10,17 +12,26 @@ package com.webcheckers.model;
  */
 public class TestBoardBuilder {
 
-	final static int WHITE_BORDER_INDEX = 2;
-	final static int RED_BORDER_INDEX = 5;
-
-
-	private static int rows = 8;
-	private static int cells = 8;
-
 	private Space[][] board;
 
 	/**
-	 * Allows for placing a piece on a space in the matrix
+	 * Seed our new object with a board (should be empty, but is not right now)
+	 */
+	private TestBoardBuilder() {
+		board = BoardBuilder.buildBoard();
+	}
+
+	/**
+	 * The builder starts with an empty board
+	 */
+
+	public static TestBoardBuilder aBoard() {
+		return new TestBoardBuilder();
+	}
+
+	/**
+	 * Add a given piece at the given position
+	 *
 	 * @param piece
 	 * @param pos
 	 * @return
@@ -35,85 +46,84 @@ public class TestBoardBuilder {
 	}
 
 	/**
-	 * buildRow builds a single row of a board
-	 * The first row of the board starts with a black square
-	 * @param rowId
-	 * @return Space[] representing a row of Spaces
+	 * Remove a piece at the given position
+	 * @param pos
+	 * @return
 	 */
-	private Space[] buildRow(int rowId) {
+	public TestBoardBuilder withoutPieceAt(Position pos) {
+		Space target = board[pos.getRow()][pos.getCell()];
 
-		Space[] row = new Space[cells];
+		target.removePiece();
 
-		// Should this row start with a black space?
-		boolean startOnBlack = (rowId % 2 == 0);
-
-		boolean cellValid = startOnBlack;
-
-		for (int cellId=0; cellId < cells; cellId++) {
-			row[cellId] = buildSpace(rowId, cellId, cellValid);
-
-			cellValid = ! cellValid; // alternate
-		}
-
-		return row;
+		return this;
 	}
 
 	/**
-	 * Build a Space given a row and cell ID context
-	 * @param rowId
-	 * @param cellId
-	 * @param invalidSpace
+	 * Fluent interface method
 	 * @return
 	 */
-	private Space buildSpace(int rowId, int cellId, boolean invalidSpace) {
-
-		if (invalidSpace) {
-			return new Space(cellId, Space.State.INVALID);
-		} else {
-
-			if (rowId <= WHITE_BORDER_INDEX) {
-				return new Space(cellId, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
-
-			} else if (rowId >= RED_BORDER_INDEX) {
-				return new Space(cellId, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
-
-			} else {
-				return new Space(cellId, Space.State.OPEN);
-
-			}
-		}
+	public TestBoardBuilder but() {
+		return this;
 	}
 
 	/**
-	 * Build a board according to the parameters we have set in this object
-	 *
-	 * We build it from the top down. Checkers rules says that there must be a black space
-	 * in the corner. So startRowBlackSquare = true;
-	 * @return
-	 * @param testBoardBuilder
+	 * Actually get the usable board that we've constructed
+	 * @return Space[][] - constructed board
 	 */
-	public static Space[][] buildBoard(TestBoardBuilder testBoardBuilder) {
-
-		if (testBoardBuilder.board != null) {
-			return testBoardBuilder.board;
-		}
-
-		Space[][] board = new Space[rows][cells];
-
-		for (int rowId=0; rowId < rows; rowId++) {
-			board[rowId] = testBoardBuilder.buildRow(rowId);
-		}
-
+	public Space[][] build() {
 		return board;
 	}
 
+	/**
+	 * A starting board looks like this.
+	 * Where [.] = invalid space and [_] = open space
 
-	public Space[][] build() {
+	 . W . W . W . W
+	 W . W . W . W .
+	 . W . W . W . W
+	 _ . _ . _ . _ .
+	 . _ . _ . _ . _
+	 R . R . R . R .
+	 . R . R . R . R
+	 R . R . R . R .
 
-		// This is only used if we don't add things to the default board
-		if (this.board == null) {
-			this.board = buildBoard(this);
+	 * @return
+	 */
+	public TestBoardBuilder logBoard() {
+
+		System.out.println("Board as it has been constructed:");
+
+		StringJoiner row;
+
+		for (Space[] r : board) {
+
+			row = new StringJoiner(" ");
+
+			for (Space c : r) {
+				if (c.isOpen()) {
+
+					row.add("_");
+				}
+
+				if (!c.isValid()) {
+					row.add(".");
+				}
+
+				switch (c.getPiece().getColor()) {
+					case WHITE:
+						row.add("W");
+						break;
+					case RED:
+						row.add("R");
+						break;
+				}
+			}
+
+			System.out.println(row.toString());
 		}
-		return this.board;
+
+		System.out.println("End of board view");
+
+		return this;
 	}
 }

@@ -1,7 +1,9 @@
 package com.webcheckers.model;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -17,8 +19,6 @@ public class MoveValidatorTest {
 	private static Player player;
 	private static Piece piece;
 
-	private static TestBoardBuilder testBoardBuilder;
-
 	private static MoveValidator moveValidator;
 
 	@BeforeAll
@@ -32,20 +32,16 @@ public class MoveValidatorTest {
 		// Mock dependents
 		game = mock(CheckersGame.class);
 
-		// build board matrix we'll be testing
-		testBoardBuilder = new TestBoardBuilder();
-
 		// Setup behaviors
+		when(game.getMatrix()).thenReturn(TestBoardBuilder.aBoard().build());
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
 
 
 		moveValidator = new MoveValidator(game, player);
 	}
 
-	//@Test
+	@Test
 	public void test_aDiagonalMove() {
-		when(game.getMatrix()).thenReturn(testBoardBuilder.build());
-
 		Move diagonalMove = new Move(
 				new Position(2,1),
 				new Position(3,0)
@@ -54,7 +50,8 @@ public class MoveValidatorTest {
 		assertTrue(moveValidator.validateMove(diagonalMove));
 	}
 
-	//@Test
+	@Test
+	@Disabled
 	public void test_aKingMoveBackwards() {
 		// The board is laid out with white pieces starting on top
 		// red pieces on bottom
@@ -63,7 +60,7 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = testBoardBuilder.withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = TestBoardBuilder.aBoard().withPieceAt(king, kingPosition).build();
 
 		when(game.getMatrix()).thenReturn(boardWithKing);
 
