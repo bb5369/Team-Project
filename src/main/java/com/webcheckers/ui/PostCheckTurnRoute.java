@@ -24,6 +24,8 @@ public class PostCheckTurnRoute implements Route {
     private final GameManager gameManager;
 
     private final String opponentResigned = "true"/*"Your opponent has resigned From the game"*/;
+    private final String thisPlayersTurn = "true";
+    private final String otherPlayersTurn = "false";
 
     private final Gson gson;
 
@@ -57,18 +59,16 @@ public class PostCheckTurnRoute implements Route {
         //System.out.println("PostCheckTurn");
         Player currentPlayer = request.session().attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        Message message;
-        if(game == null){
-            message = new Message(opponentResigned, Message.MessageType.info);
+        if(game.getTurn().getPlayer().equals(game.getOtherPlayer(currentPlayer))){
             //gameManager.clearResigned(currentPlayer);
-            return formatMessageJson(message);
+            return formatMessageJson(opponentResigned);
+        }
+        else if(game.getTurn().getPlayer().equals(currentPlayer)){
+            return formatMessageJson(thisPlayersTurn);
         }
         else {
-            message = new Message("false", Message.MessageType.info);
-
-            return formatMessageJson(message);
+            return formatMessageJson(otherPlayersTurn);
         }
-        return null;
     }
 
     /**
@@ -76,8 +76,8 @@ public class PostCheckTurnRoute implements Route {
      *
      * @return - gson Message object
      */
-    public Object formatMessageJson(Message message) {
-        return gson.toJson(message);
+    public Object formatMessageJson(String message) {
+        return gson.toJson(new Message(message, Message.MessageType.info));
     }
 }
 

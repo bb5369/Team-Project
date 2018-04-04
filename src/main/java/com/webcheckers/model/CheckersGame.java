@@ -115,6 +115,12 @@ public class CheckersGame {
         }
     }
 
+    public Player getOtherPlayer(Player player){
+        if(player.equals(playerRed))
+            return playerRed;
+        else
+            return playerWhite;
+    }
 
     /**
      * Uses our static BoardBuilder to generate the starting Checkers Board
