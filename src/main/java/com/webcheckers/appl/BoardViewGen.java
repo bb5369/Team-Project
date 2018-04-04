@@ -41,7 +41,7 @@ public class BoardViewGen implements Iterable {
     }
 
     /**
-     * Returns a RowIterator to iterate over the rows
+     * Returns a RowIterator to iterate over the ROWS
      *
      * @return - RowIterator
      */
@@ -67,7 +67,7 @@ public class BoardViewGen implements Iterable {
         /**
          * Determines whether or not the iterator is at the end of the line
          *
-         * @return - true if not the end of the rows, false otherwise
+         * @return - true if not the end of the ROWS, false otherwise
          */
         @Override
         public boolean hasNext() {

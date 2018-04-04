@@ -161,7 +161,7 @@ public class MoveValidator {
         int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
         int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
 
-        LOG.finest(String.format("Move distance is %d rows and %d cells", deltaY, deltaX));
+        LOG.finest(String.format("Move distance is %d ROWS and %d CELLS", deltaY, deltaX));
 
         return (deltaY == 1 && deltaX == 1);
 

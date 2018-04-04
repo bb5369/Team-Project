@@ -23,9 +23,9 @@ public class BoardBuilderTest {
 		// Board starts at 0,0 with an invalid space
 		boolean invalid = true;
 
-		for (int row = 0; row < BoardBuilder.rows; row++) {
+		for (int row = 0; row < BoardBuilder.ROWS; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < BoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
@@ -50,7 +50,7 @@ public class BoardBuilderTest {
 
 		for (int row = 0; row <= BoardBuilder.WHITE_BORDER_INDEX; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < BoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
@@ -74,9 +74,9 @@ public class BoardBuilderTest {
 		// 5th row starts with a valid Space with Red Piece
 		boolean invalid = false;
 
-		for (int row = BoardBuilder.RED_BORDER_INDEX; row < BoardBuilder.rows; row++) {
+		for (int row = BoardBuilder.RED_BORDER_INDEX; row < BoardBuilder.ROWS; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < BoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
