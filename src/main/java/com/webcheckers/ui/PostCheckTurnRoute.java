@@ -59,7 +59,7 @@ public class PostCheckTurnRoute implements Route {
         //System.out.println("PostCheckTurn");
         Player currentPlayer = request.session().attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if(game.getTurn().getPlayer().equals(game.getOtherPlayer(currentPlayer))){
+        if(game.isResignedPlayer(game.getOtherPlayer(currentPlayer))){
             //gameManager.clearResigned(currentPlayer);
             return formatMessageJson(opponentResigned);
         }
