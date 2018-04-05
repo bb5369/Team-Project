@@ -5,6 +5,7 @@ public class CheckersGame {
     //instance variables
     private final Player playerRed;
     private final Player playerWhite;
+    private final Player resignedPlayer;
     private Space[][] matrix;
     private Turn activeTurn;
 
@@ -19,6 +20,7 @@ public class CheckersGame {
     public CheckersGame(Player playerRed, Player playerWhite) {
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
+        this.resignedPlayer = null;
 
 
         generateStartingBoard();
@@ -120,6 +122,10 @@ public class CheckersGame {
             return playerRed;
         else
             return playerWhite;
+    }
+
+    public boolean isResignedPlayer(Player player){
+            return player.equals(resignedPlayer);
     }
 
     /**
