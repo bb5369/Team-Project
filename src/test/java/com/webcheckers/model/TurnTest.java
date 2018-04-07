@@ -141,7 +141,7 @@ public class TurnTest {
 		// TODO: move validator's concept of the board I think should update an interim
 		// board while moves are being validated, since adding the same move shouldn't be valid
 		assertTrue(CuT.validateMove(validMove));
-		assertTrue(CuT.validateMove(validMove));
+		assertFalse(CuT.validateMove(validMove));
 
 		assertTrue(CuT.backupMove());
 		assertEquals(Turn.State.STABLE_TURN, CuT.getState());
