@@ -215,4 +215,13 @@ public class SpaceTest {
 
 		assertTrue(testSpace.movePieceFrom(sourceSpace));
 	}
+
+	@Test
+	public void testClone()
+	{
+		Space toClone = new Space(SPACE_ID, mockPiece);
+		Space clone = toClone.clone();
+		assertEquals(toClone, clone);
+	}
+
 }
