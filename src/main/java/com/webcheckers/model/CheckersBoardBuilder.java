@@ -26,6 +26,8 @@ public class CheckersBoardBuilder {
 	 * The builder starts with an empty board
 	 */
 	public static CheckersBoardBuilder aBoard() {
+	    LOG.finest("aBoard() - an empty board");
+
 		return new CheckersBoardBuilder();
 	}
 
@@ -33,6 +35,8 @@ public class CheckersBoardBuilder {
      * Build a board with pieces in their starting positions
      */
     public static CheckersBoardBuilder aStartingBoard() {
+        LOG.finest("aStartingBoard() - with red/white pieces in starting positions");
+
         return new CheckersBoardBuilder().withStartingPieces();
     }
 
@@ -52,6 +56,8 @@ public class CheckersBoardBuilder {
      * @return
      */
     public CheckersBoardBuilder withPieceAt(Piece piece, Position pos) {
+        LOG.finest("withPieceAt()");
+
         Space target = board[pos.getRow()][pos.getCell()];
 
         target.removePiece();
@@ -66,6 +72,8 @@ public class CheckersBoardBuilder {
      * @return
      */
     public CheckersBoardBuilder withoutPieceAt(Position pos) {
+        LOG.finest("withoutPieceAt()");
+
         Space target = board[pos.getRow()][pos.getCell()];
 
         target.removePiece();
