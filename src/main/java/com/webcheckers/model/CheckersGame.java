@@ -122,10 +122,15 @@ public class CheckersGame {
 
 
     /**
-     * Uses our static BoardBuilder to generate the starting Checkers Board
+     * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void generateStartingBoard() {
-        this.matrix = BoardBuilder.buildBoard();
+        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+
+        LOG.fine("Starting board:");
+        LOG.fine(builder.formatBoardString());
+
+        matrix = builder.build();
     }
 
 
