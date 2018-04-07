@@ -49,6 +49,15 @@ public class Piece {
     }
 
     /**
+     * clone method
+     * This method return a cloned copy of the object
+     */
+    public Piece clone()
+    {
+        return new Piece(this.ty, this.col);
+    }
+
+    /**
      * Creates and returns a string detailing the piece's color and type
      *
      * @return - String created

@@ -4,7 +4,7 @@ package com.webcheckers.model;
  * <p>Title: Space class</p>
  * <p>Description: This class represents a single space on a checkers board</p>
  */
-public class Space {
+public class Space{
 
     public enum State {
         INVALID,
@@ -16,6 +16,7 @@ public class Space {
     private int cellIdx;
     private Piece currPiece;
     private State state;
+
 
     /**
      * Parameterized constructor
@@ -158,5 +159,19 @@ public class Space {
     public Piece getPiece() {
         return currPiece;
     }
+
+
+    /**
+     * clone method
+     * This method return a cloned copy of the space object
+     * Note: enums are apparently passed by reference
+     * @return cloned copy of the Space object
+     */
+    public Space clone()
+    {
+        return new Space(cellIdx, currPiece.clone());
+    }
+
+
 
 }
