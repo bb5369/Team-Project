@@ -89,12 +89,15 @@ public final class BoardBuilder {
      * @return: a clone of the original board
      */
     public static Space[][] cloneBoard(Space[][] source){
+
         Space[][] newBoard = new Space[ROWS][CELLS];
+
         for(int x = 0; x < ROWS; x++){
             for(int y = 0; y < CELLS; y++){
                 newBoard[x][y] = source[x][y].clone();
             }
         }
+
         return newBoard;
     }
 }
