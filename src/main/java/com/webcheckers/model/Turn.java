@@ -37,6 +37,8 @@ public class Turn {
      * @param player - player the Turn is being made for
      */
     Turn(CheckersGame game, Space[][] matrix, Player player) {
+        LOG.fine(String.format("I am a new turn for Player [%s]", player.getName()));
+
         this.game = game;
         this.matrix = matrix;
         this.player = player;
@@ -46,7 +48,7 @@ public class Turn {
 
         this.moveValidator = new MoveValidator(game, player);
 
-        LOG.fine(String.format("Turn initialized for Player [%s] in [%s] state", player.getName(), this.state));
+        LOG.fine(String.format("Turn initialized in [%s] state", this.state));
     }
 
     /**

@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
+import java.util.logging.Logger;
+
 public class CheckersGame {
+    private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
     //instance variables
     private final Player playerRed;
@@ -17,14 +20,16 @@ public class CheckersGame {
      * @param playerWhite - Player two
      */
     public CheckersGame(Player playerRed, Player playerWhite) {
+        LOG.fine(String.format("I am a new CheckersGame between [%s] and [%s]",
+                playerRed.getName(),
+                playerWhite.getName()));
+
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
-
 
         generateStartingBoard();
 
         this.activeTurn = new Turn(this, matrix, playerRed);
-
     }
 
     /**

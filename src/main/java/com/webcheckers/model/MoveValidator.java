@@ -29,7 +29,6 @@ public class MoveValidator {
         this.matrix = game.getMatrix();
 
         LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
-        LOG.finest(String.format("matrix is: %s", this.matrix));
     }
 
     /**
@@ -41,8 +40,8 @@ public class MoveValidator {
 
         LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
 
+        LOG.finest(CheckersBoardBuilder.formatBoardString(matrix));
 
-        logBoardMatrix();
         logMoveCoordinates(move);
         logMoveStates(move);
 
@@ -60,22 +59,6 @@ public class MoveValidator {
                 (isMoveSingleSpace(move) || isMoveJump(move)) &&
                 isMoveInRightDirection(move) &&
                 isEndSpaceOpen(move);
-    }
-
-    /**
-     * Logs the matrix board for debug
-     */
-    private void logBoardMatrix() {
-        // Trace log our board matrix
-        for (Space[] row : matrix) {
-            StringBuilder rowStates = new StringBuilder();
-
-            for (Space space : row) {
-                rowStates.append(space.getState() + " ");
-            }
-
-            LOG.finest(rowStates.toString());
-        }
     }
 
     /**
