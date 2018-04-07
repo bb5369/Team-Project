@@ -34,7 +34,9 @@ public class Space{
             this.currPiece = currPiece;
             this.state = State.OCCUPIED;
         } else {
-            throw new NullPointerException("Piece constructor requires a non-null Piece");
+//            throw new NullPointerException("Piece constructor requires a non-null Piece");
+            this.currPiece = currPiece;
+            this.state = State.OPEN;
         }
     }
 
@@ -187,6 +189,10 @@ public class Space{
      */
     public Space clone()
     {
+
+        if(currPiece == null)
+            return new Space(cellIdx, currPiece);
+
         return new Space(cellIdx, currPiece.clone());
     }
 
