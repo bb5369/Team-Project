@@ -82,4 +82,19 @@ public final class BoardBuilder {
 
         return board;
     }
+
+    /**
+     * Clones the board so that moves can be tracked with board states
+     * @param source: original board
+     * @return: a clone of the original board
+     */
+    public static Space[][] cloneBoard(Space[][] source){
+        Space[][] newBoard = new Space[rows][cells];
+        for(int x = 0; x < rows; x++){
+            for(int y = 0; y < cells; y++){
+                newBoard[x][y] = source[x][y].clone();
+            }
+        }
+        return newBoard;
+    }
 }
