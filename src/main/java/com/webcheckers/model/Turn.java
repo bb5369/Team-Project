@@ -41,11 +41,12 @@ public class Turn {
         this.game = game;
         this.matrix = matrix;
         this.player = player;
-
         this.pendingMoves = new Stack<>();
         this.state = State.EMPTY_TURN;
 
-        this.moveValidator = new MoveValidator(game, player);
+        this.pendingMoves.push(matrix);
+
+        this.moveValidator = new MoveValidator(player, game.getPlayerColor(player));
 
         LOG.fine(String.format("Turn initialized for Player [%s] in [%s] state", player.getName(), this.state));
     }
@@ -62,11 +63,13 @@ public class Turn {
                 player.getName(),
                 move.toString()));
 
-        if (moveValidator.validateMove(move)) {
+        if (moveValidator.validateMove(pendingMoves.peek(), move)) {
             LOG.finer("Move has been validated successfully");
 
-
-            pendingMoves.enqueue(move);
+            //Clones the board on top of the stack, and creates a new board with the move executed, which is pushed
+            Space[][] newBoard = BoardBuilder.cloneBoard(pendingMoves.peek());
+            makeMove(newBoard, move);
+            pendingMoves.push(newBoard);
 
             state = State.STABLE_TURN;
 
@@ -98,11 +101,7 @@ public class Turn {
             return false;
         }
 
-        while (!pendingMoves.isEmpty()) {
-            if (!makeMove(matrix, pendingMoves.removeFromFront())) {
-                return false;
-            }
-        }
+        matrix = pendingMoves.peek();
 
         this.state = State.TURN_SUBMITTED;
 
@@ -149,7 +148,7 @@ public class Turn {
      */
     public boolean backupMove() {
         if (!pendingMoves.isEmpty()) {
-            Move badMove = pendingMoves.removeFromRear();
+            Space[][] badMove = pendingMoves.pop();
 
             LOG.finest(String.format("Removing move %s from %s's history",
                     badMove.toString(),
