@@ -6,11 +6,11 @@ package com.webcheckers.model;
  */
 public final class BoardBuilder {
 
-    public final static int WHITE_BORDER_INDEX = 2;
-    public final static int RED_BORDER_INDEX = 5;
+    protected final static int WHITE_BORDER_INDEX = 2;
+    protected final static int RED_BORDER_INDEX = 5;
 
-    public static int rows = 8;
-    public static int cells = 8;
+    protected static int ROWS = 8;
+    protected static int CELLS = 8;
 
     /**
      * buildRow builds a single row of a board
@@ -21,14 +21,14 @@ public final class BoardBuilder {
      */
     private static Space[] buildRow(int rowId) {
 
-        Space[] row = new Space[cells];
+        Space[] row = new Space[CELLS];
 
         // Should this row start with a black space?
         boolean startOnBlack = (rowId % 2 == 0);
 
         boolean cellValid = startOnBlack;
 
-        for (int cellId = 0; cellId < cells; cellId++) {
+        for (int cellId = 0; cellId < CELLS; cellId++) {
             row[cellId] = buildSpace(rowId, cellId, cellValid);
 
             cellValid = !cellValid; // alternate
@@ -74,9 +74,9 @@ public final class BoardBuilder {
      */
     public static Space[][] buildBoard() {
 
-        Space[][] board = new Space[rows][cells];
+        Space[][] board = new Space[ROWS][CELLS];
 
-        for (int rowId = 0; rowId < rows; rowId++) {
+        for (int rowId = 0; rowId < ROWS; rowId++) {
             board[rowId] = buildRow(rowId);
         }
 
@@ -89,9 +89,9 @@ public final class BoardBuilder {
      * @return: a clone of the original board
      */
     public static Space[][] cloneBoard(Space[][] source){
-        Space[][] newBoard = new Space[rows][cells];
-        for(int x = 0; x < rows; x++){
-            for(int y = 0; y < cells; y++){
+        Space[][] newBoard = new Space[ROWS][CELLS];
+        for(int x = 0; x < ROWS; x++){
+            for(int y = 0; y < CELLS; y++){
                 newBoard[x][y] = source[x][y].clone();
             }
         }
