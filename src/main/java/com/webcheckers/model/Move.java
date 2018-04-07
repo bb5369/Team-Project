@@ -81,6 +81,11 @@ public class Move {
         return diff.getCell() == 2 && diff.getRow() == 2;
     }
 
+    public boolean isASingleMoveAttempt(){
+        Position diff = Position.absoluteDifference(end, start);
+        return diff.getCell() == 1 && diff.getRow() == 1;
+    }
+
     /**
      * This generates a string representing the state of the Move object
      *

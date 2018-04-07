@@ -25,6 +25,7 @@ public class Turn {
     private Player player;
     private DoublyLinkedQueue<Move> pendingMoves;
     private State state;
+    private boolean single;
 
     private MoveValidator moveValidator;
 
@@ -40,6 +41,7 @@ public class Turn {
         this.game = game;
         this.matrix = matrix;
         this.player = player;
+        this.single = false;
 
         this.pendingMoves = new DoublyLinkedQueue<>();
         this.state = State.EMPTY_TURN;
@@ -61,13 +63,16 @@ public class Turn {
                 player.getName(),
                 move.toString()));
 
-        if (moveValidator.validateMove(move)) {
+        if (!single && moveValidator.validateMove(move)) {
             LOG.finer("Move has been validated successfully");
 
             pendingMoves.enqueue(move);
 
             state = State.STABLE_TURN;
-
+            if(move.isASingleMoveAttempt()) {
+                LOG.finer("This is a single move");
+                single = true;
+            }
             LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
                     game.getPlayerColor(player),
                     player.getName(),
@@ -125,16 +130,20 @@ public class Turn {
         Position start = move.getStart();
         Position end = move.getEnd();
 
-        if (move.isAJumpMoveAttempt()) {
+        if (move.isAJumpMoveAttempt() && !single) {
             //TODO jump move logic goes here
             return true;
 
-        } else //single move logic
+        } else if(!single)//single move logic
         {
             Space startSpace = matrix[start.getRow()][start.getCell()];
             Space endSpace = matrix[end.getRow()][end.getCell()];
+            single = true;
 
             return endSpace.movePieceFrom(startSpace);
+        }
+        else{
+            return false;
         }
     }
 
@@ -157,7 +166,7 @@ public class Turn {
             if (pendingMoves.isEmpty()) {
                 this.state = State.EMPTY_TURN;
             }
-
+            single = false;
             return true;
         }
 
