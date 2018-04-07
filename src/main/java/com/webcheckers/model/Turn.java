@@ -182,6 +182,10 @@ public class Turn {
         return (this.state == State.TURN_SUBMITTED);
     }
 
+    public boolean canResign(){
+        return this.state == State.EMPTY_TURN;
+    }
+
 
     /**
      * Return the player whose turn it is

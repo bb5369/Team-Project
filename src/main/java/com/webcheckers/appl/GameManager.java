@@ -133,8 +133,11 @@ public class GameManager {
 
     public boolean resignGame(Player player) {
         CheckersGame game = getGame(player);
-
-        return gameList.remove(game);
+        if(!game.getTurn().getPlayer().equals(player) || game.getTurn().canResign()) {
+            return gameList.remove(game);
+        }
+        else
+            return false;
     }
 
     public void clearGame(Player player) {
