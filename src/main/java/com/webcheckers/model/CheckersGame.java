@@ -36,6 +36,11 @@ public class CheckersGame {
         return matrix;
     }
 
+    public void setMatrix(Space[][] matrix)
+    {
+        this.matrix = matrix;
+    }
+
     /**
      * Used to access the red player in the game
      *

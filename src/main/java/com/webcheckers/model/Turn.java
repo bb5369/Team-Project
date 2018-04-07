@@ -101,7 +101,7 @@ public class Turn {
             return false;
         }
 
-        matrix = pendingMoves.peek();
+        game.setMatrix(pendingMoves.peek());
 
         this.state = State.TURN_SUBMITTED;
 
