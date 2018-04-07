@@ -57,6 +57,20 @@ public class Piece {
         return new Piece(this.ty, this.col);
     }
 
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other == null && other instanceof Piece)
+            return false;
+
+        if(this.ty != ((Piece)other).ty)
+            return false;
+        if(this.col != ((Piece)other).col)
+            return false;
+
+        return true;
+    }
+
     /**
      * Creates and returns a string detailing the piece's color and type
      *

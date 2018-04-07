@@ -219,7 +219,7 @@ public class SpaceTest {
 	@Test
 	public void testClone()
 	{
-		Space toClone = new Space(SPACE_ID, mockPiece);
+		Space toClone = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 		Space clone = toClone.clone();
 		assertEquals(toClone, clone);
 	}
