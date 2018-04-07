@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.WebServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -57,7 +56,7 @@ public class TurnTest {
 	 */
 	@BeforeEach
 	public void setupCuT() {
-		checkersBoard = BoardBuilder.buildBoard();
+		checkersBoard = CheckersBoardBuilder.aStartingBoard().build();
 
 		// TODO: Refactor this need out of MoveValidator so its passed in a board
 		// MoveValidator will become a static class

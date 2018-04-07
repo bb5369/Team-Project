@@ -21,6 +21,10 @@ public class MoveValidatorTest {
 
 	private static MoveValidator moveValidator;
 
+	private static CheckersBoardBuilder boardBuilder;
+
+	private Space[][] board;
+
 	@BeforeAll
 	public static void testSetup() {
 
@@ -32,8 +36,10 @@ public class MoveValidatorTest {
 		// Mock dependents
 		game = mock(CheckersGame.class);
 
+		boardBuilder = CheckersBoardBuilder.aBoard();
+
 		// Setup behaviors
-		when(game.getMatrix()).thenReturn(TestBoardBuilder.aBoard().build());
+		when(game.getMatrix()).thenReturn(boardBuilder.build());
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
 
 
@@ -60,7 +66,7 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = TestBoardBuilder.aBoard().withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).build();
 
 		when(game.getMatrix()).thenReturn(boardWithKing);
 
