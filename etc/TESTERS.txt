@@ -25,4 +25,9 @@ on the same server from several different computers, you simply need to type
 the host computer's IP address followed by ':4567' into the browser of other
 computers. (Example: '129.21.37.13:4567')
 
+For your reference, here are the American Rules for Checkers that this project
+is based off of:
+
+http://www.se.rit.edu/~swen-261/projects/WebCheckers/American%20Rules.html
+
 Happy testing!
