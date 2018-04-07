@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.Scanner;
+
 /**
  * <p>Title: Space class</p>
  * <p>Description: This class represents a single space on a checkers board</p>
@@ -158,6 +160,22 @@ public class Space{
      */
     public Piece getPiece() {
         return currPiece;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other == null && other instanceof Space)
+            return false;
+
+        if(this.cellIdx != ((Space)other).cellIdx)
+            return false;
+        if(!this.currPiece.equals(((Space) other).currPiece))
+            return false;
+        if(this.state != ((Space)other).state)
+            return false;
+
+        return true;
     }
 
 
