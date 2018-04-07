@@ -2,6 +2,7 @@ package com.webcheckers.model;
 
 import com.webcheckers.util.DoublyLinkedQueue;
 
+import java.util.Stack;
 import java.util.logging.Logger;
 
 /**
@@ -23,7 +24,7 @@ public class Turn {
     private CheckersGame game;
     private Space[][] matrix;
     private Player player;
-    private DoublyLinkedQueue<Move> pendingMoves;
+    private Stack<Space[][]> pendingMoves;
     private State state;
 
     private MoveValidator moveValidator;
@@ -41,7 +42,7 @@ public class Turn {
         this.matrix = matrix;
         this.player = player;
 
-        this.pendingMoves = new DoublyLinkedQueue<>();
+        this.pendingMoves = new Stack<>();
         this.state = State.EMPTY_TURN;
 
         this.moveValidator = new MoveValidator(game, player);
@@ -63,6 +64,7 @@ public class Turn {
 
         if (moveValidator.validateMove(move)) {
             LOG.finer("Move has been validated successfully");
+
 
             pendingMoves.enqueue(move);
 
@@ -191,7 +193,6 @@ public class Turn {
     public Player getPlayer() {
         return this.player;
     }
-
 
     /**
      * Used in testing to inspect component state
