@@ -46,7 +46,7 @@ public class MoveValidator {
         logMoveCoordinates(move);
         logMoveStates(move);
 
-        if(moveAvailable() == false)
+        if(isMoveAvailable() == false)
             return false;
 
         return validateMoveByStep(move);
@@ -218,7 +218,7 @@ public class MoveValidator {
      *
      * @return true if there are available moves, false otherwise
      */
-    public boolean moveAvailable(){
+    public boolean isMoveAvailable(){
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 // If the piece on the space is the color of the active player
