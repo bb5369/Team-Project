@@ -46,6 +46,9 @@ public class MoveValidator {
         logMoveCoordinates(move);
         logMoveStates(move);
 
+        if(moveAvailable() == false)
+            return false;
+
         return validateMoveByStep(move);
     }
 
@@ -199,5 +202,41 @@ public class MoveValidator {
      */
     private Space getSpace(Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
+    }
+
+    public boolean checkRound(int x, int y, Piece piece){
+        if(matrix[x][y].isOccupied() || !matrix[x][y].isValid())
+            return false;
+        if(piece.getType() != Piece.Type.KING){
+
+        }
+        return false;
+    }
+
+    /**
+     * Checks to see if there are any available moves
+     *
+     * @return true if there are available moves, false otherwise
+     */
+    public boolean moveAvailable(){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                // If the piece on the space is the color of the active player
+                if(matrix[i][j].isOccupied()
+                        && matrix[i][j].getPiece().getColor() == game.getPlayerColor(player)){
+                    Position currentPos = new Position(i, j);
+                    Move checkMove;
+                    for(int row = -1; row < 2; row += 2){
+                        for(int col = -1; col < 2; col += 2){
+                            Position place = new Position(i + row, j + col);
+                            checkMove = new Move(currentPos, place);
+                            if(validateMoveByStep(checkMove))
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
