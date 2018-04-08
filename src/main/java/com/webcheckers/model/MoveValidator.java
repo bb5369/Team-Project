@@ -59,7 +59,7 @@ public class MoveValidator {
      */
     private boolean validateMoveByStep(Move move) {
 
-        return isMoveDiagonal(move) &&
+        return isOnBoard(move) && isMoveDiagonal(move) &&
                 (isMoveSingleSpace(move) || isMoveJump(move)) &&
                 isMoveInRightDirection(move) &&
                 isEndSpaceOpen(move);
@@ -214,6 +214,18 @@ public class MoveValidator {
     }
 
     /**
+     * Determines whether or not the ending position of a move is on the board
+     *
+     * @param move
+     * @return
+     */
+    public boolean isOnBoard(Move move){
+        return (move.getEnd().getCell() >= 0 && move.getEnd().getCell() < 8) &&
+                (move.getEnd().getRow() >= 0 && move.getEnd().getRow() < 8);
+    }
+
+
+    /**
      * Checks to see if there are any available moves
      *
      * @return true if there are available moves, false otherwise
@@ -224,10 +236,12 @@ public class MoveValidator {
                 // If the piece on the space is the color of the active player
                 if(matrix[i][j].isOccupied()
                         && matrix[i][j].getPiece().getColor() == game.getPlayerColor(player)){
+                    LOG.finest("Space is occupied, and the piece is the proper color");
                     Position currentPos = new Position(i, j);
                     Move checkMove;
                     for(int row = -1; row < 2; row += 2){
                         for(int col = -1; col < 2; col += 2){
+                            LOG.finest("We're moving");
                             Position place = new Position(i + row, j + col);
                             checkMove = new Move(currentPos, place);
                             if(validateMoveByStep(checkMove))
