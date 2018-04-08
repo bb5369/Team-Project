@@ -203,7 +203,15 @@ public class MoveValidator {
     private Space getSpace(Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
     }
-    
+
+    public boolean checkRound(int x, int y, Piece piece){
+        if(matrix[x][y].isOccupied() || !matrix[x][y].isValid())
+            return false;
+        if(piece.getType() != Piece.Type.KING){
+
+        }
+        return false;
+    }
 
     /**
      * Determines whether or not the ending position of a move is on the board
@@ -225,7 +233,7 @@ public class MoveValidator {
     public boolean isMoveAvailable(){
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                // If the piece on the space is the color of the active player
+                // If the space holds a piece of the color of the active player
                 if(matrix[i][j].isOccupied()
                         && matrix[i][j].getPiece().getColor() == game.getPlayerColor(player)){
                     LOG.finest("Space is occupied, and the piece is the proper color");
