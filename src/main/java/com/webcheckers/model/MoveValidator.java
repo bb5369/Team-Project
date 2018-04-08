@@ -204,20 +204,12 @@ public class MoveValidator {
         return matrix[pos.getRow()][pos.getCell()];
     }
 
-    public boolean checkRound(int x, int y, Piece piece){
-        if(matrix[x][y].isOccupied() || !matrix[x][y].isValid())
-            return false;
-        if(piece.getType() != Piece.Type.KING){
-
-        }
-        return false;
-    }
 
     /**
      * Determines whether or not the ending position of a move is on the board
      *
-     * @param move
-     * @return
+     * @param move - the move being made
+     * @return - true if the end position of the move is on the board, false otherwise
      */
     public boolean isOnBoard(Move move){
         return (move.getEnd().getCell() >= 0 && move.getEnd().getCell() < 8) &&
