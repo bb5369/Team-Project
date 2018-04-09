@@ -130,20 +130,16 @@ public class Turn {
         Position start = move.getStart();
         Position end = move.getEnd();
 
-        if (move.isAJumpMoveAttempt() && !single) {
+        if (move.isAJumpMoveAttempt()) {
             //TODO jump move logic goes here
             return true;
 
-        } else if(!single)//single move logic
-        {
+        } else {
             Space startSpace = matrix[start.getRow()][start.getCell()];
             Space endSpace = matrix[end.getRow()][end.getCell()];
             single = true;
 
             return endSpace.movePieceFrom(startSpace);
-        }
-        else{
-            return false;
         }
     }
 
