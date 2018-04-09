@@ -133,7 +133,9 @@ public class GameManager {
 
     public boolean resignGame(Player player) {
         CheckersGame game = getGame(player);
-        if(!game.getTurn().getPlayer().equals(player) || game.getTurn().canResign()) {
+
+        // A player can only resign if it their turn and they have not made any moves
+        if(game.getPlayerActive().equals(player) && game.getTurn().canResign()) {
             return gameList.remove(game);
         }
         else
