@@ -31,22 +31,22 @@ public class PostResignGameRouteTest {
     private Player player2;
     @BeforeEach
     public void setup(){
+        player1 = new Player("PlayerOne");
+
         request = mock(Request.class);
         session = mock(Session.class);
-        when(request.session()).thenReturn(session);
         response = mock(Response.class);
+        gameManager = mock(GameManager.class);
 
-        player1 = new Player("PlayerOne");
-        player2 = new Player("PlayerTwo");
-        gameManager = new GameManager();
+        when(request.session()).thenReturn(session);
+        when(session.attribute("Player")).thenReturn(player1);
 
-        gameManager.getNewGame(player1, player2);
         CuT = new PostResignGameRoute(gameManager);
     }
 
     @Test
-    public void test() {
-        when(session.attribute("Player")).thenReturn(player1);
+    public void resign_success() {
+        when(gameManager.resignGame(player1)).thenReturn(true);
 
         Object responseString = CuT.handle(request, response);
         Object gson = new Gson().toJson(new Message(player1.name + "Resigned", Message.MessageType.info));
@@ -55,13 +55,14 @@ public class PostResignGameRouteTest {
     }
 
     @Test
-    public void test2(){
-        gameManager.clearGames();
-        when(session.attribute("Player")).thenReturn(player2);
+    public void resign_fail() {
+        when(gameManager.resignGame(player1)).thenReturn(false);
+
 
         Object responseString = CuT.handle(request, response);
-        Object gson = new Gson().toJson(new Message(player2.name + "'s Resign failed", Message.MessageType.error));
+        Object gson = new Gson().toJson(new Message(player1.name + "'s Resign failed", Message.MessageType.error));
 
         assertEquals(responseString, gson);
     }
+
 }

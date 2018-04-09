@@ -129,7 +129,7 @@ public class Space {
      * @return - true if space is valid, false otherwise
      */
     public boolean isValid() {
-        return (state != State.INVALID);
+        return (state != State.INVALID && state != State.OCCUPIED);
     }
 
     /**
