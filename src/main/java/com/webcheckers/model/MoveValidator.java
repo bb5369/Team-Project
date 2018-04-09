@@ -188,7 +188,7 @@ public class MoveValidator {
      * @return - true if the move is a jump move, false otherwise
      */
     private boolean isMoveJump(Move move) {
-        return move.isAJumpMoveAttempt();
+        return false;
     }
 
     /**
