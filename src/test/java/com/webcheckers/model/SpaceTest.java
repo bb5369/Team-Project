@@ -57,8 +57,9 @@ public class SpaceTest {
 	@Test
 	public void invalidSpace() {
 		Space testSpace = new Space(SPACE_ID, Space.State.INVALID);
+		Space testSpace2 = new Space(SPACE_ID, Space.State.OCCUPIED);
 
-		assertFalse(testSpace.isValid());
+		assertFalse(testSpace.isValid() || testSpace2.isValid());
 
 	}
 
@@ -69,7 +70,7 @@ public class SpaceTest {
 	public void validSpacePiece() {
 		Space testSpace = new Space(SPACE_ID, mockPiece);
 
-		assertTrue(testSpace.isValid());
+		assertTrue(!testSpace.isValid());
 	}
 
 	/**

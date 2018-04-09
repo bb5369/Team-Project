@@ -2,11 +2,18 @@ package com.webcheckers.model;
 
 public class CheckersGame {
 
+    protected enum State {
+        IN_PLAY,
+        WON,
+        RESIGNED
+    }
+
     //instance variables
     private final Player playerRed;
     private final Player playerWhite;
     private Space[][] matrix;
     private Turn activeTurn;
+    private State state;
 
 
     /**
@@ -19,12 +26,11 @@ public class CheckersGame {
     public CheckersGame(Player playerRed, Player playerWhite) {
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
-
+        this.state = State.IN_PLAY;
 
         generateStartingBoard();
 
         this.activeTurn = new Turn(this, matrix, playerRed);
-
     }
 
     /**
@@ -104,6 +110,21 @@ public class CheckersGame {
 	     return activeTurn;
     }
 
+    public boolean resignGame() {
+
+        if (activeTurn.canResign()) {
+            state = State.RESIGNED;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isResigned() {
+        return state == State.RESIGNED;
+    }
+
     /**
      * What color is the given player?
      *
@@ -120,6 +141,20 @@ public class CheckersGame {
         }
     }
 
+    public Player getOtherPlayer(Player player){
+        if(player.equals(playerRed))
+            return playerRed;
+        else
+            return playerWhite;
+    }
+
+    /**
+     * Used for logging
+     * @return
+     */
+    public State getState() {
+        return state;
+    }
 
     /**
      * Uses our static BoardBuilder to generate the starting Checkers Board
@@ -127,7 +162,5 @@ public class CheckersGame {
     private void generateStartingBoard() {
         this.matrix = BoardBuilder.buildBoard();
     }
-
-
 
 }
