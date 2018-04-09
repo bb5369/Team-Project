@@ -44,13 +44,18 @@ public class PostResignGameRoute implements Route {
 
         Player sessionPlayer = request.session().attribute("Player");
 
+        LOG.finer(String.format("Player [%s] wants to resign!", sessionPlayer.getName()));
+
         boolean resignWorked = gameManager.resignGame(sessionPlayer);
 
-        if (resignWorked)
-            return (new Gson()).toJson(new Message(sessionPlayer.name + "Resigned", Message.MessageType.info));
+        if (resignWorked) {
+            LOG.finer("Resign worked");
+			return (new Gson()).toJson(new Message(sessionPlayer.name + "Resigned", Message.MessageType.info));
 
-        else
+		} else{
+            LOG.finer("Resign failed. Most likely not their turn");
             return (new Gson()).toJson(new Message(sessionPlayer.name + "'s Resign failed", Message.MessageType.error));
+        }
 
     }
 }

@@ -21,13 +21,15 @@ import java.util.logging.Logger;
 public class PostCheckTurnRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostCheckTurnRoute.class.getName());
 
+	private final Gson gson;
     private final GameManager gameManager;
 
     private final String opponentResigned = "true"/*"Your opponent has resigned From the game"*/;
     private final String thisPlayersTurn = "true";
     private final String otherPlayersTurn = "false";
+    private final String RESIGNED_NOTIFICATION_STRING = "The other player has resigned! <a href='/'>return to lobby</a>.";
+	private final String GAME_ENDED_STRING = "The game has ended! <a href='/'>return to lobby</a>.";
 
-    private final Gson gson;
 
     /**
      * Initializes the PostCheckTurnRoute
@@ -36,7 +38,6 @@ public class PostCheckTurnRoute implements Route {
      * @param gson        - used to transmit messages to AJAX
      */
     public PostCheckTurnRoute(GameManager gameManager, Gson gson) {
-        // validation
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
 
@@ -56,18 +57,26 @@ public class PostCheckTurnRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("PostCheckTurnRoute is invoked.");
-        //System.out.println("PostCheckTurn");
         Player currentPlayer = request.session().attribute("Player");
+
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if(game == null || game.isResignedPlayer(game.getOtherPlayer(currentPlayer))){
-            //gameManager.clearResigned(currentPlayer);
+
+        if (game == null) {
+        	return formatMessageJson(GAME_ENDED_STRING);
+        }
+
+        if (game.isResigned()) {
+        	// This message is rendered when the frontend reloads the game view
+        	request.session().attribute("message", new Message(RESIGNED_NOTIFICATION_STRING, Message.MessageType.error));
+
             return formatMessageJson(opponentResigned);
-        }
-        else if(game.getTurn().getPlayer().equals(currentPlayer)){
+
+        } else if(game.getPlayerActive().equals(currentPlayer)){
             return formatMessageJson(thisPlayersTurn);
-        }
-        else {
+
+        } else {
             return formatMessageJson(otherPlayersTurn);
+
         }
     }
 
