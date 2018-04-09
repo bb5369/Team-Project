@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,9 +50,13 @@ public class GetHomeRouteTest {
     public void playerInLobbyNotNull(){
         currPlayer = new Player("redPlayer");
         Message.MessageType type = Message.MessageType.info;
+        CheckersGame game = mock(CheckersGame.class);
         message = new Message("message text", type);
+
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(playerLobby.isPlayerInLobby(currPlayer)).thenReturn(true);
+        when(gameManager.getGame(currPlayer)).thenReturn(game);
+        when(game.isResigned()).thenReturn(false);
         when(gameManager.isPlayerInAGame(currPlayer)).thenReturn(true);
         when(request.session().attribute("message")).thenReturn(message);
 
