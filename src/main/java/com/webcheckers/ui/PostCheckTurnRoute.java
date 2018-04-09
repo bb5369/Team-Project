@@ -66,12 +66,12 @@ public class PostCheckTurnRoute implements Route {
         }
 
         if (game.isResigned()) {
-        	// This message is rendered when the frontend reloads the game view
-        	request.session().attribute("message", new Message(RESIGNED_NOTIFICATION_STRING, Message.MessageType.error));
+	        // This message is rendered when the frontend reloads the game view
+	        request.session().attribute("message", new Message(RESIGNED_NOTIFICATION_STRING, Message.MessageType.error));
 
-            return formatMessageJson(opponentResigned);
+	        return formatMessageJson(opponentResigned);
 
-        } else if(game.getPlayerActive().equals(currentPlayer)){
+        } else if (currentPlayer.equals(game.getPlayerActive())) {
             return formatMessageJson(thisPlayersTurn);
 
         } else {
