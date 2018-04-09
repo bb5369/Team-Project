@@ -46,10 +46,7 @@ public class MoveValidator {
         logMoveCoordinates(move);
         logMoveStates(move);
 
-        if(isMoveAvailable() == false)
-            return false;
-
-        return validateMoveByStep(move);
+        return isMoveAvailable() && validateMoveByStep(move);
     }
 
     /**
