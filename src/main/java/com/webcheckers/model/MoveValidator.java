@@ -208,7 +208,7 @@ public class MoveValidator {
      * @param move - the move being made
      * @return - true if the end position of the move is on the board, false otherwise
      */
-    public boolean isOnBoard(Move move){
+    private boolean isOnBoard(Move move){
         return (move.getEnd().getCell() >= 0 && move.getEnd().getCell() < 8) &&
                 (move.getEnd().getRow() >= 0 && move.getEnd().getRow() < 8);
     }
@@ -219,7 +219,7 @@ public class MoveValidator {
      *
      * @return true if there are available moves, false otherwise
      */
-    public boolean isMoveAvailable(){
+    private boolean isMoveAvailable(){
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 // If the space holds a piece of the color of the active player
