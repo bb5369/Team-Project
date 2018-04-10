@@ -1,7 +1,9 @@
 package com.webcheckers.model;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -17,9 +19,11 @@ public class MoveValidatorTest {
 	private static Player player;
 	private static Piece piece;
 
-	private static TestBoardBuilder testBoardBuilder;
-
 	private static MoveValidator moveValidator;
+
+	private static CheckersBoardBuilder boardBuilder;
+
+	private Space[][] board;
 
 	@BeforeAll
 	public static void testSetup() {
@@ -32,30 +36,34 @@ public class MoveValidatorTest {
 		// Mock dependents
 		game = mock(CheckersGame.class);
 
-		// build board matrix we'll be testing
-		testBoardBuilder = new TestBoardBuilder();
+		boardBuilder = CheckersBoardBuilder.aBoard();
+
 
 		// Setup behaviors
+		when(game.getBoard()).thenReturn(boardBuilder.getBoard());
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
 
 
-		moveValidator = new MoveValidator(game, player);
+		moveValidator = new MoveValidator(player, Piece.Color.WHITE);
 	}
 
-	//@Test
+	@Test
 	public void test_aDiagonalMove() {
-		when(game.getMatrix()).thenReturn(testBoardBuilder.build());
+		board = boardBuilder.getBoard();
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
 				new Position(3,0)
 		);
 
-		assertTrue(moveValidator.validateMove(diagonalMove));
+		assertTrue(moveValidator.validateMove(board, diagonalMove));
 	}
 
-	//@Test
+	@Test
+	@Disabled
 	public void test_aKingMoveBackwards() {
+		board = boardBuilder.getBoard();
+
 		// The board is laid out with white pieces starting on top
 		// red pieces on bottom
 		// so a white KING piece starting down on row 4 should be able to move up to row 3
@@ -63,15 +71,15 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = testBoardBuilder.withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
-		when(game.getMatrix()).thenReturn(boardWithKing);
+		when(game.getBoard()).thenReturn(boardWithKing);
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
 				new Position(3, 2)
 		);
 
-		assertTrue(moveValidator.validateMove(kingMoveBackwards));
+		assertTrue(moveValidator.validateMove(board, kingMoveBackwards));
 	}
 }

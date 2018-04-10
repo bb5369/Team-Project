@@ -1,0 +1,33 @@
+Hello, testers!
+
+Running our project is rather easy. Open the file in a terminal. From the
+team-project-2175-swen-261-08-c folder, run the command 'mvn compile exec:java'.
+If you try to run this file from any subdirectory (ie. src/) it will fail, as
+not all of the target files necessary for running are located in this directory
+
+Give the project a few seconds to build. If it's your first time running it, it
+may take a bit longer to grab all of the necessary files to build. Once you've
+done it once, your computer will remember where to get the resources from so it
+should build a bit faster.
+
+After the project builds, the console will spit out several lines, ending in
+something that looks similar to this:
+
+> [Thread-1] INFO org.eclipse.jetty.server.Server - Started @19148ms
+
+Once you see the Started line, you can begin manipulating the actual project.
+Open a browser (preferably not Internet Explorer) and go to the following address:
+
+> localhost:4567
+
+From here you should see the webpage to play webcheckers. If you want to play
+on the same server from several different computers, you simply need to type
+the host computer's IP address followed by ':4567' into the browser of other
+computers. (Example: '129.21.37.13:4567')
+
+For your reference, here are the American Rules for Checkers that this project
+is based off of:
+
+http://www.se.rit.edu/~swen-261/projects/WebCheckers/American%20Rules.html
+
+Happy testing!

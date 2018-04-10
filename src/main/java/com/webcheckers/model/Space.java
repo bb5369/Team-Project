@@ -1,10 +1,12 @@
 package com.webcheckers.model;
 
+import java.util.Scanner;
+
 /**
  * <p>Title: Space class</p>
  * <p>Description: This class represents a single space on a checkers board</p>
  */
-public class Space {
+public class Space{
 
     public enum State {
         INVALID,
@@ -16,6 +18,7 @@ public class Space {
     private int cellIdx;
     private Piece currPiece;
     private State state;
+
 
     /**
      * Parameterized constructor
@@ -31,7 +34,8 @@ public class Space {
             this.currPiece = currPiece;
             this.state = State.OCCUPIED;
         } else {
-            throw new NullPointerException("Piece constructor requires a non-null Piece");
+            this.currPiece = null;
+            this.state = State.OPEN;
         }
     }
 
@@ -129,7 +133,7 @@ public class Space {
      * @return - true if space is valid, false otherwise
      */
     public boolean isValid() {
-        return (state != State.INVALID);
+        return (state != State.INVALID && state != State.OCCUPIED);
     }
 
     /**
@@ -158,5 +162,39 @@ public class Space {
     public Piece getPiece() {
         return currPiece;
     }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other == null && other instanceof Space)
+            return false;
+
+        if(this.cellIdx != ((Space)other).cellIdx)
+            return false;
+        if(!this.currPiece.equals(((Space) other).currPiece))
+            return false;
+        if(this.state != ((Space)other).state)
+            return false;
+
+        return true;
+    }
+
+
+    /**
+     * clone method
+     * This method return a cloned copy of the space object
+     * Note: enums are apparently passed by reference
+     * @return cloned copy of the Space object
+     */
+    public Space clone()
+    {
+
+        if(currPiece == null)
+            return new Space(cellIdx, currPiece);
+
+        return new Space(cellIdx, currPiece.clone());
+    }
+
+
 
 }

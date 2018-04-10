@@ -92,8 +92,9 @@ public class GameManager {
     public CheckersGame getGame(Player currentPlayer) {
         for (CheckersGame game : gameList) {
             if (isPlayerInThisGame(game, currentPlayer)) {
-                LOG.finer(String.format("getGame(Player: '%s') Found game in progress",
-                        currentPlayer.getName()));
+                LOG.finer(String.format("getGame(Player: '%s') Found game in STATE %s",
+                        currentPlayer.getName(),
+                        game.getState()));
                 return game;
             }
         }
@@ -134,7 +135,13 @@ public class GameManager {
     public boolean resignGame(Player player) {
         CheckersGame game = getGame(player);
 
-        return gameList.remove(game);
+        // A player can only resign if it their turn and they have not made any moves
+        if (player.equals(game.getPlayerActive())) {
+        	return game.resignGame();
+
+        } else {
+            return false;
+        }
     }
 
     public void clearGame(Player player) {
@@ -154,7 +161,12 @@ public class GameManager {
     public Turn getPlayerTurn(Player player) {
         final CheckersGame game = getGame(player);
 
-        return game.getTurn();
+        if (player.equals(game.getPlayerActive())) {
+            return game.getTurn();
+        }
+
+        return null;
+
     }
 
     /**

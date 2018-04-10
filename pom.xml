@@ -196,6 +196,14 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven.surefire.version}</version>
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>java.util.logging.config.file</name>
+              <value>src/test/resources/log.properties</value>
+            </property>
+          </systemProperties>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.junit.platform</groupId>
