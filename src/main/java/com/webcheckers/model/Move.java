@@ -81,22 +81,27 @@ public class Move {
         return diff.getCell() == 2 && diff.getRow() == 2;
     }
 
+    public boolean isASingleMoveAttempt(){
+        Position diff = Position.absoluteDifference(end, start);
+        return diff.getCell() == 1 && diff.getRow() == 1;
+    }
+
     /**
      * This generates a string representing the state of the Move object
      *
      * @return - string representing the state of the move object
      */
     public String toString() {
-        int startX, startY, endX, endY;
+    	int startRow, startCell, endRow, endCell;
 
-        startX = start.getCell();
-        startY = start.getRow();
+        startCell = start.getCell();
+        startRow = start.getRow();
 
-        endX = end.getCell();
-        endY = end.getRow();
+        endCell = end.getCell();
+        endRow = end.getRow();
 
         return String.format("<%d,%d> to <%d,%d>",
-                startX, startY,
-                endX, endY);
+                startRow, startCell,
+                endRow, endCell);
     }
 }

@@ -38,27 +38,32 @@ public class MoveValidatorTest {
 
 		boardBuilder = CheckersBoardBuilder.aBoard();
 
+
 		// Setup behaviors
-		when(game.getMatrix()).thenReturn(boardBuilder.build());
+		when(game.getBoard()).thenReturn(boardBuilder.build());
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
 
 
-		moveValidator = new MoveValidator(game, player);
+		moveValidator = new MoveValidator(player, Piece.Color.WHITE);
 	}
 
 	@Test
 	public void test_aDiagonalMove() {
+		board = boardBuilder.build();
+
 		Move diagonalMove = new Move(
 				new Position(2,1),
 				new Position(3,0)
 		);
 
-		assertTrue(moveValidator.validateMove(diagonalMove));
+		assertTrue(moveValidator.validateMove(board, diagonalMove));
 	}
 
 	@Test
 	@Disabled
 	public void test_aKingMoveBackwards() {
+		board = boardBuilder.build();
+
 		// The board is laid out with white pieces starting on top
 		// red pieces on bottom
 		// so a white KING piece starting down on row 4 should be able to move up to row 3
@@ -68,13 +73,13 @@ public class MoveValidatorTest {
 
 		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).build();
 
-		when(game.getMatrix()).thenReturn(boardWithKing);
+		when(game.getBoard()).thenReturn(boardWithKing);
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
 				new Position(3, 2)
 		);
 
-		assertTrue(moveValidator.validateMove(kingMoveBackwards));
+		assertTrue(moveValidator.validateMove(board, kingMoveBackwards));
 	}
 }

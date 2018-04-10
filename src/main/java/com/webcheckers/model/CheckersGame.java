@@ -5,18 +5,23 @@ import java.util.logging.Logger;
 public class CheckersGame {
     private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
-    //instance variables
+    protected enum State {
+        IN_PLAY,
+        WON,
+        RESIGNED
+    }
+
     private final Player playerRed;
     private final Player playerWhite;
-    private Space[][] matrix;
+    private Space[][] board;
     private Turn activeTurn;
-
+    private State state;
 
     /**
      * Parameterized constructor
-     * Creation of a new checkers game between two players
+     * Create a new checkers game between two players
      *
-     * @param playerRed   - Player one
+     * @param playerRed   - Player one, red player, starting player
      * @param playerWhite - Player two
      */
     public CheckersGame(Player playerRed, Player playerWhite) {
@@ -26,20 +31,15 @@ public class CheckersGame {
 
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
+        this.state = State.IN_PLAY;
 
-        generateStartingBoard();
+        initStartingBoard();
 
-        this.activeTurn = new Turn(this, matrix, playerRed);
+        this.activeTurn = new Turn(this, board, playerRed);
     }
 
-    /**
-     * Space matrix representing a checkers board
-     *
-     * @return - space matrix
-     */
-    public Space[][] getMatrix() {
-        return matrix;
-    }
+
+    // PLAYER INTERFACE
 
     /**
      * Used to access the red player in the game
@@ -76,32 +76,11 @@ public class CheckersGame {
         Player activePlayer = activeTurn.getPlayer();
 
         if (activePlayer.equals(playerRed)) {
-            activeTurn = new Turn(this, matrix, playerWhite);
+            activeTurn = new Turn(this, board, playerWhite);
 
         } else if (activePlayer.equals(playerWhite)) {
-        	activeTurn = new Turn(this, matrix, playerRed);
+            activeTurn = new Turn(this, board, playerRed);
         }
-    }
-
-    /**
-     * Advance the game to the next turn using the new player
-     */
-	 public void nextTurn() {
-        // makes sure Turn is SUBMITTED state
-        // create new turn with other player
-
-        if (activeTurn.isSubmitted()) {
-            changeActivePlayer();
-        }
-    }
-
-
-    /**
-     * Get the active turn from the game
-     * @return - the active turn
-     */
-    public Turn getTurn() {
-	     return activeTurn;
     }
 
     /**
@@ -121,18 +100,85 @@ public class CheckersGame {
     }
 
 
+    // BOARD INTERFACE
+
+    /**
+     * Two-dimensional Space array representing a Checkers board
+     *
+     * @return - space board
+     */
+    public Space[][] getBoard() {
+        return board;
+    }
+
     /**
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
-    private void generateStartingBoard() {
+    private void initStartingBoard() {
         CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
 
         LOG.fine("Starting board:");
         LOG.fine(builder.formatBoardString());
 
-        matrix = builder.build();
+        board = builder.build();
     }
 
 
+    // TURN INTERFACE
+
+    /**
+     * Get the active turn from the game
+     * @return - the active turn
+     */
+    public Turn getTurn() {
+        return activeTurn;
+    }
+
+    /**
+	 * Allow the active player to submit their turn
+     * @param player
+     * @return
+     */
+    public boolean submitTurn(Player player) {
+        if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
+            board = activeTurn.getFinalBoard();
+
+            changeActivePlayer();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Allow the active player to resign the game
+     * @return boolean - if resignation was successful
+     */
+    public boolean resignGame() {
+        if (activeTurn.canResign()) {
+            state = State.RESIGNED;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Indiciates if this game is resigned
+     * @return boolean
+     */
+    public boolean isResigned() {
+        return state == State.RESIGNED;
+    }
+
+    /**
+     * Used for logging
+     * @return
+     */
+    public State getState() {
+        return state;
+    }
 
 }

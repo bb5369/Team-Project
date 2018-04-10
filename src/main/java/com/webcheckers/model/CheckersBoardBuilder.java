@@ -145,7 +145,7 @@ public class CheckersBoardBuilder {
                     continue;
                 }
 
-                if (!c.isValid()) {
+                if (c.getState() == Space.State.INVALID) {
                     row.add(".");
                 } else {
                     switch (c.getPiece().getColor()) {
@@ -265,6 +265,24 @@ public class CheckersBoardBuilder {
         	    board[rowId][cellId].addPiece(new Piece(SINGLE, Piece.Color.RED));
             }
         }
+    }
+
+    /**
+     * Clones the board so that moves can be tracked with board states
+     * @param source: original board
+     * @return: a clone of the original board
+     */
+    public static Space[][] cloneBoard(Space[][] source){
+
+        Space[][] newBoard = new Space[ROWS][CELLS];
+
+        for(int x = 0; x < ROWS; x++){
+            for(int y = 0; y < CELLS; y++){
+                newBoard[x][y] = source[x][y].clone();
+            }
+        }
+
+        return newBoard;
     }
 
 }

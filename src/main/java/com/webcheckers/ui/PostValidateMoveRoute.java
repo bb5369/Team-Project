@@ -53,27 +53,31 @@ public class PostValidateMoveRoute implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("PostValidateMoveRoute invoked");
 
-        Player sessionPlayer = request.session().attribute("Player");
-        Turn turn = gameManager.getPlayerTurn(sessionPlayer);
+        try {
+            if(request.body().contains("null")){
+                throw new Error("The move is invalid");
+            }
+            Player sessionPlayer = request.session().attribute("Player");
+            Turn turn = gameManager.getPlayerTurn(sessionPlayer);
+            String positionAsJson = request.body();
+            LOG.finest(String.format("JSON body: [%s]", positionAsJson));
 
-        String positionAsJson = request.body();
+            if (positionAsJson.isEmpty()) {
+                return formatMessageJson(Message.MessageType.error, NO_POSITION_PROVIDED_MESSAGE);
+            }
+            Move requestedMove = gson.fromJson(positionAsJson, Move.class);
+            boolean isValidMove = turn.validateMove(requestedMove);
 
-        LOG.finest(String.format("JSON body: [%s]", positionAsJson));
-
-        if (positionAsJson.isEmpty()) {
-            return formatMessageJson(Message.MessageType.error, NO_POSITION_PROVIDED_MESSAGE);
-        }
-
-        Move requestedMove = gson.fromJson(positionAsJson, Move.class);
-
-        boolean isValidMove = turn.validateMove(requestedMove);
-
-        if (isValidMove) {
-            LOG.fine("Move was found to be valid!");
-            return formatMessageJson(Message.MessageType.info, "Good move");
-        } else {
-            LOG.fine("Move was found to be invalid!");
-            return formatMessageJson(Message.MessageType.error, INVALID_MOVE_MESSAGE);
+            if (isValidMove) {
+                LOG.fine("Move was found to be valid!");
+                return formatMessageJson(Message.MessageType.info, "Good move");
+            } else {
+                LOG.fine("Move was found to be invalid!");
+                return formatMessageJson(Message.MessageType.error, INVALID_MOVE_MESSAGE);
+            }
+        }catch(Error e){
+            LOG.warning(e.getMessage());
+            return formatMessageJson(Message.MessageType.error, "You can't move to a space occupied by a piece");
         }
     }
 
@@ -84,7 +88,7 @@ public class PostValidateMoveRoute implements Route {
      * @param messageText - contents of the message
      * @return - gson Message object
      */
-    public Object formatMessageJson(Message.MessageType messageType, String messageText) {
+    private Object formatMessageJson(Message.MessageType messageType, String messageText) {
         Message message = new Message(messageText, messageType);
 
         return gson.toJson(message);

@@ -65,15 +65,23 @@ public class GetGameRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-
         LOG.finer("GetGameRoute is invoked.");
 
         final Player currentPlayer = request.session().attribute("Player");
 
-        if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
-            return renderGame(currentPlayer, null);//playGameWith(currentPlayer);
+        Map<String, Object> vm = new HashMap();
 
-            //return renderGame(game, currentPlayer);
+        // If a message is available, display it.
+        if (request.session().attribute("message") != null) {
+            final Message messageToRender = request.session().attribute("message");
+            request.session().removeAttribute("message");
+            vm.put("message", messageToRender);
+        }
+
+        // TODO: Refactor the conditional game set-up logic below into GameManager
+        if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
+            return renderGame(vm, currentPlayer, null);
+
         } else if (currentPlayer != null && haveParam(request, "whitePlayer")) {
             // We are setting up a new game
 
@@ -93,10 +101,9 @@ public class GetGameRoute implements Route {
                 redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
 
-            return renderGame(redPlayer, whitePlayer);//playGameBetween(redPlayer, whitePlayer);
+            return renderGame(vm, redPlayer, whitePlayer);
         } else {
             response.redirect(WebServer.HOME_URL);
-            //halt();
         }
 
         // We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design
@@ -140,7 +147,7 @@ public class GetGameRoute implements Route {
      * @param sessionPlayer
      * @return
      */
-    private Object renderGame(Player sessionPlayer, Player opponentPlayer) {
+    private Object renderGame(Map<String, Object> vm, Player sessionPlayer, Player opponentPlayer) {
         CheckersGame game;
         if (opponentPlayer == null) {
             LOG.fine(String.format("Playing game with [%s]", sessionPlayer.getName()));
@@ -149,16 +156,14 @@ public class GetGameRoute implements Route {
             LOG.fine(String.format("Playing game between [%s] and [%s]", sessionPlayer.getName(), opponentPlayer.getName()));
             game = gameManager.getGame(sessionPlayer, opponentPlayer);
         }
-        return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, VIEW_TITLE), VIEW_NAME));
+        return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
     }
 
-    public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, String viewTitle) {
+    public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, Map<String, Object> vm, String viewTitle) {
         LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
                 game.getPlayerRed().getName(),
                 game.getPlayerWhite().getName(),
                 sessionPlayer.getName()));
-
-        Map<String, Object> vm = new HashMap();
 
         final Player redPlayer = game.getPlayerRed();
         final Player whitePlayer = game.getPlayerWhite();
@@ -171,13 +176,20 @@ public class GetGameRoute implements Route {
         vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
         //Generates a board with the stored matrix in the instance of CheckersGame for the view
-        BoardViewGen board = new BoardViewGen(game.getMatrix());
+        BoardViewGen board = new BoardViewGen(game.getBoard());
 
         if (sessionPlayer.equals(redPlayer)) {
             vm.put("board", board);
         } else {
             vm.put("board", board.getReverseBoard());
         }
+
+        // This is a really bad place to put something as important as this
+	    // Now that we've rendered the game for the final time, get rid of it!
+        if (game.isResigned()) {
+            gameManager.clearGame(sessionPlayer);
+        }
+
         return vm;
     }
 }
