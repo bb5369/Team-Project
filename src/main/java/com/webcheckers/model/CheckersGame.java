@@ -71,16 +71,23 @@ public class CheckersGame {
 
     /**
      * Changes the player who is active from red to white or vice versa
+	 * This is a private method that assumes the Turn is over
      */
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
+        Player nextPlayer;
 
-        if (activePlayer.equals(playerRed)) {
-            activeTurn = new Turn(this, board, playerWhite);
-
-        } else if (activePlayer.equals(playerWhite)) {
-            activeTurn = new Turn(this, board, playerRed);
+        // determine who the next player is
+		if (activePlayer.equals(playerWhite)) {
+		    nextPlayer = playerRed;
+        } else {
+            nextPlayer = playerWhite;
         }
+
+        // make sure the next player has moves available
+
+        // setup their turn
+        activeTurn = new Turn(this, board, nextPlayer);
     }
 
     /**
