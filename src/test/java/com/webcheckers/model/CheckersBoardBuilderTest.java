@@ -14,7 +14,7 @@ public class CheckersBoardBuilderTest {
 	@BeforeAll
 	public static void setupTest() {
 
-		CheckersBoard = CheckersBoardBuilder.aStartingBoard().build();
+		CheckersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
 	}
 
 	@Test

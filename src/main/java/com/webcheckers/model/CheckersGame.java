@@ -120,7 +120,7 @@ public class CheckersGame {
         LOG.fine("Starting board:");
         LOG.fine(builder.formatBoardString());
 
-        board = builder.build();
+        board = builder.getBoard();
     }
 
 

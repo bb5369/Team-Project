@@ -20,7 +20,24 @@ public class CheckersBoardBuilder {
 
     private Space[][] board;
 
-    // PUBLIC METHODS
+
+    /**
+     * Private constructor used in the named constructors aBoard, aStartingBoard
+     */
+    private CheckersBoardBuilder() {
+        LOG.finest("Generated an empty checkers board");
+        board = buildBoard();
+    }
+
+    /**
+     * Returns a builder that starts with a board and red and white player pieces
+     * @return
+     */
+    private CheckersBoardBuilder withStartingPieces() {
+        addStartingPieces(board);
+
+        return this;
+    }
 
 	/**
 	 * The builder starts with an empty board
@@ -38,14 +55,6 @@ public class CheckersBoardBuilder {
         LOG.finest("aStartingBoard() - with red/white pieces in starting positions");
 
         return new CheckersBoardBuilder().withStartingPieces();
-    }
-
-
-
-    public CheckersBoardBuilder withStartingPieces() {
-        addStartingPieces(board);
-
-        return this;
     }
 
     /**
@@ -82,20 +91,10 @@ public class CheckersBoardBuilder {
     }
 
     /**
-     * Allows for fluent method chaining
-	 * BoardMother.startingBoard().butWithoutPieceAt(Position)
-	 *
-     * @return CheckersBoardBuilder
-     */
-    public CheckersBoardBuilder but() {
-        return this;
-    }
-
-    /**
      * Actually get the usable board that we've constructed
      * @return Space[][] - constructed board
      */
-    public Space[][] build() {
+    public Space[][] getBoard() {
         return board;
     }
 
@@ -166,14 +165,6 @@ public class CheckersBoardBuilder {
 
 
     // PRIVATE METHODS
-
-    /**
-     * Private constructor used for the builder pattern
-      */
-	private CheckersBoardBuilder() {
-		LOG.finest("Generated an empty checkers board");
-		board = buildBoard();
-	}
 
     /**
      * Build a board according to the parameters we have set in this object

@@ -53,7 +53,7 @@ public class TurnTest {
 	 */
 	@BeforeEach
 	public void setupCuT() {
-		checkersBoard = CheckersBoardBuilder.aStartingBoard().build();
+		checkersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
 
 		// TODO: Refactor this need out of MoveValidator so its passed in a board
 		// MoveValidator will become a static class
@@ -93,7 +93,7 @@ public class TurnTest {
 		CheckersBoardBuilder jumpBoardBuilder = CheckersBoardBuilder.aStartingBoard()
 				.withPieceAt(opponentPiece, jumpPosition);
 
-		Space[][] board = jumpBoardBuilder.build();
+		Space[][] board = jumpBoardBuilder.getBoard();
 		when(checkersGame.getBoard()).thenReturn(board);
 
 		// Setup a new turn with this board

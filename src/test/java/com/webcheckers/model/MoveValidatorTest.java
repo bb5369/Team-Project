@@ -40,7 +40,7 @@ public class MoveValidatorTest {
 
 
 		// Setup behaviors
-		when(game.getBoard()).thenReturn(boardBuilder.build());
+		when(game.getBoard()).thenReturn(boardBuilder.getBoard());
 		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
 
 
@@ -49,7 +49,7 @@ public class MoveValidatorTest {
 
 	@Test
 	public void test_aDiagonalMove() {
-		board = boardBuilder.build();
+		board = boardBuilder.getBoard();
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
@@ -62,7 +62,7 @@ public class MoveValidatorTest {
 	@Test
 	@Disabled
 	public void test_aKingMoveBackwards() {
-		board = boardBuilder.build();
+		board = boardBuilder.getBoard();
 
 		// The board is laid out with white pieces starting on top
 		// red pieces on bottom
@@ -71,7 +71,7 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
 		when(game.getBoard()).thenReturn(boardWithKing);
 
