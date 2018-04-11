@@ -111,6 +111,15 @@ Controllers are built using the Spark framework and View are built using the Fre
 
 Details of the components within these tiers are supplied below
 
+### Logging
+
+|Log level|Function Visibility|Usage
+--- | --- | ---
+|INFO|Public/Private|User actions|
+|FINE|Public|Should log at the start, and optionally end, of public methods with the outcome|
+FINER|Private|Object-level detail once per public method (public or private)|
+FINEST|Public/Private|When, why, and outcome of logic decisions. Or when multi-line verbose output is required.|
+
 
 ### Overview of User Interface
 
