@@ -61,16 +61,17 @@ public class Turn {
                 player.getName(),
                 move.toString()));
 
-        // TODO: pull out to own function
-        // This determines the board we are going to validate the move against
-        Space[][] board = (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
+        // TODO: run this through with the team. Not sure if best approach, but allowed for making
+        // move validator fully static
+        move.setPieceColor(playerColor);
+        move.setPlayer(player);
 
         Space[][] board = getLatestBoard();
 
         LOG.finest("The board we are using for this validateMove()");
         LOG.finest(CheckersBoardBuilder.formatBoardString(board));
 
-        if (!single && moveValidator.validateMove(board, move)) {
+        if (!single && MoveValidator.validateMove(board, move)) {
             LOG.finer("Move has been validated successfully");
 
             // Now that the move has been validated, lets clone the board and execute the move
@@ -81,8 +82,8 @@ public class Turn {
 
             state = State.STABLE_TURN;
 
-            if(move.isASingleMoveAttempt()) {
-                LOG.finer("This is a single-space move");
+            if(move.isSingleSpace()) {
+                LOG.finer("This is a single-space move. No more moves can be validated.");
                 single = true;
             }
 
@@ -117,7 +118,7 @@ public class Turn {
         Position start = move.getStart();
         Position end = move.getEnd();
 
-        if (move.isAJumpMoveAttempt()) {
+        if (move.isJump()) {
             //TODO jump move logic goes here
             return true;
 
@@ -164,15 +165,6 @@ public class Turn {
      */
     public boolean isMyTurn(Player player) {
         return this.player.equals(player);
-    }
-
-    /**
-     * Returns whether or not the turn has been submitted
-     *
-     * @return - true if the turn has been submitted, false otherwise
-     */
-    public boolean isSubmitted() {
-        return (this.state == State.TURN_SUBMITTED);
     }
 
     /**

@@ -41,7 +41,7 @@ public class MoveValidatorTest {
 				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(board, diagonalMove));
+		assertTrue(MoveValidator.validateMove(board, diagonalMove));
 	}
 
 	@Test
@@ -58,7 +58,6 @@ public class MoveValidatorTest {
 
 		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
-		when(game.getBoard()).thenReturn(boardWithKing);
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
@@ -67,6 +66,6 @@ public class MoveValidatorTest {
 				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(board, kingMoveBackwards));
+		assertTrue(MoveValidator.validateMove(board, kingMoveBackwards));
 	}
 }

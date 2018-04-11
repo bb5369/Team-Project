@@ -3,89 +3,76 @@ package com.webcheckers.model;
 import java.util.logging.Logger;
 
 /**
- * Move validator controller consumes a CheckersGame, Move, and Player
+ * Move validation requires several things:
+ * - a board to validate the move against
+ * - a player, and the color of their pieces
+ * - the move to validate
+ *
+ * Move validator consumes a CheckersGame, Move, and Player
  * and determines if the Move is a valid one
  */
 public class MoveValidator {
 
     private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
 
-    private Player player;
-    private Piece.Color playerColor;
-
-
-    /**
-     * MoveValidator constructor for seeding info needed for the algorithm
-     *
-     * @param color  - active player's color
-     * @param player - Player whose turn it is
-     */
-    public MoveValidator(Player player, Piece.Color color) {
-
-        this.player = player;
-        this.playerColor = color;
-
-        LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
-    }
-
     /**
      * Entrypoint to move validation algorithm - kicks off the process
      *
      * @return - true if the move is valid
      */
-    public boolean validateMove(Space[][] matrix, Move move) {
+    public static boolean validateMove(Space[][] board, Move move) {
 
-        LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
+        LOG.fine(String.format("Validating move for Player [%s]", move.getPlayerName()));
 
         logMoveCoordinates(move);
-        logMoveStates(matrix, move);
 
-        return isMoveAvailable(matrix) && validateMoveByStep(matrix, move);
+        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        logMove(board, move);
+
+        boolean isMoveValidOnBoard = move.isValid() &&
+									isMoveInRightDirection(board, move) &&
+									isEndSpaceOpen(board, move) &&
+									(move.isSingleSpace() || isMoveJumpingAPiece(board, move)) &&
+                                    areWeMovingMyPiece(board, move);
+
+        LOG.fine(String.format("Move validity has been determined to be %s", isMoveValidOnBoard));
+
+        return isMoveValidOnBoard;
     }
-
-    /**
-     * Facade of move validation steps
-     *
-     * @return - boolean if the given move is a valid one or not
-     */
-    private boolean validateMoveByStep(Space[][] matrix, Move move) {
-
-        return isOnBoard(move) && isMoveDiagonal(move) &&
-                (isMoveSingleSpace(move) || isMoveJump(move)) &&
-                isMoveInRightDirection(matrix, move) &&
-                isEndSpaceOpen(matrix, move);
-    }
-
 
     /**
      * Logs the move as a pair of coordinates
      *
      * @param move - Move being made
      */
-    private void logMoveCoordinates(Move move) {
-        // "RED Player [username] wants to move from <0,1> to <1,2>"
+    private static void logMoveCoordinates(Move move) {
         LOG.finest(String.format("%s Player [%s] wants to move from %s",
-                playerColor,
-                player.getName(),
+                move.getPieceColor(),
+                move.getPlayerName(),
                 move.toString()));
     }
 
     /**
      * Logs the current state of affairs at the two spaces involved in the move
      */
-    private void logMoveStates(Space[][] matrix, Move move) {
+    private static void logMove(Space[][] matrix, Move move) {
         Space startSpace = getSpace(matrix, move.getStart());
         Space endSpace = getSpace(matrix, move.getEnd());
 
-        LOG.finest(String.format("Starting position state is [%s]", startSpace.getState()));
+        LOG.finest(String.format("Starting position state is [%s] by a %s Piece", startSpace.getState(),
+                startSpace.getPiece().getColor()));
         LOG.finest(String.format("End position state is [%s]", endSpace.getState()));
 
+
+        // I'm so sorry. This is to assist debugging hell
+        LOG.finest(String.format("Validate move.isValid() - %s", move.isValid()));
+        LOG.finest(String.format("Validate     └─ start.isOnBoard() -  %s", move.getStart().isOnBoard()));
+        LOG.finest(String.format("Validate     └─ end.isOnBoard() -  %s", move.getEnd().isOnBoard()));
+        LOG.finest(String.format("Validate     └─ isSingleSpace() -  %s", move.isSingleSpace()));
+        LOG.finest(String.format("Validate     └─ isJump() -  %s", move.isJump()));
+        LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
     }
 
-
-    /**
-     * MOVE VALIDATION STEPS
-     */
 
     /**
      * Given a move is the end position open
@@ -93,10 +80,14 @@ public class MoveValidator {
      * @param move - Move being made
      * @return - true if the space being moved to is a valid, unoccupied space
      */
-    private boolean isEndSpaceOpen(Space[][] matrix, Move move) {
+    private static boolean isEndSpaceOpen(Space[][] matrix, Move move) {
         Space endSpace = getSpace(matrix, move.getEnd());
 
-        return endSpace.isOpen();
+        boolean conditionTruth = endSpace.isOpen();
+
+        LOG.finest(String.format("Validate isEndSpaceOpen(): %s", conditionTruth));
+
+        return conditionTruth;
     }
 
     /**
