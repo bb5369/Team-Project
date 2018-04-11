@@ -27,20 +27,24 @@ public class TurnTest {
 	public static void setupTest() {
 		// build our real components
 		player = new Player("Testy McTestFace");
+		playerColor = Piece.Color.WHITE;
 
 		validMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(END_ROW, END_CELL)
+				new Position(END_ROW, END_CELL),
+				player, playerColor
 		);
 
 		invalidMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(3, 3)
+				new Position(3, 3),
+				player, playerColor
 		);
 
 		jumpMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(START_ROW + 2, START_CELL + 2)
+				new Position(START_ROW + 2, START_CELL + 2),
+				player, playerColor
 		);
 
 		// create mocks

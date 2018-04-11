@@ -36,7 +36,9 @@ public class MoveValidatorTest {
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
-				new Position(3,0)
+				new Position(3,0),
+				player,
+				Piece.Color.WHITE
 		);
 
 		assertTrue(moveValidator.validateMove(board, diagonalMove));
@@ -60,7 +62,9 @@ public class MoveValidatorTest {
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
-				new Position(3, 2)
+				new Position(3, 2),
+				player,
+				Piece.Color.WHITE
 		);
 
 		assertTrue(moveValidator.validateMove(board, kingMoveBackwards));
