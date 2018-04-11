@@ -49,42 +49,55 @@ public class MoveValidator {
      * @return true if there are available moves, false otherwise
      */
     public static boolean areMovesAvailableForPlayer(Space[][] board, Player player, Piece.Color color){
-        LOG.info("Determining if a player has any moves left");
+        boolean movesLeft = false;
 
-        // for each row
-        for(int i = 0; i < 8; i++){
-            // for each cell
-            for(int j = 0; j < 8; j++){
+        LOG.fine(String.format("Determining if %s player has any moves left", color));
 
-                if(board[i][j].isOccupied() && board[i][j].getPiece().getColor() == color){
-                    Position currentPos = new Position(i, j);
+        boardWalk: {
+            // for each row
+            for(int i = 0; i < 8; i++){
+                // for each cell
+                for(int j = 0; j < 8; j++){
 
-                    Move checkMove;
+                    if(board[i][j].isOccupied() && board[i][j].getPiece().getColor() == color){
+                        Position currentPos = new Position(i, j);
 
-                    for(int row = -1; row < 2; row += 2){
+                        Move checkMove;
 
-                        for(int col = -1; col < 2; col += 2){
+                        for(int row = -1; row < 2; row += 2){
 
-                            int destRow = i + row;
-                            int destCell = j + col;
+                            for(int col = -1; col < 2; col += 2){
 
-                            if (destRow < 0 || destCell < 0)
-                                continue;
+                                int destRow = i + row;
+                                int destCell = j + col;
 
-                            if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
-                                continue;
+                                if (destRow < 0 || destCell < 0)
+                                    continue;
 
-                            Position place = new Position(destRow, destCell);
-                            checkMove = new Move(currentPos, place, player, color);
+                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
+                                    continue;
 
-                            if(validateMove(board, checkMove))
-                                return true;
+                                Position place = new Position(destRow, destCell);
+                                checkMove = new Move(currentPos, place, player, color);
+
+                                if(validateMove(board, checkMove)) {
+                                    LOG.finest(String.format("Found a valid move! %s", checkMove.toString()));
+                                    movesLeft = true;
+                                    break boardWalk;
+                                }
+
+                            }
                         }
                     }
                 }
             }
         }
-        return false;
+
+        String condition = (movesLeft) ? "has" : "does not have";
+
+        LOG.fine(String.format("%s Player %s moves left", color, condition));
+
+        return movesLeft;
     }
 
     /**
