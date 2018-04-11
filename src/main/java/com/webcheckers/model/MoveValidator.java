@@ -96,57 +96,36 @@ public class MoveValidator {
      * @param move - Move being made
      * @return - True, if it does, false otherwise
      */
-    private boolean isMoveInRightDirection(Space[][] matrix, Move move) {
+    private static boolean isMoveInRightDirection(Space[][] matrix, Move move) {
         Piece piece = getSpace(matrix, move.getStart()).getPiece();
+        boolean conditionTruth = false;
 
         // If the piece is a king then they can move bi-directionally
         if (piece != null && piece.getType() == Piece.Type.KING) {
-            return true;
+            conditionTruth = true;
+        } else {
+
+            // White players start at top, move down board
+            // Red players start at bottom, move up board
+
+            int startRow = move.getStartRow();
+            int endRow = move.getEndRow();
+
+            switch (move.getPieceColor()) {
+                case RED:
+                    conditionTruth = (endRow < startRow);
+                    break;
+                case WHITE:
+                    conditionTruth = (endRow > startRow);
+                    break;
+            }
         }
 
-        // White players start at top, move down board
-        // Red players start at bottom, move up board
 
-        int startRow = move.getStartRow();
-        int endRow = move.getEndRow();
+        LOG.finest(String.format("Validate isMoveInRightDirection(): %s", conditionTruth));
 
-        switch (playerColor) {
-            case RED:
-                return (endRow < startRow);
-            case WHITE:
-                return (endRow > startRow);
-        }
+        return conditionTruth;
 
-        return false;
-    }
-
-    /**
-     * Checks to see if we are only moving one space away
-     *
-     * @param move - Move being made
-     * @return boolean - true if the move is moving one space away from start position, false otherwise
-     */
-    private boolean isMoveSingleSpace(Move move) {
-        int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
-        int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
-
-        LOG.finest(String.format("Move distance is %d ROWS and %d CELLS", deltaY, deltaX));
-
-        return (deltaY == 1 && deltaX == 1);
-
-    }
-
-    /**
-     * All moves must be diagonal, therefore rise==run
-     *
-     * @param move - Move being made
-     * @return boolean - true if the move being made is diagonal from the starting position
-     */
-    private boolean isMoveDiagonal(Move move) {
-        int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
-        int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
-
-        return (deltaY == deltaX);
     }
 
     /**
@@ -155,32 +134,34 @@ public class MoveValidator {
      *
      * @return - true if the move is a jump move, false otherwise
      */
-    private boolean isMoveJump(Move move) {
-        return false;
+    private static boolean isMoveJumpingAPiece(Space[][] board, Move move) {
+        boolean conditionTruth = false;
+
+        LOG.finest(String.format("Validate isMoveJumpingAPiece(): %s", conditionTruth));
+
+    	return conditionTruth;
     }
 
+	private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
+        boolean conditionTruth = false;
+
+        Space start = getSpace(board, move.getStart());
+
+        conditionTruth = start.getPiece().getColor() == move.getPieceColor();
+
+        LOG.finest(String.format("Validate areWeMovingMyPiece(): %s", conditionTruth));
+
+    	return conditionTruth;
+    }
     /**
-     * Matrix lookup function - given a position it will return the enumerated state
+     * Board lookup convenience method - given a position it will return the enumerated state
      *
      * @param pos - end position of the move
      * @return SpaceState - current state of the position being moved to
      */
-    private Space getSpace(Space[][] matrix, Position pos) {
+    private static Space getSpace(Space[][] matrix, Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
     }
-
-
-    /**
-     * Determines whether or not the ending position of a move is on the board
-     *
-     * @param move - the move being made
-     * @return - true if the end position of the move is on the board, false otherwise
-     */
-    private boolean isOnBoard(Move move){
-        return (move.getEnd().getCell() >= 0 && move.getEnd().getCell() < 8) &&
-                (move.getEnd().getRow() >= 0 && move.getEnd().getRow() < 8);
-    }
-
 
     /**
      * Checks to see if there are any available moves
