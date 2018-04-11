@@ -65,13 +65,15 @@ public class Turn {
         // This determines the board we are going to validate the move against
         Space[][] board = (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
 
-        LOG.finest("The board we are using in validateMove()");
+        Space[][] board = getLatestBoard();
+
+        LOG.finest("The board we are using for this validateMove()");
         LOG.finest(CheckersBoardBuilder.formatBoardString(board));
 
         if (!single && moveValidator.validateMove(board, move)) {
             LOG.finer("Move has been validated successfully");
 
-            //Clones the board on top of the stack, and creates a new board with the move executed, which is pushed
+            // Now that the move has been validated, lets clone the board and execute the move
             Space[][] newBoard = CheckersBoardBuilder.cloneBoard(board);
             makeMove(newBoard, move);
 
@@ -203,9 +205,7 @@ public class Turn {
         return this.state;
     }
 
-    public Space[][] getFinalBoard() {
-        state = State.TURN_SUBMITTED;
-
-        return pendingMoves.peek();
+    public Space[][] getLatestBoard() {
+        return (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
     }
 }
