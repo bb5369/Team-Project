@@ -37,7 +37,7 @@ public class Turn {
      * @param color - The color of the player's pieces
      */
     Turn(Space[][] startingBoard, Player player, Piece.Color color) {
-        LOG.fine(String.format("I am a new turn for Player [%s]", player.getName()));
+        LOG.info(String.format("I am a new turn for Player [%s]", player.getName()));
 
         this.startingBoard = startingBoard;
         this.player = player;
@@ -57,7 +57,7 @@ public class Turn {
      * @return - true if move was validated, otherwise false
      */
     public boolean validateMove(Move move) {
-        LOG.finer(String.format("%s Player [%s] is validating move %s",
+        LOG.info(String.format("%s Player [%s] is validating move %s",
                 playerColor,
                 player.getName(),
                 move.toString()));
@@ -88,7 +88,7 @@ public class Turn {
                 single = true;
             }
 
-            LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
+            LOG.info(String.format("%s Player [%s] has %d queued moves in [%s] state",
                     playerColor,
                     player.getName(),
                     pendingMoves.size(),
@@ -97,7 +97,7 @@ public class Turn {
             return true;
 
         } else {
-            LOG.finer("Move is not valid");
+            LOG.info("Move was not valid");
             return false;
 
         }
@@ -111,7 +111,7 @@ public class Turn {
      * @return - true if the pieces where moved successfully
      */
     public boolean makeMove(Space[][] matrix, Move move) {
-        LOG.finer(String.format("%s Player [%s] turn - executing move %s",
+        LOG.info(String.format("%s Player [%s] turn - executing move %s",
                 playerColor,
                 player.getName(),
                 move.toString()));
@@ -143,8 +143,7 @@ public class Turn {
         if (!pendingMoves.isEmpty()) {
             Space[][] badMove = pendingMoves.pop();
 
-            LOG.finest(String.format("Removing move %s from %s's history",
-                    badMove.toString(),
+            LOG.info(String.format("Removing last move from %s's history",
                     player.getName()));
 
             // Return Turn state to EMPTY_TURN if they have no pending moves

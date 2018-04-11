@@ -25,7 +25,7 @@ public class CheckersGame {
      * @param playerWhite - Player two
      */
     public CheckersGame(Player playerRed, Player playerWhite) {
-        LOG.fine(String.format("I am a new CheckersGame between [%s] and [%s]",
+        LOG.info(String.format("I am a new CheckersGame between [%s] and [%s]",
                 playerRed.getName(),
                 playerWhite.getName()));
 
@@ -93,7 +93,7 @@ public class CheckersGame {
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
         } else {
 		    // trigger a win for activePlayer
-            LOG.fine(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
         }
 
     }
@@ -132,8 +132,8 @@ public class CheckersGame {
     private void initStartingBoard() {
         CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
 
-        LOG.fine("Starting board:");
-        LOG.fine(builder.formatBoardString());
+        LOG.finest("Starting board:");
+        LOG.finest(builder.formatBoardString());
 
         board = builder.getBoard();
     }

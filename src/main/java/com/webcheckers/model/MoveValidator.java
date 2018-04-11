@@ -49,6 +49,7 @@ public class MoveValidator {
      * @return true if there are available moves, false otherwise
      */
     public static boolean areMovesAvailableForPlayer(Space[][] board, Player player, Piece.Color color){
+        LOG.info("Determining if a player has any moves left");
 
         // for each row
         for(int i = 0; i < 8; i++){
@@ -73,8 +74,6 @@ public class MoveValidator {
                             if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
                                 continue;
 
-                            LOG.finest("We're moving");
-
                             Position place = new Position(destRow, destCell);
                             checkMove = new Move(currentPos, place, player, color);
 
@@ -94,7 +93,7 @@ public class MoveValidator {
      * @param move - Move being made
      */
     private static void logMoveCoordinates(Move move) {
-        LOG.finest(String.format("%s Player [%s] wants to move from %s",
+        LOG.finer(String.format("%s Player [%s] wants to move from %s",
                 move.getPieceColor(),
                 move.getPlayerName(),
                 move.toString()));
@@ -120,7 +119,6 @@ public class MoveValidator {
         LOG.finest(String.format("Validate     └─ isJump() -  %s", move.isJump()));
         LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
     }
-
 
     /**
      * Given a move is the end position open
@@ -169,7 +167,6 @@ public class MoveValidator {
             }
         }
 
-
         LOG.finest(String.format("Validate isMoveInRightDirection(): %s", conditionTruth));
 
         return conditionTruth;
@@ -189,6 +186,14 @@ public class MoveValidator {
 
     	return conditionTruth;
     }
+
+    /**
+     * Guard condition to prevent malicious moves sent from browser.
+     * We must only move a piece located at the start that we own
+     * @param board
+     * @param move
+     * @return boolean - if the player owns the piece at the start position
+     */
     private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
         boolean conditionTruth = false;
 
