@@ -15,11 +15,7 @@ public class MoveValidatorTest {
 	private static final String RED_PLAYER_NAME = "redPlayer";
 	private static final String WHITE_PLAYER_NAME = "whitePlayer";
 
-	private static CheckersGame game;
 	private static Player player;
-	private static Piece piece;
-
-	private static MoveValidator moveValidator;
 
 	private static CheckersBoardBuilder boardBuilder;
 
@@ -29,22 +25,9 @@ public class MoveValidatorTest {
 	public static void testSetup() {
 
 		// Build dependent objects
-		player = new Player(RED_PLAYER_NAME);
-		piece = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
+		player = new Player(WHITE_PLAYER_NAME);
 
-
-		// Mock dependents
-		game = mock(CheckersGame.class);
-
-		boardBuilder = CheckersBoardBuilder.aBoard();
-
-
-		// Setup behaviors
-		when(game.getBoard()).thenReturn(boardBuilder.getBoard());
-		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
-
-
-		moveValidator = new MoveValidator(player, Piece.Color.WHITE);
+		boardBuilder = CheckersBoardBuilder.aStartingBoard();
 	}
 
 	@Test

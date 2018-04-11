@@ -35,7 +35,7 @@ public class CheckersGame {
 
         initStartingBoard();
 
-        this.activeTurn = new Turn(this, board, playerRed);
+        this.activeTurn = new Turn(board, playerRed, Piece.Color.RED);
     }
 
 
@@ -76,18 +76,21 @@ public class CheckersGame {
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
         Player nextPlayer;
+        Piece.Color nextPlayerColor;
 
         // determine who the next player is
 		if (activePlayer.equals(playerWhite)) {
 		    nextPlayer = playerRed;
+		    nextPlayerColor = Piece.Color.RED;
         } else {
             nextPlayer = playerWhite;
+            nextPlayerColor = Piece.Color.WHITE;
         }
 
         // make sure the next player has moves available
 
         // setup their turn
-        activeTurn = new Turn(this, board, nextPlayer);
+        activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
     }
 
     /**

@@ -19,10 +19,9 @@ public class Turn {
         TURN_SUBMITTED
     }
 
-    private CheckersGame game;
-    private MoveValidator moveValidator;
     private Space[][] startingBoard;
     private Player player;
+    private Piece.Color playerColor;
     private Stack<Space[][]> pendingMoves;
     private State state;
     private boolean single;
@@ -30,23 +29,22 @@ public class Turn {
 
     /**
      * Parameterized constructor
-     * A turn is identified by a game and a player
+     * A turn is identified by the player, the board they are playing on and their color
      *
-     * @param game   - game the Turn is being made for
      * @param startingBoard - The checkers board matrix
      * @param player - player the Turn is being made for
+     * @param color - The color of the player's pieces
      */
-    Turn(CheckersGame game, Space[][] startingBoard, Player player) {
+    Turn(Space[][] startingBoard, Player player, Piece.Color color) {
         LOG.fine(String.format("I am a new turn for Player [%s]", player.getName()));
 
-        this.game = game;
         this.startingBoard = startingBoard;
         this.player = player;
-        this.pendingMoves = new Stack<>();
-        this.single = false;
-        this.state = State.EMPTY_TURN;
+        this.playerColor = color;
 
-        this.moveValidator = new MoveValidator(player, game.getPlayerColor(player));
+        pendingMoves = new Stack<>();
+        single = false;
+        state = State.EMPTY_TURN;
 
         LOG.fine(String.format("Turn initialized in [%s] state", this.state));
     }
@@ -58,8 +56,8 @@ public class Turn {
      * @return - true if move was validated, otherwise false
      */
     public boolean validateMove(Move move) {
-        LOG.finer(String.format("%s Player [%s] is validing move %s",
-                game.getPlayerColor(player),
+        LOG.finer(String.format("%s Player [%s] is validating move %s",
+                playerColor,
                 player.getName(),
                 move.toString()));
 
@@ -87,7 +85,7 @@ public class Turn {
             }
 
             LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
-                    game.getPlayerColor(player),
+                    playerColor,
                     player.getName(),
                     pendingMoves.size(),
                     state));
@@ -110,7 +108,7 @@ public class Turn {
      */
     public boolean makeMove(Space[][] matrix, Move move) {
         LOG.finer(String.format("%s Player [%s] turn - executing move %s",
-                game.getPlayerColor(player),
+                playerColor,
                 player.getName(),
                 move.toString()));
 
@@ -147,7 +145,8 @@ public class Turn {
 
             // Return Turn state to EMPTY_TURN if they have no pending moves
             if (pendingMoves.isEmpty()) {
-                this.state = State.EMPTY_TURN;
+                LOG.finest(String.format("%s has reversed all planned moves", player.getName()));
+                state = State.EMPTY_TURN;
             }
             single = false;
             return true;
