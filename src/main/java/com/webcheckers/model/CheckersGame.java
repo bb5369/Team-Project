@@ -88,9 +88,14 @@ public class CheckersGame {
         }
 
         // make sure the next player has moves available
+        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
+            // setup their turn
+            activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
+        } else {
+		    // trigger a win for activePlayer
+            LOG.fine(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+        }
 
-        // setup their turn
-        activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
     }
 
     /**

@@ -8,8 +8,11 @@ import java.util.logging.Logger;
  * - a player, and the color of their pieces
  * - the move to validate
  *
- * Move validator consumes a CheckersGame, Move, and Player
- * and determines if the Move is a valid one
+ * Move validation has two modes of operation:
+ * 1. Given a board and a move (start, end, player, color) - It will determine if the move is valid on the board
+ *
+ * 2. Given a board and a player color it will determine if that player has any moves available
+ *
  */
 public class MoveValidator {
 
@@ -38,6 +41,51 @@ public class MoveValidator {
         LOG.fine(String.format("Move validity has been determined to be %s", isMoveValidOnBoard));
 
         return isMoveValidOnBoard;
+    }
+
+    /**
+     * Checks to see if there are any available moves for the player color
+     *
+     * @return true if there are available moves, false otherwise
+     */
+    public static boolean areMovesAvailableForPlayer(Space[][] board, Player player, Piece.Color color){
+
+        // for each row
+        for(int i = 0; i < 8; i++){
+            // for each cell
+            for(int j = 0; j < 8; j++){
+
+                if(board[i][j].isOccupied() && board[i][j].getPiece().getColor() == color){
+                    Position currentPos = new Position(i, j);
+
+                    Move checkMove;
+
+                    for(int row = -1; row < 2; row += 2){
+
+                        for(int col = -1; col < 2; col += 2){
+
+                            int destRow = i + row;
+                            int destCell = j + col;
+
+                            if (destRow < 0 || destCell < 0)
+                                continue;
+
+                            if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
+                                continue;
+
+                            LOG.finest("We're moving");
+
+                            Position place = new Position(destRow, destCell);
+                            checkMove = new Move(currentPos, place, player, color);
+
+                            if(validateMove(board, checkMove))
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -141,8 +189,7 @@ public class MoveValidator {
 
     	return conditionTruth;
     }
-
-	private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
+    private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
         boolean conditionTruth = false;
 
         Space start = getSpace(board, move.getStart());
@@ -153,6 +200,7 @@ public class MoveValidator {
 
     	return conditionTruth;
     }
+
     /**
      * Board lookup convenience method - given a position it will return the enumerated state
      *
@@ -161,34 +209,5 @@ public class MoveValidator {
      */
     private static Space getSpace(Space[][] matrix, Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
-    }
-
-    /**
-     * Checks to see if there are any available moves
-     *
-     * @return true if there are available moves, false otherwise
-     */
-    private boolean isMoveAvailable(Space[][] matrix){
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                // If the space holds a piece of the color of the active player
-                if(matrix[i][j].isOccupied()
-                        && matrix[i][j].getPiece().getColor() == game.getPlayerColor(player)){
-                    LOG.finest("Space is occupied, and the piece is the proper color");
-                    Position currentPos = new Position(i, j);
-                    Move checkMove;
-                    for(int row = -1; row < 2; row += 2){
-                        for(int col = -1; col < 2; col += 2){
-                            LOG.finest("We're moving");
-                            Position place = new Position(i + row, j + col);
-                            checkMove = new Move(currentPos, place);
-                            if(validateMoveByStep(checkMove))
-                                return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
     }
 }
