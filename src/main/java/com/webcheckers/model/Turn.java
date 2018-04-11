@@ -13,10 +13,11 @@ import java.util.logging.Logger;
 public class Turn {
     private static final Logger LOG = Logger.getLogger(Turn.class.getName());
 
+    // Purposely mismatching frontend
+    // If a Turn is SUBMITTED then this Turn instance will no longer exist
     public enum State {
         EMPTY_TURN,
-        STABLE_TURN,
-        TURN_SUBMITTED
+        STABLE_TURN
     }
 
     private Space[][] startingBoard;
