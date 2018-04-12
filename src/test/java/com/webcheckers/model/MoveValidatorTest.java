@@ -68,4 +68,13 @@ public class MoveValidatorTest {
 
 		assertTrue(MoveValidator.validateMove(board, kingMoveBackwards));
 	}
+
+	@Test
+	@Disabled
+	public void test_areMovesAvailable(){
+		Piece.Color color = Piece.Color.WHITE;
+		// Tests against a starting board
+		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
+		// TODO: Test on a board set up with no moves
+	}
 }
