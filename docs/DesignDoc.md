@@ -20,8 +20,6 @@ The web application for Webcheckers allows players to play checkers with other p
 > Users play against one another in a game of checkers, competing to win.
 
 ### Glossary and Acronyms
-> Provide a table of terms and acronyms.
-
 | Term | Definition |
 |------|------------|
 | VO | Value Object |
@@ -29,7 +27,6 @@ The web application for Webcheckers allows players to play checkers with other p
 \pagebreak
 
 # Requirements
-
 > Players must be able to sign-in to the application and start a game against other players. Using drag-and-drop capabilities, players move pieces down the board, jumping over their opponents, to advance towards winning the game.
 > If players reach their opponent's end of the board, their pieces will be "kinged," giving the piece advanced capabilities to move in any direction on the board.
 > Players have the option to enter Tournament Mode, in which they compete against other players to place in a 1st, 2nd, etc. style ranking system.
@@ -103,20 +100,21 @@ Below are the entities involved in the Checkers application domain. In every che
 
 # Architecture
 
-This section describes the application architecture.
+This section details the design choices and relationships between the components in the software architecture.
 
 ## Summary
 
-The following Tiers/Layers model shows a high-level view of the webapp's architecture.
+The following diagram shows the composition of the web application by logical tier.
 
 ![The Tiers & Layers of the Architecture](architecture-tiers-and-layers.png)
 
-As a web application, the user interacts with the system using a browser.  The client-side
-of the UI is composed of HTML pages with some minimal CSS for styling the page.  There is also
-some JavaScript that has been provided to the team by the architect.
+The **Client UI** is comprised of a JavaScript framework handling user interactions in their web browser. Basic CSS styling controls how the Client UI is presented in the user's browser. The Client UI interacts with the **Server UI** over HTTP using direct and AJAX calls.
 
-The server-side tiers include the UI Tier that is composed of UI Controllers and Views.
-Controllers are built using the Spark framework and View are built using the FreeMarker framework.  The Application and Model tiers are built using plain-old Java objects (POJOs).
+The **Server UI** contains controllers for each HTTP route. These controllers exchange data with the Client UI and work with the **Application** tier. Also included in the Server UI tier are the FreeMarker templates and ViewModels that produce HTML to be rendered in the client's browser.
+
+The **Application** tier contains service components that exchange data between the Server UI components and Models comprising the application domain.
+
+The **Model** tier is made of Value Objects and Entities of the application domain.
 
 Details of the components within these tiers are supplied below
 
