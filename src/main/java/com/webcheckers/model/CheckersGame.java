@@ -13,6 +13,8 @@ public class CheckersGame {
 
     private final Player playerRed;
     private final Player playerWhite;
+    private Player winner;
+    private Player loser;
     private Space[][] board;
     private Turn activeTurn;
     private State state;
@@ -95,6 +97,8 @@ public class CheckersGame {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
             this.state = State.WON;
+            this.winner = activePlayer;
+            this.loser = nextPlayer;
         }
 
     }
@@ -202,4 +206,18 @@ public class CheckersGame {
     public State getState() {
         return state;
     }
+
+    /**
+     * Returns the winner of the game
+     *
+     * @return - the winner
+     */
+    public Player getWinner(){ return this.winner; }
+
+    /**
+     * Returns the loser of the game
+     *
+     * @return - the loser
+     */
+    public Player getLoser(){ return this.loser; }
 }
