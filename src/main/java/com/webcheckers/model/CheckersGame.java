@@ -130,7 +130,29 @@ public class CheckersGame {
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void initStartingBoard() {
-        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+        CheckersBoardBuilder builder = CheckersBoardBuilder.aBoard();
+
+        switch (playerRed.getName()) {
+            case "kingMe":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(1, 0));
+                break;
+
+            case "endgame":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 0)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(2, 1)
+                );
+                break;
+
+            default:
+                // I don't actually have a public method to place starting pieces.. otherwise that woudl go here
+        }
+
 
         LOG.finest("Starting board:");
         LOG.finest(builder.formatBoardString());
@@ -158,12 +180,30 @@ public class CheckersGame {
         if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
             board = activeTurn.getLatestBoard();
 
+            makeKings();
+
             changeActivePlayer();
 
             return true;
         }
 
         return false;
+    }
+
+    public void makeKings(){
+        // King white pieces
+        for(int cell = 0; cell < 8; cell++){
+            if(board[0][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.RED){
+                board[0][cell].getPiece().kingMe();
+            }
+        }
+
+        // King red pieces
+        for(int cell = 0; cell < 8; cell++){
+            if(board[7][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.WHITE){
+                board[7][cell].getPiece().kingMe();
+            }
+        }
     }
 
     /**
