@@ -4,8 +4,11 @@ geometry: margin=1in
 # WebCheckers Design Documentation
 
 ### Team Information
-* Team name: (2175) SWEN-261-08-Team-C
-* Team members
+
+**Name**: `(2175) SWEN-261-08-Team-C`
+
+**Members:**
+
   * Ian Flournoy <icf6667@rit.edu>
   * Rohandeep Singh <rs9773@rit.edu>
   * Logan D'Auria <lxd1644@rit.edu>
@@ -17,7 +20,7 @@ geometry: margin=1in
 The web application for Webcheckers allows players to play checkers with other players who are currently signed in. The game user interface supports a game experience using drag-and-drop browser capabilities for making moves. Beyond these simple capabilities, players are able to play in Tournament Mode against other players in Tournament Mode, as well as being able to request help from the application on what moves to make in order to win the game.
 
 ### Purpose
-> Users play against one another in a game of checkers, competing to win.
+*Users play against one another in a game of checkers, competing to win.*
 
 ### Glossary and Acronyms
 | Term | Definition |
