@@ -26,6 +26,7 @@ public class Turn {
     private DoublyLinkedQueue<Move> pendingMoves;
     private State state;
     private boolean single;
+    private int jumps;
 
     private MoveValidator moveValidator;
 
@@ -42,6 +43,7 @@ public class Turn {
         this.matrix = matrix;
         this.player = player;
         this.single = false;
+        this.jumps = 0;
 
         this.pendingMoves = new DoublyLinkedQueue<>();
         this.state = State.EMPTY_TURN;
@@ -62,8 +64,10 @@ public class Turn {
                 game.getPlayerColor(player),
                 player.getName(),
                 move.toString()));
-
-        if (!single && moveValidator.validateMove(move)) {
+        boolean hasJumped = false;
+        if(jumps > 0)
+            hasJumped = true;
+        if (!hasJumped && !single && moveValidator.validateMove(move)) {
             LOG.finer("Move has been validated successfully");
 
             pendingMoves.enqueue(move);
@@ -72,6 +76,10 @@ public class Turn {
             if(move.isASingleMoveAttempt()) {
                 LOG.finer("This is a single move");
                 single = true;
+            }
+            if(move.isAJumpMoveAttempt()){
+                LOG.finer("This is a jump move");
+                jumps++;
             }
             LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
                     game.getPlayerColor(player),
@@ -131,8 +139,13 @@ public class Turn {
         Position end = move.getEnd();
 
         if (move.isAJumpMoveAttempt()) {
-            //TODO jump move logic goes here
-            return true;
+            jumps++;
+            Space startSpace = matrix[start.getRow()][start.getCell()];
+            Space endSpace = matrix[end.getRow()][end.getCell()];
+            Position midPos = move.getEnd().midPosition(move.getEnd(), move.getStart());
+            Space midSpace = matrix[midPos.getRow()][midPos.getCell()];
+
+            return endSpace.jumpPieceMove(startSpace, midSpace);
 
         } else {
             Space startSpace = matrix[start.getRow()][start.getCell()];
@@ -162,6 +175,8 @@ public class Turn {
             if (pendingMoves.isEmpty()) {
                 this.state = State.EMPTY_TURN;
             }
+            if(!single)
+                jumps--;
             single = false;
             return true;
         }

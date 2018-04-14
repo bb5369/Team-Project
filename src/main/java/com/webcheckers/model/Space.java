@@ -89,6 +89,25 @@ public class Space {
         return true;
     }
 
+    public boolean jumpPieceMove(Space source, Space jumped){
+        if (source == null) {
+            return false;
+        }
+
+        if (state != State.OPEN || !jumped.isOccupied()) {
+            return false;
+        }
+
+        if (source.getPiece() == null || jumped.getPiece() == null) {
+            return false;
+        }
+
+        addPiece(source.getPiece());
+        source.removePiece();
+        jumped.removePiece();
+        return true;
+    }
+
     /**
      * Add a piece to this Space
      *

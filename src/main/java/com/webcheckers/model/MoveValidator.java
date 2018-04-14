@@ -188,7 +188,16 @@ public class MoveValidator {
      * @return - true if the move is a jump move, false otherwise
      */
     private boolean isMoveJump(Move move) {
-        return false;
+        if(move.isAJumpMoveAttempt()) {
+            Position jumped = move.getEnd();
+            jumped = jumped.midPosition(move.getEnd(), move.getStart());
+            Space space = getSpace(jumped);
+            Piece piece = getSpace(move.getStart()).getPiece();
+            if(space.isOccupied() && !space.getPiece().getColor().equals(piece.getColor())) {
+                return true;
+            }
+        }
+            return false;
     }
 
     /**

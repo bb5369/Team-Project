@@ -41,6 +41,13 @@ public class Position {
         return new Position(x, y);
     }
 
+    public Position midPosition(Position end, Position start){
+        int x = start.row + (end.row - start.row)/2;
+        int y = start.cell + (end.cell - start.cell)/2;
+
+        return new Position(x, y);
+    }
+
     /**
      * This method returns the y coordinate of the position
      *
