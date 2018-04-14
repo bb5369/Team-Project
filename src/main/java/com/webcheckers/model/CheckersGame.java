@@ -182,12 +182,18 @@ public class CheckersGame {
     }
 
     /**
-     * Indiciates if this game is resigned
+     * Indicates if this game is resigned
      * @return boolean
      */
     public boolean isResigned() {
         return state == State.RESIGNED;
     }
+
+    /**
+     * Indicates if this game has been won
+     * @return - true if the game is won, false otherwise
+     */
+    public boolean isWon(){ return state == State.WON; }
 
     /**
      * Used for logging
@@ -196,5 +202,4 @@ public class CheckersGame {
     public State getState() {
         return state;
     }
-
 }
