@@ -233,21 +233,29 @@ These generators present to the Client UI a view of a checkers board in the way 
 \pagebreak
 
 
-![Turn - backup move](sequence-diagrams/Turn_BackupMove.png)
+## Model Tier
 
-**Turn: Make Move**
+In true Object Oriented spirit we have tried to make our domain model rich and alive with behavior that intuitively acts on the data our model objects represent. When we found ourselves placing functionality in a fabricated component we would first ask ourselves if the functionality was using data already located in model component. In this way we tried to avoid the [Anemic Domain Model](https://martinfowler.com/bliki/AnemicDomainModel.html) anti-pattern described by Martin Fowler where he states that it is a poor use of Model objects if the data and the logic surrounding that data are not unified.
 
-![Turn - Make Move](sequence-diagrams/Turn_MakeMove.png)
+### Static models
 
-**Turn: Validate Move**
+#### Ideas for static models in Model tier
+* Relationship of CheckersGame->Turn
+* Who uses MoveValidator static class
+* Who uses CheckersBoardBuilder
+* Relationship of Piece, Position, Move
 
-![Turn - Validate Move](sequence-diagrams/Turn_ValidateMove.png)
+### Dynamic models
 
-**Turn: Submit**
+*NOTE: We do have some models already made for dynamic interaction. I chose not to include them now since they need updating*
 
-![Turn - Submimt](sequence-diagrams/Turn_Submit.png)
+#### Ideas for dynamic models in the Model tier
+* When a new player turn takes effect
+* When a move is validated
+* When a turn is submitted
 
 \pagebreak
+
 
 # Logging
 
