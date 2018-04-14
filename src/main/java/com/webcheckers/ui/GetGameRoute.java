@@ -176,7 +176,7 @@ public class GetGameRoute implements Route {
         vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
 
         //Generates a board with the stored matrix in the instance of CheckersGame for the view
-        BoardViewGen board = new BoardViewGen(game.getMatrix());
+        BoardViewGen board = new BoardViewGen(game.getBoard());
 
         if (sessionPlayer.equals(redPlayer)) {
             vm.put("board", board);

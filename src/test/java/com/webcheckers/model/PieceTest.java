@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @Tag("Model-tier")
@@ -42,4 +43,11 @@ public class PieceTest {
                 + ((kingType == Piece.Type.SINGLE) ? "Single" : "King"));
     }
 
+    @Test
+    public void testClone()
+    {
+        Piece toClone = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
+        Piece clone = toClone.clone();
+        assertEquals(toClone, clone);
+    }
 }

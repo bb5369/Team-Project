@@ -41,11 +41,21 @@ public class Position {
         return new Position(x, y);
     }
 
-    public Position midPosition(Position end, Position start){
+    public static Position midPosition(Position end, Position start){
         int x = start.row + (end.row - start.row)/2;
         int y = start.cell + (end.cell - start.cell)/2;
 
         return new Position(x, y);
+    }
+
+    /**
+     * Determines whether or not the position is on the board
+     *
+     * @return - true if the end position of the move is on the board, false otherwise
+     */
+    public boolean isOnBoard(){
+    	return (row >= 0 && row < CheckersBoardBuilder.ROWS) &&
+                (cell >= 0 && row < CheckersBoardBuilder.CELLS);
     }
 
     /**

@@ -40,15 +40,15 @@ public class SpaceTest {
 	}
 
 	/**
-	 * Test that the piece constructors throws a null exception
+	 * Test that the piece constructor state is open when given null piece
 	 */
 	@Test
 	public void constructor_null_piece() {
 		Piece nullPiece = null;
 
-		assertThrows(NullPointerException.class, () -> {
-			new Space(SPACE_ID, nullPiece);
-		});
+		Space CuT = new Space(SPACE_ID, nullPiece);
+
+		assertTrue(CuT.isOpen());
 	}
 
 	/**
@@ -216,4 +216,13 @@ public class SpaceTest {
 
 		assertTrue(testSpace.movePieceFrom(sourceSpace));
 	}
+
+	@Test
+	public void testClone()
+	{
+		Space toClone = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+		Space clone = toClone.clone();
+		assertEquals(toClone, clone);
+	}
+
 }

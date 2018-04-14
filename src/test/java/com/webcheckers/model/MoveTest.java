@@ -44,7 +44,7 @@ public class MoveTest {
 
 	@Test
 	public void areWeAJumpMove() {
-		assertTrue(CuT.isAJumpMoveAttempt());
+		assertTrue(CuT.isJump());
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class MoveTest {
 
 		Move notAJumpMove = new Move(start, endFriend);
 
-		assertFalse(notAJumpMove.isAJumpMoveAttempt());
+		assertFalse(notAJumpMove.isJump());
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class MoveTest {
 
 		Move alsoNotAJumpMove = new Move(start, endAway);
 
-		assertFalse(alsoNotAJumpMove.isAJumpMoveAttempt());
+		assertFalse(alsoNotAJumpMove.isJump());
 	}
 
 	@Test

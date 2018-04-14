@@ -161,7 +161,12 @@ public class GameManager {
     public Turn getPlayerTurn(Player player) {
         final CheckersGame game = getGame(player);
 
-        return game.getTurn();
+        if (player.equals(game.getPlayerActive())) {
+            return game.getTurn();
+        }
+
+        return null;
+
     }
 
     /**

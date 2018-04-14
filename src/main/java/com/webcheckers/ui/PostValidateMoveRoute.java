@@ -66,6 +66,7 @@ public class PostValidateMoveRoute implements Route {
                 return formatMessageJson(Message.MessageType.error, NO_POSITION_PROVIDED_MESSAGE);
             }
             Move requestedMove = gson.fromJson(positionAsJson, Move.class);
+
             boolean isValidMove = turn.validateMove(requestedMove);
 
             if (isValidMove) {

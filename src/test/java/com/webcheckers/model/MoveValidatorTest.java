@@ -1,7 +1,9 @@
 package com.webcheckers.model;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -13,49 +15,40 @@ public class MoveValidatorTest {
 	private static final String RED_PLAYER_NAME = "redPlayer";
 	private static final String WHITE_PLAYER_NAME = "whitePlayer";
 
-	private static CheckersGame game;
 	private static Player player;
-	private static Piece piece;
 
-	private static TestBoardBuilder testBoardBuilder;
+	private static CheckersBoardBuilder boardBuilder;
 
-	private static MoveValidator moveValidator;
+	private Space[][] board;
 
 	@BeforeAll
 	public static void testSetup() {
 
 		// Build dependent objects
-		player = new Player(RED_PLAYER_NAME);
-		piece = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
+		player = new Player(WHITE_PLAYER_NAME);
 
-
-		// Mock dependents
-		game = mock(CheckersGame.class);
-
-		// build board matrix we'll be testing
-		testBoardBuilder = new TestBoardBuilder();
-
-		// Setup behaviors
-		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
-
-
-		moveValidator = new MoveValidator(game, player);
+		boardBuilder = CheckersBoardBuilder.aStartingBoard();
 	}
 
-	//@Test
+	@Test
 	public void test_aDiagonalMove() {
-		when(game.getMatrix()).thenReturn(testBoardBuilder.build());
+		board = boardBuilder.getBoard();
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
-				new Position(3,0)
+				new Position(3,0),
+				player,
+				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(diagonalMove));
+		assertTrue(MoveValidator.validateMove(board, diagonalMove));
 	}
 
-	//@Test
+	@Test
+	@Disabled
 	public void test_aKingMoveBackwards() {
+		board = boardBuilder.getBoard();
+
 		// The board is laid out with white pieces starting on top
 		// red pieces on bottom
 		// so a white KING piece starting down on row 4 should be able to move up to row 3
@@ -63,15 +56,25 @@ public class MoveValidatorTest {
 		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
 		Position kingPosition = new Position(4, 1);
 
-		Space[][] boardWithKing = testBoardBuilder.withPieceAt(king, kingPosition).build();
+		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
-		when(game.getMatrix()).thenReturn(boardWithKing);
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
-				new Position(3, 2)
+				new Position(3, 2),
+				player,
+				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(kingMoveBackwards));
+		assertTrue(MoveValidator.validateMove(board, kingMoveBackwards));
+	}
+
+	@Test
+	@Disabled
+	public void test_areMovesAvailable(){
+		Piece.Color color = Piece.Color.WHITE;
+		// Tests against a starting board
+		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
+		// TODO: Test on a board set up with no moves
 	}
 }
