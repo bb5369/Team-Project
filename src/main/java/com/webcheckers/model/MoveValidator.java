@@ -182,7 +182,6 @@ public class MoveValidator {
     }
 
     /**
-     * :TODO implement is a valid jump move, For now return false for test
      * purposes assuming no valid jump move will me made
      *
      * @return - true if the move is a jump move, false otherwise
@@ -200,6 +199,43 @@ public class MoveValidator {
             return false;
     }
 
+    public boolean forcedJump(Move move){
+        Piece piece = getSpace(move.getStart()).getPiece();
+        for(int row = 0; row < matrix.length; row++){
+            for(int cell = 0; cell < matrix[row].length; cell++){
+                Space cur = matrix[row][cell];
+                if(cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())){
+                    Move test = move;
+                    Position start = new Position(row, cell);
+                    if(cell + 2 < matrix[row].length) {
+                        if(row + 2 < matrix.length) {
+                            test = new Move(start, new Position(row + 2, cell + 2));
+                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                                return true;
+                        }
+                        if(row - 2 > 0) {
+                            test = new Move(start, new Position(row - 2, cell + 2));
+                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                                return true;
+                        }
+                    }
+                    if(cell - 2 > 0) {
+                        if(row + 2 < matrix.length) {
+                            test = new Move(start, new Position(row + 2, cell - 2));
+                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                                return true;
+                        }
+                        if(row - 2 > 0) {
+                            test = new Move(start, new Position(row - 2, cell - 2));
+                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
     /**
      * Matrix lookup function - given a position it will return the enumerated state
      *

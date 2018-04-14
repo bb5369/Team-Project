@@ -65,9 +65,13 @@ public class Turn {
                 player.getName(),
                 move.toString()));
         boolean hasJumped = false;
+        boolean forcedJump = moveValidator.forcedJump(move);
         if(jumps > 0)
             hasJumped = true;
-        if (!hasJumped && !single && moveValidator.validateMove(move)) {
+        if(move.isASingleMoveAttempt() && (hasJumped || forcedJump)){
+            return false;
+        }
+        if (!single && moveValidator.validateMove(move)) {
             LOG.finer("Move has been validated successfully");
 
             pendingMoves.enqueue(move);
@@ -174,8 +178,10 @@ public class Turn {
             // Return Turn state to EMPTY_TURN if they have no pending moves
             if (pendingMoves.isEmpty()) {
                 this.state = State.EMPTY_TURN;
+                jumps = 0;
+                single = false;
             }
-            if(!single)
+            if(jumps > 0)
                 jumps--;
             single = false;
             return true;
