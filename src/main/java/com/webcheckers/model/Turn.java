@@ -135,7 +135,7 @@ public class Turn {
                     jumps++;
                     Space startSpace = matrix[start.getRow()][start.getCell()];
                     Space endSpace = matrix[end.getRow()][end.getCell()];
-                    Position midPos = move.getEnd().midPosition(move.getEnd(), move.getStart());
+                    Position midPos = Position.midPosition(move.getEnd(), move.getStart());
                     Space midSpace = matrix[midPos.getRow()][midPos.getCell()];
 
                     return endSpace.jumpPieceMove(startSpace, midSpace);

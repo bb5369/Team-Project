@@ -189,9 +189,10 @@ public class MoveValidator {
     }
 
     /**
-     * :TODO implement is a valid jump move, For now return false for test
-     * purposes assuming no valid jump move will me made
+     * Determines if a piece is a valid jump move
      *
+     * @param board
+     * @param move
      * @return - true if the move is a jump move, false otherwise
      */
     private static boolean isMoveJumpingAPiece(Space[][] board, Move move) {
@@ -226,51 +227,57 @@ public class MoveValidator {
 
     }
 
-        public static boolean forcedJump (Space[][] board, Move move){
-            Piece piece = getSpace(board, move.getStart()).getPiece();
-            for (int row = 0; row < board.length; row++) {
-                for (int cell = 0; cell < board[row].length; cell++) {
-                    Space cur = board[row][cell];
-                    if (cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())) {
-                        Move test = move;
-                        Position start = new Position(row, cell);
-                        if (cell + 2 < board[row].length) {
-                            if (row + 2 < board.length) {
-                                test = new Move(start, new Position(row + 2, cell + 2));
-                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                                //test.setPlayer(new Player(move.getPlayerName()));
-                                if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                    return true;
-                            }
-                            if (row - 2 >= 0) {
-                                test = new Move(start, new Position(row - 2, cell + 2));
-                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                                //test.setPlayer(new Player(move.getPlayerName()));
-                                if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                    return true;
-                            }
+    /**
+     * Checks if there are any possible jump moves
+     * @param board
+     * @param move
+     * @return boolean - true if there is a jump move, false otherwise
+     */
+    public static boolean forcedJump (Space[][] board, Move move){
+        Piece piece = getSpace(board, move.getStart()).getPiece();
+        for (int row = 0; row < board.length; row++) {
+            for (int cell = 0; cell < board[row].length; cell++) {
+                Space cur = board[row][cell];
+                if (cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())) {
+                    Move test = move;
+                    Position start = new Position(row, cell);
+                    if (cell + 2 < board[row].length) {
+                        if (row + 2 < board.length) {
+                            test = new Move(start, new Position(row + 2, cell + 2));
+                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                            //test.setPlayer(new Player(move.getPlayerName()));
+                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                                return true;
                         }
-                        if (cell - 2 >= 0) {
-                            if (row + 2 < board.length) {
-                                test = new Move(start, new Position(row + 2, cell - 2));
-                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                                //test.setPlayer(new Player(move.getPlayerName()));
-                                if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                    return true;
-                            }
-                            if (row - 2 >= 0) {
-                                test = new Move(start, new Position(row - 2, cell - 2));
-                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                                //test.setPlayer(new Player(move.getPlayerName()));
-                                if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                    return true;
-                            }
+                        if (row - 2 >= 0) {
+                            test = new Move(start, new Position(row - 2, cell + 2));
+                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                            //test.setPlayer(new Player(move.getPlayerName()));
+                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                                return true;
                         }
+                    }
+                    if (cell - 2 >= 0) {
+                        if (row + 2 < board.length) {
+                            test = new Move(start, new Position(row + 2, cell - 2));
+                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                            //test.setPlayer(new Player(move.getPlayerName()));
+                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                                return true;
+                        }
+                        if (row - 2 >= 0) {
+                            test = new Move(start, new Position(row - 2, cell - 2));
+                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                            //test.setPlayer(new Player(move.getPlayerName()));
+                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                                return true;
+                            }
                     }
                 }
             }
-            return false;
         }
+        return false;
+    }
         /**
          * Board lookup convenience method - given a position it will return the enumerated state
          *

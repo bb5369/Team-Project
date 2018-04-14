@@ -93,6 +93,12 @@ public class Space{
         return true;
     }
 
+    /**
+     *
+     * @param source - starting space that is being moved from
+     * @param jumped - space inbetween the start and end of the jump
+     * @return returns true is not null, isoccupied or has not piece
+     */
     public boolean jumpPieceMove(Space source, Space jumped){
         if (source == null) {
             return false;

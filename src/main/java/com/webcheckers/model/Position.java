@@ -41,6 +41,12 @@ public class Position {
         return new Position(x, y);
     }
 
+    /**
+     * Determins the middle position of a piece in a jump
+     * @param end
+     * @param start
+     * @return The middle position
+     */
     public static Position midPosition(Position end, Position start){
         int x = start.row + (end.row - start.row)/2;
         int y = start.cell + (end.cell - start.cell)/2;
