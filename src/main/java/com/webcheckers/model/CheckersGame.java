@@ -94,6 +94,7 @@ public class CheckersGame {
         } else {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+            this.state = State.WON;
         }
 
     }
