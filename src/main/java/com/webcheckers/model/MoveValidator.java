@@ -237,7 +237,7 @@ public class MoveValidator {
         Piece piece = getSpace(board, move.getStart()).getPiece();
         for (int row = 0; row < board.length; row++) {
             for (int cell = 0; cell < board[row].length; cell++) {
-                if (canJump(board, row, cell, piece))
+                if (canJump(board, row, cell, piece.getColor()))
                     return true;
             }
         }
@@ -245,18 +245,18 @@ public class MoveValidator {
     }
 
     //Called after a move is made, so the starting postion should be the ending row and cell
-    public static boolean isJumpMove(Space[][]board, Move move){
-        int row = move.getEndRow();
-        int cell = move.getEndCell();
-        Piece piece = getSpace(board, move.getStart()).getPiece();
-        if (canJump(board, row, cell, piece))
-            return true;
-        return false;
+    public static boolean isJumpMove(Space[][]board, Position pos, Piece.Color piece){
+        boolean condition;
+        int row = pos.getRow();
+        int cell = pos.getCell();
+        condition = canJump(board, row, cell, piece);
+        LOG.fine(String.format("Can Mutlt-jump: %b", condition));
+        return condition;
     }
 
-    private static boolean canJump(Space[][] board, int row, int cell, Piece piece) {
+    private static boolean canJump(Space[][] board, int row, int cell, Piece.Color piece) {
         Space cur = board[row][cell];
-        if (cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())) {
+        if (cur.isOccupied() && piece.equals(cur.getPiece().getColor())) {
             Move test;
             Position start = new Position(row, cell);
             if (cell + 2 < board[row].length) {

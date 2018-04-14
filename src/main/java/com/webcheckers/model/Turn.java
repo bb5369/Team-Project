@@ -25,7 +25,7 @@ public class Turn {
     private Piece.Color playerColor;
     private Stack<Space[][]> pendingMoves;
     private State state;
-    private boolean single;
+    private boolean single, mulitJump;
     private int jumps;
 
 
@@ -46,6 +46,7 @@ public class Turn {
 
         pendingMoves = new Stack<>();
         single = false;
+        mulitJump = false;
         jumps = 0;
         state = State.EMPTY_TURN;
 
@@ -97,6 +98,7 @@ public class Turn {
             }
             if(move.isJump()){
                 LOG.finer("This is a jump move");
+                mulitJump = MoveValidator.isJumpMove(getLatestBoard(), move.getEnd(), move.getPieceColor());
                 jumps++;
             }
             LOG.info(String.format("%s Player [%s] has %d queued moves in [%s] state",
@@ -135,8 +137,9 @@ public class Turn {
                     jumps++;
                     Space startSpace = matrix[start.getRow()][start.getCell()];
                     Space endSpace = matrix[end.getRow()][end.getCell()];
-                    Position midPos = Position.midPosition(move.getEnd(), move.getStart());
+                    Position midPos = Position.midPosition(end, start);
                     Space midSpace = matrix[midPos.getRow()][midPos.getCell()];
+                    //mulitJump = MoveValidator.isJumpMove(matrix, move);
 
                     return endSpace.jumpPieceMove(startSpace, midSpace);
 
@@ -168,11 +171,13 @@ public class Turn {
                 this.state = State.EMPTY_TURN;
                 jumps = 0;
                 single = false;
+                mulitJump = false;
                 LOG.finest(String.format("%s has reversed all planned moves", player.getName()));
                 state = State.EMPTY_TURN;
             }
             if(jumps > 0)
                 jumps--;
+            mulitJump = false;
             single = false;
             return true;
         }
@@ -221,5 +226,10 @@ public class Turn {
 
     public Space[][] getLatestBoard() {
         return (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
+    }
+
+    public boolean mulitJumpDone(){
+        LOG.fine(String.format("canMultiJump: %b", mulitJump));
+        return !mulitJump;
     }
 }

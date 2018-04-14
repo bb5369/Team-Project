@@ -155,7 +155,7 @@ public class CheckersGame {
      * @return
      */
     public boolean submitTurn(Player player) {
-        if (player.equals(getPlayerActive()) && activeTurn.isStable() && !getTurn().mulitJumpDone()) {
+        if (player.equals(getPlayerActive()) && activeTurn.isStable() && getTurn().mulitJumpDone()) {
             board = activeTurn.getLatestBoard();
 
             changeActivePlayer();
