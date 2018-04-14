@@ -15,6 +15,7 @@ import spark.Route;
 
 
 public class PostResignGameRoute implements Route {
+
     private static final Logger LOG = Logger.getLogger(PostResignGameRoute.class.getName());
 
     private final GameManager gameManager;

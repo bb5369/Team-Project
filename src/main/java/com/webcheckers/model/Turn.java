@@ -1,7 +1,6 @@
 package com.webcheckers.model;
 
-import com.webcheckers.util.DoublyLinkedQueue;
-
+import java.util.Stack;
 import java.util.logging.Logger;
 
 /**
@@ -14,41 +13,41 @@ import java.util.logging.Logger;
 public class Turn {
     private static final Logger LOG = Logger.getLogger(Turn.class.getName());
 
+    // Purposely mismatching frontend
+    // If a Turn is SUBMITTED then this Turn instance will no longer exist
     public enum State {
         EMPTY_TURN,
-        STABLE_TURN,
-        TURN_SUBMITTED
+        STABLE_TURN
     }
 
-    private CheckersGame game;
-    private Space[][] matrix;
+    private Space[][] startingBoard;
     private Player player;
-    private DoublyLinkedQueue<Move> pendingMoves;
+    private Piece.Color playerColor;
+    private Stack<Space[][]> pendingMoves;
     private State state;
     private boolean single;
 
-    private MoveValidator moveValidator;
 
     /**
      * Parameterized constructor
-     * A turn is identified by a game and a player
+     * A turn is identified by the player, the board they are playing on and their color
      *
-     * @param game   - game the Turn is being made for
-     * @param matrix - The checkers board matrix
+     * @param startingBoard - The checkers board matrix
      * @param player - player the Turn is being made for
+     * @param color - The color of the player's pieces
      */
-    Turn(CheckersGame game, Space[][] matrix, Player player) {
-        this.game = game;
-        this.matrix = matrix;
+    Turn(Space[][] startingBoard, Player player, Piece.Color color) {
+        LOG.info(String.format("I am a new turn for Player [%s]", player.getName()));
+
+        this.startingBoard = startingBoard;
         this.player = player;
-        this.single = false;
+        this.playerColor = color;
 
-        this.pendingMoves = new DoublyLinkedQueue<>();
-        this.state = State.EMPTY_TURN;
+        pendingMoves = new Stack<>();
+        single = false;
+        state = State.EMPTY_TURN;
 
-        this.moveValidator = new MoveValidator(game, player);
-
-        LOG.fine(String.format("Turn initialized for Player [%s] in [%s] state", player.getName(), this.state));
+        LOG.fine(String.format("Turn initialized in [%s] state", this.state));
     }
 
     /**
@@ -58,60 +57,50 @@ public class Turn {
      * @return - true if move was validated, otherwise false
      */
     public boolean validateMove(Move move) {
-        LOG.finer(String.format("%s Player [%s] is validing move %s",
-                game.getPlayerColor(player),
+        LOG.info(String.format("%s Player [%s] is validating move %s",
+                playerColor,
                 player.getName(),
                 move.toString()));
 
-        if (!single && moveValidator.validateMove(move)) {
+        // TODO: run this through with the team. Not sure if best approach, but allowed for making
+        // move validator fully static
+        move.setPieceColor(playerColor);
+        move.setPlayer(player);
+
+        Space[][] board = getLatestBoard();
+
+        LOG.finest("The board we are using for this validateMove()");
+        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+
+        if (!single && MoveValidator.validateMove(board, move)) {
             LOG.finer("Move has been validated successfully");
 
-            pendingMoves.enqueue(move);
+            // Now that the move has been validated, lets clone the board and execute the move
+            Space[][] newBoard = CheckersBoardBuilder.cloneBoard(board);
+            makeMove(newBoard, move);
+
+            pendingMoves.push(newBoard);
 
             state = State.STABLE_TURN;
-            if(move.isASingleMoveAttempt()) {
-                LOG.finer("This is a single move");
+
+            if(move.isSingleSpace()) {
+                LOG.finer("This is a single-space move. No more moves can be validated.");
                 single = true;
             }
-            LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
-                    game.getPlayerColor(player),
+
+            LOG.info(String.format("%s Player [%s] has %d queued moves in [%s] state",
+                    playerColor,
                     player.getName(),
                     pendingMoves.size(),
                     state));
 
             return true;
-        }
 
-        return false;
-    }
-
-    /**
-     * This method implement the submitMove logic
-     * making the necessary changes to the board
-     *
-     * @return - true if the submitMove was successful, false otherwise
-     */
-    public boolean submitTurn() {
-        LOG.finer(String.format("%s Player [%s] is submitting their turn of %d moves.",
-                game.getPlayerColor(player),
-                player.getName(),
-                pendingMoves.size()));
-
-        if (pendingMoves.isEmpty()) {
+        } else {
+            LOG.info("Move was not valid");
             return false;
+
         }
-
-        while (!pendingMoves.isEmpty()) {
-            if (!makeMove(matrix, pendingMoves.removeFromFront())) {
-                return false;
-            }
-        }
-
-        this.state = State.TURN_SUBMITTED;
-
-        game.nextTurn();
-
-        return true;
     }
 
     /**
@@ -122,15 +111,15 @@ public class Turn {
      * @return - true if the pieces where moved successfully
      */
     public boolean makeMove(Space[][] matrix, Move move) {
-        LOG.finer(String.format("%s Player [%s] turn - executing move %s",
-                game.getPlayerColor(player),
+        LOG.info(String.format("%s Player [%s] turn - executing move %s",
+                playerColor,
                 player.getName(),
                 move.toString()));
 
         Position start = move.getStart();
         Position end = move.getEnd();
 
-        if (move.isAJumpMoveAttempt()) {
+        if (move.isJump()) {
             //TODO jump move logic goes here
             return true;
 
@@ -152,15 +141,15 @@ public class Turn {
      */
     public boolean backupMove() {
         if (!pendingMoves.isEmpty()) {
-            Move badMove = pendingMoves.removeFromRear();
+            Space[][] badMove = pendingMoves.pop();
 
-            LOG.finest(String.format("Removing move %s from %s's history",
-                    badMove.toString(),
+            LOG.info(String.format("Removing last move from %s's history",
                     player.getName()));
 
             // Return Turn state to EMPTY_TURN if they have no pending moves
             if (pendingMoves.isEmpty()) {
-                this.state = State.EMPTY_TURN;
+                LOG.finest(String.format("%s has reversed all planned moves", player.getName()));
+                state = State.EMPTY_TURN;
             }
             single = false;
             return true;
@@ -179,12 +168,11 @@ public class Turn {
     }
 
     /**
-     * Returns whether or not the turn has been submitted
-     *
-     * @return - true if the turn has been submitted, false otherwise
+     * A stable turn is one where a player has made one or more moves
+     * @return
      */
-    public boolean isSubmitted() {
-        return (this.state == State.TURN_SUBMITTED);
+    public boolean isStable() {
+        return state == State.STABLE_TURN;
     }
 
     public boolean canResign(){
@@ -201,12 +189,15 @@ public class Turn {
         return this.player;
     }
 
-
     /**
      * Used in testing to inspect component state
      * @return Turn State
      */
     public State getState() {
         return this.state;
+    }
+
+    public Space[][] getLatestBoard() {
+        return (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
     }
 }

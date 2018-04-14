@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.WebServer;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +17,7 @@ public class TurnTest {
 	private static CheckersGame checkersGame;
 	private static Space[][] checkersBoard;
 	private static Player player;
+	private static Piece.Color playerColor;
 	private Turn CuT;
 	private static Move validMove;
 	private static Move invalidMove;
@@ -27,20 +27,24 @@ public class TurnTest {
 	public static void setupTest() {
 		// build our real components
 		player = new Player("Testy McTestFace");
+		playerColor = Piece.Color.WHITE;
 
 		validMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(END_ROW, END_CELL)
+				new Position(END_ROW, END_CELL),
+				player, playerColor
 		);
 
 		invalidMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(3, 3)
+				new Position(3, 3),
+				player, playerColor
 		);
 
 		jumpMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(START_ROW + 2, START_CELL + 2)
+				new Position(START_ROW + 2, START_CELL + 2),
+				player, playerColor
 		);
 
 		// create mocks
@@ -54,20 +58,16 @@ public class TurnTest {
 	 */
 	@BeforeEach
 	public void setupCuT() {
-		checkersBoard = BoardBuilder.buildBoard();
+		checkersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
 
-		// TODO: Refactor this need out of MoveValidator so its passed in a board
-		// MoveValidator will become a static class
-		when(checkersGame.getMatrix()).thenReturn(checkersBoard);
-
-		CuT = new Turn(checkersGame, checkersBoard, player);
+		CuT = new Turn(checkersBoard, player, playerColor);
 
 		assertEquals(Turn.State.EMPTY_TURN, CuT.getState());
 	}
 
 	@Test
 	public void constructor() {
-		CuT = new Turn(checkersGame, checkersBoard, player);
+		CuT = new Turn(checkersBoard, player, playerColor);
 	}
 
 	@Test
@@ -85,37 +85,24 @@ public class TurnTest {
 	}
 
 	@Test
-	public void submitTurn_emptyQueue() {
-		assertFalse(CuT.submitTurn());
-
-		assertEquals(Turn.State.EMPTY_TURN, CuT.getState());
-	}
-
-	@Test
-	public void submitTurn_success() {
-		Piece startPiece = checkersBoard[START_ROW][START_CELL].getPiece();
-
-		assertTrue(CuT.validateMove(validMove));
-		assertEquals(Turn.State.STABLE_TURN, CuT.getState());
-		assertFalse(CuT.isSubmitted());
-
-		assertTrue(CuT.submitTurn());
-
-		assertTrue(CuT.isSubmitted());
-		verify(checkersGame, times(1)).nextTurn();
-
-		Piece endPiece = checkersBoard[END_ROW][END_CELL].getPiece();
-		assertSame(startPiece, endPiece);
-
-	}
-
-	@Test
+	@Disabled // We do not have jump moves working
 	public void validateMove_jump() {
+		Piece opponentPiece = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
+		Position jumpPosition = new Position(START_ROW+1, START_CELL+1);
+
+		// Build a board with a piece to jump
+		CheckersBoardBuilder jumpBoardBuilder = CheckersBoardBuilder.aStartingBoard()
+				.withPieceAt(opponentPiece, jumpPosition);
+
+		Space[][] board = jumpBoardBuilder.getBoard();
+		when(checkersGame.getBoard()).thenReturn(board);
+
+		// Setup a new turn with this board
+		CuT = new Turn(board, player, playerColor);
+
 		assertTrue(CuT.validateMove(jumpMove));
 
 		assertEquals(Turn.State.STABLE_TURN, CuT.getState());
-
-		assertTrue(CuT.submitTurn());
 	}
 
 

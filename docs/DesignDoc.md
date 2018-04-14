@@ -3,7 +3,7 @@ geometry: margin=1in
 ---
 # WebCheckers Design Documentation
 
-# Team Information
+### Team Information
 * Team name: (2175) SWEN-261-08-Team-C
 * Team members
   * Ian Flournoy <icf6667@rit.edu>
@@ -26,19 +26,23 @@ The web application for Webcheckers allows players to play checkers with other p
 |------|------------|
 | VO | Value Object |
 
+\pagebreak
 
-## Requirements
+# Requirements
 
 > Players must be able to sign-in to the application and start a game against other players. Using drag-and-drop capabilities, players move pieces down the board, jumping over their opponents, to advance towards winning the game.
 > If players reach their opponent's end of the board, their pieces will be "kinged," giving the piece advanced capabilities to move in any direction on the board.
 > Players have the option to enter Tournament Mode, in which they compete against other players to place in a 1st, 2nd, etc. style ranking system.
 
-### Definition of MVP
+## Definition of MVP
 > Each player must sign-in before playing a game, and be able to sign-out when finished playing.
 > Two players must be able to play a game of checkers based upon the American rules.
 > Either player of a game may choose to resign, at any point, which ends the game.
 
-### MVP Features
+## MVP Features
+
+[TODO]: # Rewrite these features as table, and a short summary of the feature. No need to duplicate full story text here.
+
 > <b>Player Sign-In</b>
 > > As a Player, I want to be able to sign-in so that I can play a game of checkers.
 >
@@ -72,7 +76,7 @@ The web application for Webcheckers allows players to play checkers with other p
 > <b>Resignation</b>
 > > As a Player in an ongoing game I want to be able to forfeit from an ongoing game so that I can return to the lobby.
 
-### Roadmap of Enhancements
+## Roadmap of Enhancements
 > <b>Getting Help</b>
 > > As a Player, I want to have valid next-moves shown to me when I request help so that I can advance in the game.
 >
@@ -85,18 +89,23 @@ The web application for Webcheckers allows players to play checkers with other p
 > > <b>Tournament Scoreboard</b>
 > > > As a competitive Player, I want to be able to view the Tournament Ladder when curious so that I can follow the Tournament.
 
-## Application Domain
+\pagebreak
+
+# Application Domain
 
 Below are the entities involved in the Checkers application domain. In every checkers game there always exists two players who controls pieces that are placed on squares of a board.  There is a logical concept of a "game" between these two players that is modeled in the diagram for cohesion.
 
+[TODO]: # Write more about the application domain to provide good context
+
 ![The WebCheckers Domain Model](domain-model-checkers.png)
 
+\pagebreak
 
-## Architecture
+# Architecture
 
 This section describes the application architecture.
 
-### Summary
+## Summary
 
 The following Tiers/Layers model shows a high-level view of the webapp's architecture.
 
@@ -111,8 +120,7 @@ Controllers are built using the Spark framework and View are built using the Fre
 
 Details of the components within these tiers are supplied below
 
-
-### Overview of User Interface
+## Overview of User Interface
 
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
@@ -121,45 +129,43 @@ with the WebCheckers application.
 
 ![The WebCheckers In-Game Web Interface Statechart](WebCheckers-UI-InGame-State-Behavior.png)
 
-> Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.
 
+## UI Tier
+**Webserver**: This links all the route togethers, so that the Player can travel to different pages.
 
-### UI Tier
-> Webserver: This links all the route togethers, so that the Player can travel to different pages.
-
-> GetClearRoute: Players with the name "admin", not case sensistive, can clear the active games in session.
+**GetClearRoute**: Players with the name "admin", not case sensistive, can clear the active games in session.
 	This route is used for primarly testing.
 
-> GetGameRoute:This route either creates or retrieves a game for the player and their opponent,
+**GetGameRoute**: This route either creates or retrieves a game for the player and their opponent,
 	or it redirects the player to home if they try to start a game with an invalid player or their opponent leaves the game.
 
-> GetHomeRoute: The home route shows the players not signed in a page with a sign-in button that redirects to a sign in page.
+**GetHomeRoute**: The home route shows the players not signed in a page with a sign-in button that redirects to a sign in page.
 	If the player is signed in and not in a game, they are shown a list of players available in the playerLobby, if they 
 	are in a game, then they are redirected to the page to play a game.
 
-> GetSignInRoute:In this route the player is on a page with a button that allows them to sign-in.
+**GetSignInRoute**: In this route the player is on a page with a button that allows them to sign-in.
 
-> GetSignOutRoute: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
+**GetSignOutRoute**: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
 
-> PostBackupMoveRoute: When a player has made a move, but not confirmed their turn, they can backup a previous move. This UI controller handles the interaction with the frontend AJAX request.
+**PostBackupMoveRoute**: When a player has made a move, but not confirmed their turn, they can backup a previous move. This UI controller handles the interaction with the frontend AJAX request.
 
-> PostCheckTurnRoute: On an interval the frontend for both players checks to see if it is their turn. This UI controller gets the game Turn status and returns true/false to the frontend.
+**PostCheckTurnRoute**: On an interval the frontend for both players checks to see if it is their turn. This UI controller gets the game Turn status and returns true/false to the frontend.
 
-> PostResignGameRoute: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
+**PostResignGameRoute**: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
 	are given a "Resign failed" message.
 
-> PostSignInRoute: This route opens up to a page with a Textfield, that the user uses to enter their username. They get an error
+**PostSignInRoute**: This route opens up to a page with a Textfield, that the user uses to enter their username. They get an error
 	message when the name already exists in the PlayerLobby or their are invalid characters. When the name is valid, the
 	player gets sent back to the homepage.
 	
-> PostSubmitTurnRoute: When a player has plotted their moves they can submit their turn. This UI controller interacts with the player's Turn to execute their move.
+**PostSubmitTurnRoute**: When a player has plotted their moves they can submit their turn. This UI controller interacts with the player's Turn to execute their move.
 
-> PostValidateMoveRoute: When a player drags and drops a piece on their board view the validateMove UI controller is called in order to check whether the move is to a valid position.
+**PostValidateMoveRoute**: When a player drags and drops a piece on their board view the validateMove UI controller is called in order to check whether the move is to a valid position.
 
-#### Static models
+### Static models
 > Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
 
-#### Dynamic models
+### Dynamic models
 
 **PostResignGameRoute**
 
@@ -170,11 +176,11 @@ with the WebCheckers application.
 ![PostSignInRoute](sequence-diagrams/PostSignInRoute.png)
 
 
-### Application Tier
+## Application Tier
 > Provide a summary of the Application tier of your architecture.
 > Describe the types of components in the tier and describe their responsibilities.
 
-#### Static models
+### Static models
 
 **BoardViewGen**
 
@@ -184,10 +190,10 @@ with the WebCheckers application.
 
 ![RowGen](static/appl/RowGen.png)
 
-#### Dynamic models
+### Dynamic models
 
 
-### Model Tier
+## Model Tier
 
 > BoardBuilder: Generates a Checkers Board with Board-Row-Space-Piece setup
 
@@ -209,7 +215,7 @@ with the WebCheckers application.
 
 > Turn: Runs a Player's turn, either in state empty turn, stable turn, or turn submitted
 
-#### Static models
+### Static models
 
 **Move**
 
@@ -231,7 +237,7 @@ with the WebCheckers application.
 
 ![Turn](static/model/Turn.png)
 
-#### Dynamic models
+### Dynamic models
 
 **BoardBuilder**
 
@@ -252,3 +258,14 @@ with the WebCheckers application.
 **Turn: Submit**
 
 ![Turn - Submimt](sequence-diagrams/Turn_Submit.png)
+
+\pagebreak
+
+# Logging
+
+|Log level|Function Visibility|Usage|
+|------|--------------|-----------------------------------------------------------------------------------------|
+|INFO|Public/Private|User actions|
+|FINE|Public|Should log at the start, and optionally end, of public methods with the outcome|
+|FINER|Private|Object-level detail once per public method (public or private)|
+|FINEST|Public/Private|When, why, and outcome of logic decisions. Or when multi-line verbose output is required.|

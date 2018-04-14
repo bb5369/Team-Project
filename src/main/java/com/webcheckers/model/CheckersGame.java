@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
+import java.util.logging.Logger;
+
 public class CheckersGame {
+    private static final Logger LOG = Logger.getLogger(CheckersGame.class.getName());
 
     protected enum State {
         IN_PLAY,
@@ -8,39 +11,35 @@ public class CheckersGame {
         RESIGNED
     }
 
-    //instance variables
     private final Player playerRed;
     private final Player playerWhite;
-    private Space[][] matrix;
+    private Space[][] board;
     private Turn activeTurn;
     private State state;
 
-
     /**
      * Parameterized constructor
-     * Creation of a new checkers game between two players
+     * Create a new checkers game between two players
      *
-     * @param playerRed   - Player one
+     * @param playerRed   - Player one, red player, starting player
      * @param playerWhite - Player two
      */
     public CheckersGame(Player playerRed, Player playerWhite) {
+        LOG.info(String.format("I am a new CheckersGame between [%s] and [%s]",
+                playerRed.getName(),
+                playerWhite.getName()));
+
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
         this.state = State.IN_PLAY;
 
-        generateStartingBoard();
+        initStartingBoard();
 
-        this.activeTurn = new Turn(this, matrix, playerRed);
+        this.activeTurn = new Turn(board, playerRed, Piece.Color.RED);
     }
 
-    /**
-     * Space matrix representing a checkers board
-     *
-     * @return - space matrix
-     */
-    public Space[][] getMatrix() {
-        return matrix;
-    }
+
+    // PLAYER INTERFACE
 
     /**
      * Used to access the red player in the game
@@ -72,52 +71,31 @@ public class CheckersGame {
 
     /**
      * Changes the player who is active from red to white or vice versa
+	 * This is a private method that assumes the Turn is over
      */
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
+        Player nextPlayer;
+        Piece.Color nextPlayerColor;
 
-        if (activePlayer.equals(playerRed)) {
-            activeTurn = new Turn(this, matrix, playerWhite);
-
-        } else if (activePlayer.equals(playerWhite)) {
-        	activeTurn = new Turn(this, matrix, playerRed);
-        }
-    }
-
-    /**
-     * Advance the game to the next turn using the new player
-     */
-	 public void nextTurn() {
-        // makes sure Turn is SUBMITTED state
-        // create new turn with other player
-
-        if (activeTurn.isSubmitted()) {
-            changeActivePlayer();
-        }
-    }
-
-
-    /**
-     * Get the active turn from the game
-     * @return - the active turn
-     */
-    public Turn getTurn() {
-	     return activeTurn;
-    }
-
-    public boolean resignGame() {
-
-        if (activeTurn.canResign()) {
-            state = State.RESIGNED;
-
-            return true;
+        // determine who the next player is
+		if (activePlayer.equals(playerWhite)) {
+		    nextPlayer = playerRed;
+		    nextPlayerColor = Piece.Color.RED;
+        } else {
+            nextPlayer = playerWhite;
+            nextPlayerColor = Piece.Color.WHITE;
         }
 
-        return false;
-    }
+        // make sure the next player has moves available
+        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
+            // setup their turn
+            activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
+        } else {
+		    // trigger a win for activePlayer
+            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+        }
 
-    public boolean isResigned() {
-        return state == State.RESIGNED;
     }
 
     /**
@@ -136,11 +114,78 @@ public class CheckersGame {
         }
     }
 
-    public Player getOtherPlayer(Player player){
-        if(player.equals(playerRed))
-            return playerRed;
-        else
-            return playerWhite;
+
+    // BOARD INTERFACE
+
+    /**
+     * Two-dimensional Space array representing a Checkers board
+     *
+     * @return - space board
+     */
+    public Space[][] getBoard() {
+        return board;
+    }
+
+    /**
+     * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
+     */
+    private void initStartingBoard() {
+        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+
+        LOG.finest("Starting board:");
+        LOG.finest(builder.formatBoardString());
+
+        board = builder.getBoard();
+    }
+
+
+    // TURN INTERFACE
+
+    /**
+     * Get the active turn from the game
+     * @return - the active turn
+     */
+    public Turn getTurn() {
+        return activeTurn;
+    }
+
+    /**
+	 * Allow the active player to submit their turn
+     * @param player
+     * @return
+     */
+    public boolean submitTurn(Player player) {
+        if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
+            board = activeTurn.getLatestBoard();
+
+            changeActivePlayer();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Allow the active player to resign the game
+     * @return boolean - if resignation was successful
+     */
+    public boolean resignGame() {
+        if (activeTurn.canResign()) {
+            state = State.RESIGNED;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Indiciates if this game is resigned
+     * @return boolean
+     */
+    public boolean isResigned() {
+        return state == State.RESIGNED;
     }
 
     /**
@@ -149,13 +194,6 @@ public class CheckersGame {
      */
     public State getState() {
         return state;
-    }
-
-    /**
-     * Uses our static BoardBuilder to generate the starting Checkers Board
-     */
-    private void generateStartingBoard() {
-        this.matrix = BoardBuilder.buildBoard();
     }
 
 }

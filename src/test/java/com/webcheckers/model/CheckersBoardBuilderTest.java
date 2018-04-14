@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("Model-tier")
-public class BoardBuilderTest {
+public class CheckersBoardBuilderTest {
 
 	private static Space[][] CheckersBoard;
 
 	@BeforeAll
 	public static void setupTest() {
 
-		CheckersBoard = BoardBuilder.buildBoard();
+		CheckersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
 	}
 
 	@Test
@@ -23,9 +23,9 @@ public class BoardBuilderTest {
 		// Board starts at 0,0 with an invalid space
 		boolean invalid = true;
 
-		for (int row = 0; row < BoardBuilder.rows; row++) {
+		for (int row = 0; row < CheckersBoardBuilder.ROWS; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < CheckersBoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
@@ -48,9 +48,9 @@ public class BoardBuilderTest {
 		// Board starts at 0,0 with an invalid space
 		boolean invalid = true;
 
-		for (int row = 0; row <= BoardBuilder.WHITE_BORDER_INDEX; row++) {
+		for (int row = 0; row <= CheckersBoardBuilder.WHITE_BORDER_INDEX; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < CheckersBoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
@@ -74,9 +74,9 @@ public class BoardBuilderTest {
 		// 5th row starts with a valid Space with Red Piece
 		boolean invalid = false;
 
-		for (int row = BoardBuilder.RED_BORDER_INDEX; row < BoardBuilder.rows; row++) {
+		for (int row = CheckersBoardBuilder.RED_BORDER_INDEX; row < CheckersBoardBuilder.ROWS; row++) {
 
-			for (int cell = 0; cell < BoardBuilder.cells; cell++) {
+			for (int cell = 0; cell < CheckersBoardBuilder.CELLS; cell++) {
 
 				Space space = CheckersBoard[row][cell];
 
