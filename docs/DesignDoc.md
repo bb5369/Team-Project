@@ -196,37 +196,42 @@ In the figure below we see the sequence of actions taken when a player wishes to
 \pagebreak
 
 
-> Turn: Runs a Player's turn, either in state empty turn, stable turn, or turn submitted
+## Application Tier
 
+The application tier is made up of [GRASP controller](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)#Controller) components that handle server-wide interactions players have with the application.
+
+The two main controllers are `GameManager` and `PlayerLobby`. This tier also contains `BoardViewGen` and `RowGen` components that will be detailed later on.
+
+#### GameManager
+GameManager's primary focus is to centralized the logic of setting up a Checkers Game, finding an active game, resigning a game. In short this controller is responsible for managing player interactions with a Checkers Game.
+
+#### PlayerLobby
+PlayerLobby manages player interactions with the home page. It provides functionality to validate a new player's name, as well as lookup players after they are signed in.
+
+#### BoardViewGen and RowGen
+These generators present to the Client UI a view of a checkers board in the way it expects. Internally we represent the checkers board in a more efficient manner, but the Client UI expects the board according to the GameView Board Model (shown below in static models).
+    
 ### Static models
 
-**Move**
+#### Ideas for static models in application tier
+* BoardViewGen and RowGen relationship
+* GameManager -> CheckersGame, Turn relationship
+* PlayerLobby -> Player relationship
 
-![Move](static/model/Move.png)
-
-**MoveValidator**
-
-![MoveValidator](static/model/MoveValidator.png)
-
-**Piece**
-
-![Piece](static/model/Piece.png)
-
-**Space**
-
-![Space](static/model/Space.png)
-
-**Turn**
-
-![Turn](static/model/Turn.png)
+#### GameView Board Model
+\ ![GameView Board Model](static/appl/GameView Board model.png)
 
 ### Dynamic models
 
-**BoardBuilder**
+#### Ideas for dynamic models in the application tier
+* Building the BoardView
+* Setting up a new game between two players
+* Getting an existing game
+* Resigning a game (kinda covered in UI seq diagram for resign)
+* Getting the turn state
 
-![BoardBuilder](sequence-diagrams/BoardBuilder.png)
+\pagebreak
 
-**Turn: Backup Move**
 
 ![Turn - backup move](sequence-diagrams/Turn_BackupMove.png)
 
