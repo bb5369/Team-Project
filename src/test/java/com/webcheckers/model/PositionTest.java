@@ -44,8 +44,12 @@ public class PositionTest {
 		String expected = new String("RowGen: 1 Column: 2");
 
 		assertEquals(expected, CuT.toString());
-
-
 	}
 
+	@Test
+	public void testMidPositon(){
+		Move test = new Move(new Position(0,0), new Position(2, 2));
+		Position mid = new Position(1,1);
+		assertEquals(mid, Position.midPosition(test.getEnd(), test.getStart()));
+	}
 }

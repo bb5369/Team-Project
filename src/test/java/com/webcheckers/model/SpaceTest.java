@@ -224,5 +224,5 @@ public class SpaceTest {
 		Space clone = toClone.clone();
 		assertEquals(toClone, clone);
 	}
-
+	//TODO: Add testing for removing a jump piece
 }

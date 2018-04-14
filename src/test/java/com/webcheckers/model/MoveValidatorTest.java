@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -76,5 +76,20 @@ public class MoveValidatorTest {
 		// Tests against a starting board
 		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
 		// TODO: Test on a board set up with no moves
+	}
+
+	@Test
+	@Disabled
+	public void test_jumpMove(){
+		Move testJump;
+		// assertTrue(MoveValidator.validateMove(board, testJump));
+		// TODO: Test on a board set up with a jump move
+	}
+
+	@Test
+	public void test_forcedJump(){
+		//doesn't have to be a valid move, as long as the start position has a piece on it
+		Move move = new Move(new Position(0,0), new Position(2, 2));
+		assertFalse(MoveValidator.forcedJump(board, move));
 	}
 }
