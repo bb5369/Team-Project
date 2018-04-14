@@ -130,6 +130,7 @@ This section describes the web interface flow; this is how the user views and in
 
 \pagebreak
 
+
 ## UI Tier
 
 #### WebServer
@@ -162,41 +163,38 @@ Within the UI tier the controllers can be separated into two categories:
 |`PostSubmitTurnRoute` | **none**        | `Message`|
 |`PostValidateMoveRoute` | `Move`        | `Message`|
 
-
 \pagebreak
 
 ### Static models
 
-**BoardViewGen**
+#### Ideas for models
+* Relationship between `WebServer` and controllers
+* Relationship between `WebServer` and parent `Application` component (how things are created in Application injected into WebServer)
 
-![BoardViewGen](static/appl/BoardViewGen.png)
-
-**RowGen**
-
-![RowGen](static/appl/RowGen.png)
+\pagebreak
 
 ### Dynamic models
 
+#### Ideas for dynamic models in the UI tier from Professor's comments
+* GetHomeRoute - Interaction with PlayerLobby
+* GetSignOutRoute - Interaction with PlayerLobby and GameManager
+* PostCheckTurnRoute - interaction with GameManager/CheckersGame/Turn
+* PostSignInRoute - How does it determine a name is already taken?
+* PostSubmitTurnRoute - Interaction with Player's turn to execute move
+* PostValidateMoveRoute - Interaction with Board View, move validation
 
-## Model Tier
+#### Player Resignation
 
-> BoardBuilder: Generates a Checkers Board with Board-Row-Space-Piece setup
+In the figure below we see the sequence of actions taken when a player wishes to resign from a game.
 
-> CheckersGame: Creates a CheckersGame between two Players
+\ ![Player Resignation Sequence Diagram](sequence-diagrams/PostResignGameRoute.png)
 
-> Message: Passes a text message of either type info or error
+#### Player Sign-In
 
-> Move: Two positions, a start and an end, that a Piece is being moved to and from
+\ ![Player Sign-In Sequence Diagram](sequence-diagrams/PostSignInRoute.png)
 
-> MoveValidator: Validates that a move being made is a valid one by checking that the piece is moving in the proper direction, and to an unoccupied valid space.
+\pagebreak
 
-> Piece: Represents a checkers piece
-
-> Player: Plays the game
-
-> Position: A set of coordinates on the board; a location
-
-> Space: Within a row, can contain a piece and is in state invalid, open, or occupied
 
 > Turn: Runs a Player's turn, either in state empty turn, stable turn, or turn submitted
 
