@@ -101,6 +101,25 @@ public class MoveValidator {
     }
 
     /**
+     * Determines whether or not the given player has any pieces on the board
+     *
+     * @return - true if the player has pieces, false otherwise
+     */
+    public static boolean playerHasPieces(Space[][] board, Player player, Piece.Color color){
+        // for each row
+        for(int i = 0; i < 8; i++) {
+            // for each cell
+            for (int j = 0; j < 8; j++) {
+
+                if (board[i][j].isOccupied() && board[i][j].getPiece().getColor() == color) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Logs the move as a pair of coordinates
      *
      * @param move - Move being made

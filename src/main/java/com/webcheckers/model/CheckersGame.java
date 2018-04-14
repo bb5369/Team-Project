@@ -153,6 +153,12 @@ public class CheckersGame {
                 );
                 break;
 
+            case "noPieces":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(1, 0)
+                );
+
             default:
                 // I don't actually have a public method to place starting pieces.. otherwise that woudl go here
         }
@@ -184,24 +190,30 @@ public class CheckersGame {
         if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
             board = activeTurn.getLatestBoard();
 
-            if(!MoveValidator.areMovesAvailableForPlayer(board, getPlayerActive(), getPlayerColor(getPlayerActive()))) {
-                Player otherPlayer;
-                if(getPlayerColor(getPlayerActive()) == getPlayerColor(playerRed))
-                    otherPlayer = playerWhite;
-                else
-                    otherPlayer = playerRed;
-                LOG.info(String.format("%s has no more moves. Sad! %s wins.", getPlayerActive().getName(), otherPlayer.getName()));
-                this.winner = otherPlayer;
-                this.loser = getPlayerActive();
-                this.state = State.WON;
-            }
-
             changeActivePlayer();
+
+            winCases();
 
             return true;
         }
 
         return false;
+    }
+
+    public void winCases(){
+        Player inactivePlayer;
+        if(getPlayerColor(getPlayerActive()) == getPlayerColor(playerRed))
+            inactivePlayer = playerWhite;
+        else
+            inactivePlayer = playerRed;
+        // If activePlayer has no moves or pieces left, they lose
+        if(!MoveValidator.areMovesAvailableForPlayer(board, getPlayerActive(), getPlayerColor(getPlayerActive())) ||
+                !MoveValidator.playerHasPieces(board, getPlayerActive(), getPlayerColor(getPlayerActive()))) {
+            LOG.info(String.format("%s has no more moves. Sad! %s wins.", getPlayerActive().getName(), inactivePlayer.getName()));
+            this.winner = inactivePlayer;
+            this.loser = getPlayerActive();
+            this.state = State.WON;
+        }
     }
 
     /**

@@ -28,7 +28,7 @@ public class PostCheckTurnRoute implements Route {
     private final String RESIGNED_NOTIFICATION_STRING = "The other player has resigned! <a href='/'>return to lobby</a>.";
 	private final String GAME_ENDED_STRING = "The game has ended! <a href='/'>return to lobby</a>.";
     private final String WON_GAME_NOTIFICATION_APPEND = " has won the game. <a href='/'>return to lobby</a>.";
-    private final String thisPlayerWon = "true";
+    private final String gameWon = "true";
 
 
     /**
@@ -76,7 +76,7 @@ public class PostCheckTurnRoute implements Route {
 
             request.session().attribute("message", new Message(WON_GAME_NOTIFICATION_STRING, Message.MessageType.info));
 
-            return formatMessageJson(thisPlayerWon);
+            return formatMessageJson(gameWon);
 
         } else if (currentPlayer.equals(game.getPlayerActive())) {
             return formatMessageJson(thisPlayersTurn);
