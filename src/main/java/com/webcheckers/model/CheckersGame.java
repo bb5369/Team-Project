@@ -89,18 +89,7 @@ public class CheckersGame {
             nextPlayerColor = Piece.Color.WHITE;
         }
 
-        // make sure the next player has moves available
-        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
-            // setup their turn
-            activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
-        } else {
-		    // trigger a win for activePlayer
-            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
-            this.state = State.WON;
-            this.winner = activePlayer;
-            this.loser = nextPlayer;
-        }
-
+        activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
     }
 
     /**
@@ -135,13 +124,6 @@ public class CheckersGame {
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void initStartingBoard() {
-//        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
-//
-//        LOG.finest("Starting board:");
-//        LOG.finest(builder.formatBoardString());
-//
-//        board = builder.getBoard();
-
         CheckersBoardBuilder builder = CheckersBoardBuilder.aBoard();
 
         switch (playerRed.getName()) {
@@ -203,12 +185,15 @@ public class CheckersGame {
             board = activeTurn.getLatestBoard();
 
             if(!MoveValidator.areMovesAvailableForPlayer(board, getPlayerActive(), getPlayerColor(getPlayerActive()))) {
-                this.winner = getPlayerActive();
-                this.state = State.WON;
-                if(getPlayerColor(winner) == getPlayerColor(playerRed))
-                    this.loser = playerWhite;
+                Player otherPlayer;
+                if(getPlayerColor(getPlayerActive()) == getPlayerColor(playerRed))
+                    otherPlayer = playerWhite;
                 else
-                    this.loser = playerRed;
+                    otherPlayer = playerRed;
+                LOG.info(String.format("%s has no more moves. Sad! %s wins.", getPlayerActive().getName(), otherPlayer.getName()));
+                this.winner = otherPlayer;
+                this.loser = getPlayerActive();
+                this.state = State.WON;
             }
 
             changeActivePlayer();
@@ -217,10 +202,6 @@ public class CheckersGame {
         }
 
         return false;
-    }
-
-    public void checkWinStatus(){
-
     }
 
     /**
