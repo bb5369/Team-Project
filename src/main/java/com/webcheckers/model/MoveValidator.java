@@ -237,48 +237,65 @@ public class MoveValidator {
         Piece piece = getSpace(board, move.getStart()).getPiece();
         for (int row = 0; row < board.length; row++) {
             for (int cell = 0; cell < board[row].length; cell++) {
-                Space cur = board[row][cell];
-                if (cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())) {
-                    Move test = move;
-                    Position start = new Position(row, cell);
-                    if (cell + 2 < board[row].length) {
-                        if (row + 2 < board.length) {
-                            test = new Move(start, new Position(row + 2, cell + 2));
-                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                            //test.setPlayer(new Player(move.getPlayerName()));
-                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                return true;
-                        }
-                        if (row - 2 >= 0) {
-                            test = new Move(start, new Position(row - 2, cell + 2));
-                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                            //test.setPlayer(new Player(move.getPlayerName()));
-                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                return true;
-                        }
-                    }
-                    if (cell - 2 >= 0) {
-                        if (row + 2 < board.length) {
-                            test = new Move(start, new Position(row + 2, cell - 2));
-                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                            //test.setPlayer(new Player(move.getPlayerName()));
-                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                return true;
-                        }
-                        if (row - 2 >= 0) {
-                            test = new Move(start, new Position(row - 2, cell - 2));
-                            test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
-                            //test.setPlayer(new Player(move.getPlayerName()));
-                            if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
-                                return true;
-                            }
-                    }
+                if (canJump(board, row, cell, piece))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    //Called after a move is made, so the starting postion should be the ending row and cell
+    public static boolean isJumpMove(Space[][]board, Move move){
+        int row = move.getEndRow();
+        int cell = move.getEndCell();
+        Piece piece = getSpace(board, move.getStart()).getPiece();
+        if (canJump(board, row, cell, piece))
+            return true;
+        return false;
+    }
+
+    private static boolean canJump(Space[][] board, int row, int cell, Piece piece) {
+        Space cur = board[row][cell];
+        if (cur.isOccupied() && piece.getColor().equals(cur.getPiece().getColor())) {
+            Move test;
+            Position start = new Position(row, cell);
+            if (cell + 2 < board[row].length) {
+                if (row + 2 < board.length) {
+                    test = new Move(start, new Position(row + 2, cell + 2));
+                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                        return true;
+                }
+                if (row - 2 >= 0) {
+                    test = new Move(start, new Position(row - 2, cell + 2));
+                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                        return true;
+                }
+            }
+            if (cell - 2 >= 0) {
+                if (row + 2 < board.length) {
+                    test = new Move(start, new Position(row + 2, cell - 2));
+                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                        return true;
+                }
+                if (row - 2 >= 0) {
+                    test = new Move(start, new Position(row - 2, cell - 2));
+                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                        return true;
                 }
             }
         }
         return false;
     }
-        /**
+
+    /**
          * Board lookup convenience method - given a position it will return the enumerated state
          *
          * @param pos - end position of the move

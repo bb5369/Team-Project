@@ -55,7 +55,8 @@ public class PostSubmitTurnRoute implements Route {
             return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));
 
         } else {
-
+            if(!game.getTurn().mulitJumpDone())
+                return (new Gson()).toJson(new Message("You have to continue the multi-jump", Message.MessageType.error));
             return (new Gson()).toJson(new Message("No move has been made", Message.MessageType.error));
         }
     }
