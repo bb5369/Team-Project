@@ -120,63 +120,50 @@ Details of the components within these tiers are supplied below
 
 ## Overview of User Interface
 
-This section describes the web interface flow; this is how the user views and interacts
-with the WebCheckers application.
+This section describes the web interface flow; this is how the user views and interacts with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](WebCheckers-UI-State-Behavior.png)
+[TODO]: # Include a narrative of the state charts below
 
-![The WebCheckers In-Game Web Interface Statechart](WebCheckers-UI-InGame-State-Behavior.png)
+\ ![The WebCheckers Web Interface Statechart](WebCheckers-UI-State-Behavior.png)
 
+\ ![The WebCheckers In-Game Web Interface Statechart](WebCheckers-UI-InGame-State-Behavior.png)
+
+\pagebreak
 
 ## UI Tier
-**Webserver**: This links all the route togethers, so that the Player can travel to different pages.
 
-**GetClearRoute**: Players with the name "admin", not case sensistive, can clear the active games in session.
-	This route is used for primarly testing.
+#### WebServer
+The WebServer component is responsible for mapping HTTP Verbs and Routes to the Controller responsible for handling the interaction. 
 
-**GetGameRoute**: This route either creates or retrieves a game for the player and their opponent,
-	or it redirects the player to home if they try to start a game with an invalid player or their opponent leaves the game.
+An example of this looks like this:
 
-**GetHomeRoute**: The home route shows the players not signed in a page with a sign-in button that redirects to a sign in page.
-	If the player is signed in and not in a game, they are shown a list of players available in the playerLobby, if they 
-	are in a game, then they are redirected to the page to play a game.
+> `POST /signin` is handled by the controller `PostSignInRoute`
 
-**GetSignInRoute**: In this route the player is on a page with a button that allows them to sign-in.
+Within the UI tier the controllers can be separated into two categories:
 
-**GetSignOutRoute**: When a Player selects the sign-out button either in the Player Lobby or in a game, GetSignOutRoute will remove the Player from both the Lobby and the session, removes the game from the list of active games in Game Manager, and redirects the signed out Player back to the home page.
+1. Controllers that return a rendered ViewModel, or redirect to another controller
+2. Controllers that handle AJAX requests and return a JSON POJO to the Client UI's JavaScript handler. These controllers are mostly used during game-play to handle move and turn logic.
+   
+#### 1. Controllers returning a rendered ViewModel template
+|Controller Name|FreeMarker Template|Function|
+|---------------|-------------------|------------------------------------------|
+|`GetGameRoute`   |`game.ftl`       | Setup and display a Checkers Game|
+|`GetHomeRoute`   |`home.ftl`       | Display the landing page and Player Lobby|
+|`GetSignInRoute` |`signin.ftl`     | Display sign-in form|
+|`PostSignInRoute`| **redirect**    | Redirect when successful login|
+|`GetSignOutRoute`|**redirect**     | Handle signout action|
 
-**PostBackupMoveRoute**: When a player has made a move, but not confirmed their turn, they can backup a previous move. This UI controller handles the interaction with the frontend AJAX request.
-
-**PostCheckTurnRoute**: On an interval the frontend for both players checks to see if it is their turn. This UI controller gets the game Turn status and returns true/false to the frontend.
-
-**PostResignGameRoute**: When a Player selects the resign button, if the player is in WAITING_FOR_TURN state or EMPTY_TURN state, they are resigned from a game, if not, then they
-	are given a "Resign failed" message.
-
-**PostSignInRoute**: This route opens up to a page with a Textfield, that the user uses to enter their username. They get an error
-	message when the name already exists in the PlayerLobby or their are invalid characters. When the name is valid, the
-	player gets sent back to the homepage.
-	
-**PostSubmitTurnRoute**: When a player has plotted their moves they can submit their turn. This UI controller interacts with the player's Turn to execute their move.
-
-**PostValidateMoveRoute**: When a player drags and drops a piece on their board view the validateMove UI controller is called in order to check whether the move is to a valid position.
-
-### Static models
-> Provide one or more static models (UML class or object diagrams) with some details such as critical attributes and methods.
-
-### Dynamic models
-
-**PostResignGameRoute**
-
-![PostResignGameRoute](sequence-diagrams/PostResignGameRoute.png)
-
-**PostSignInRoute**
-
-![PostSignInRoute](sequence-diagrams/PostSignInRoute.png)
+#### 2. AJAX contollers
+|Controller Name       |Request Data     |Response Data|
+|----------------------|-----------------|-------------|
+|`PostBackupMoveRoute` | **none**        | `Message`|
+|`PostCheckTurnRoute`  | **none**        | `Message`|
+|`PostResignGameRoute` | **none**        | `Message`|
+|`PostSubmitTurnRoute` | **none**        | `Message`|
+|`PostValidateMoveRoute` | `Move`        | `Message`|
 
 
-## Application Tier
-> Provide a summary of the Application tier of your architecture.
-> Describe the types of components in the tier and describe their responsibilities.
+\pagebreak
 
 ### Static models
 
