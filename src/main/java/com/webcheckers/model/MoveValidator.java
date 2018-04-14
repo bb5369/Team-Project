@@ -210,24 +210,24 @@ public class MoveValidator {
                     if(cell + 2 < matrix[row].length) {
                         if(row + 2 < matrix.length) {
                             test = new Move(start, new Position(row + 2, cell + 2));
-                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                            if (isMoveJump(test) && isEndSpaceOpen(test) && isMoveInRightDirection(test))
                                 return true;
                         }
-                        if(row - 2 > 0) {
+                        if(row - 2 >= 0) {
                             test = new Move(start, new Position(row - 2, cell + 2));
-                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                            if (isMoveJump(test) && isEndSpaceOpen(test) && isMoveInRightDirection(test))
                                 return true;
                         }
                     }
-                    if(cell - 2 > 0) {
+                    if(cell - 2 >= 0) {
                         if(row + 2 < matrix.length) {
                             test = new Move(start, new Position(row + 2, cell - 2));
-                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                            if (isMoveJump(test) && isEndSpaceOpen(test) && isMoveInRightDirection(test))
                                 return true;
                         }
-                        if(row - 2 > 0) {
+                        if(row - 2 >= 0) {
                             test = new Move(start, new Position(row - 2, cell - 2));
-                            if (isMoveJump(test) && isEndSpaceOpen(move))
+                            if (isMoveJump(test) && isEndSpaceOpen(test) && isMoveInRightDirection(test))
                                 return true;
                         }
                     }
