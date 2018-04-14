@@ -135,7 +135,46 @@ public class CheckersGame {
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void initStartingBoard() {
-        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+//        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+//
+//        LOG.finest("Starting board:");
+//        LOG.finest(builder.formatBoardString());
+//
+//        board = builder.getBoard();
+
+        CheckersBoardBuilder builder = CheckersBoardBuilder.aBoard();
+
+        switch (playerRed.getName()) {
+            case "noMoreMoves":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 0)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 2)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(0, 3)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(3, 0)
+                );
+                break;
+
+            case "endgame":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 0)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(2, 1)
+                );
+                break;
+
+            default:
+                // I don't actually have a public method to place starting pieces.. otherwise that woudl go here
+        }
+
 
         LOG.finest("Starting board:");
         LOG.finest(builder.formatBoardString());
@@ -163,12 +202,25 @@ public class CheckersGame {
         if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
             board = activeTurn.getLatestBoard();
 
+            if(!MoveValidator.areMovesAvailableForPlayer(board, getPlayerActive(), getPlayerColor(getPlayerActive()))) {
+                this.winner = getPlayerActive();
+                this.state = State.WON;
+                if(getPlayerColor(winner) == getPlayerColor(playerRed))
+                    this.loser = playerWhite;
+                else
+                    this.loser = playerRed;
+            }
+
             changeActivePlayer();
 
             return true;
         }
 
         return false;
+    }
+
+    public void checkWinStatus(){
+
     }
 
     /**

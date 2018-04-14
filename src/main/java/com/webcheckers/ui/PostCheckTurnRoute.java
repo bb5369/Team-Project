@@ -27,10 +27,8 @@ public class PostCheckTurnRoute implements Route {
     private final String otherPlayersTurn = "false";
     private final String RESIGNED_NOTIFICATION_STRING = "The other player has resigned! <a href='/'>return to lobby</a>.";
 	private final String GAME_ENDED_STRING = "The game has ended! <a href='/'>return to lobby</a>.";
-    private final String WON_GAME_NOTIFICATION_STRING = "You have won the game! <a href='/'>return to lobby</a>.";
-    private final String LOST_GAME_NOTIFICATION_STRING = "You have lost the game. :( <a href='/'>return to lobby</a>.";
+    private final String WON_GAME_NOTIFICATION_APPEND = " has won the game. <a href='/'>return to lobby</a>.";
     private final String thisPlayerWon = "true";
-    private final String thisPlayerLost = "false";
 
 
     /**
@@ -74,18 +72,11 @@ public class PostCheckTurnRoute implements Route {
 	        return formatMessageJson(opponentResigned);
 
         } else if(game.isWon()) {
-            if(currentPlayer == game.getWinner()) {
-                request.session().attribute("message", new Message(WON_GAME_NOTIFICATION_STRING, Message.MessageType.info));
+            String WON_GAME_NOTIFICATION_STRING = game.getWinner().getName() + WON_GAME_NOTIFICATION_APPEND;
 
-                return formatMessageJson(thisPlayerWon);
+            request.session().attribute("message", new Message(WON_GAME_NOTIFICATION_STRING, Message.MessageType.info));
 
-            }else {
-                request.session().attribute("message", new Message(LOST_GAME_NOTIFICATION_STRING, Message.MessageType.info));
-
-                return formatMessageJson(thisPlayerLost);
-
-            }
-
+            return formatMessageJson(thisPlayerWon);
 
         } else if (currentPlayer.equals(game.getPlayerActive())) {
             return formatMessageJson(thisPlayersTurn);

@@ -186,7 +186,7 @@ public class GetGameRoute implements Route {
 
         // This is a really bad place to put something as important as this
 	    // Now that we've rendered the game for the final time, get rid of it!
-        if (game.isResigned() || game.isWon()) {
+        if (game.isResigned()) {
             gameManager.clearGame(sessionPlayer);
         }
 
