@@ -237,11 +237,15 @@ public class MoveValidator {
                         if (cell + 2 < board[row].length) {
                             if (row + 2 < board.length) {
                                 test = new Move(start, new Position(row + 2, cell + 2));
+                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                                //test.setPlayer(new Player(move.getPlayerName()));
                                 if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
                                     return true;
                             }
                             if (row - 2 >= 0) {
                                 test = new Move(start, new Position(row - 2, cell + 2));
+                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                                //test.setPlayer(new Player(move.getPlayerName()));
                                 if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
                                     return true;
                             }
@@ -249,11 +253,15 @@ public class MoveValidator {
                         if (cell - 2 >= 0) {
                             if (row + 2 < board.length) {
                                 test = new Move(start, new Position(row + 2, cell - 2));
+                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                                //test.setPlayer(new Player(move.getPlayerName()));
                                 if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
                                     return true;
                             }
                             if (row - 2 >= 0) {
                                 test = new Move(start, new Position(row - 2, cell - 2));
+                                test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                                //test.setPlayer(new Player(move.getPlayerName()));
                                 if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
                                     return true;
                             }
