@@ -25,7 +25,7 @@ public class CheckersGame {
      * @param playerWhite - Player two
      */
     public CheckersGame(Player playerRed, Player playerWhite) {
-        LOG.fine(String.format("I am a new CheckersGame between [%s] and [%s]",
+        LOG.info(String.format("I am a new CheckersGame between [%s] and [%s]",
                 playerRed.getName(),
                 playerWhite.getName()));
 
@@ -35,7 +35,7 @@ public class CheckersGame {
 
         initStartingBoard();
 
-        this.activeTurn = new Turn(this, board, playerRed);
+        this.activeTurn = new Turn(board, playerRed, Piece.Color.RED);
     }
 
 
@@ -71,16 +71,31 @@ public class CheckersGame {
 
     /**
      * Changes the player who is active from red to white or vice versa
+	 * This is a private method that assumes the Turn is over
      */
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
+        Player nextPlayer;
+        Piece.Color nextPlayerColor;
 
-        if (activePlayer.equals(playerRed)) {
-            activeTurn = new Turn(this, board, playerWhite);
-
-        } else if (activePlayer.equals(playerWhite)) {
-            activeTurn = new Turn(this, board, playerRed);
+        // determine who the next player is
+		if (activePlayer.equals(playerWhite)) {
+		    nextPlayer = playerRed;
+		    nextPlayerColor = Piece.Color.RED;
+        } else {
+            nextPlayer = playerWhite;
+            nextPlayerColor = Piece.Color.WHITE;
         }
+
+        // make sure the next player has moves available
+        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
+            // setup their turn
+            activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
+        } else {
+		    // trigger a win for activePlayer
+            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+        }
+
     }
 
     /**
@@ -117,8 +132,8 @@ public class CheckersGame {
     private void initStartingBoard() {
         CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
 
-        LOG.fine("Starting board:");
-        LOG.fine(builder.formatBoardString());
+        LOG.finest("Starting board:");
+        LOG.finest(builder.formatBoardString());
 
         board = builder.getBoard();
     }
@@ -141,7 +156,7 @@ public class CheckersGame {
      */
     public boolean submitTurn(Player player) {
         if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
-            board = activeTurn.getFinalBoard();
+            board = activeTurn.getLatestBoard();
 
             changeActivePlayer();
 

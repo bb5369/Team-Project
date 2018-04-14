@@ -42,6 +42,16 @@ public class Position {
     }
 
     /**
+     * Determines whether or not the position is on the board
+     *
+     * @return - true if the end position of the move is on the board, false otherwise
+     */
+    public boolean isOnBoard(){
+    	return (row >= 0 && row < CheckersBoardBuilder.ROWS) &&
+                (cell >= 0 && row < CheckersBoardBuilder.CELLS);
+    }
+
+    /**
      * This method returns the y coordinate of the position
      *
      * @return - y coordinate of the position

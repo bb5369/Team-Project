@@ -15,11 +15,7 @@ public class MoveValidatorTest {
 	private static final String RED_PLAYER_NAME = "redPlayer";
 	private static final String WHITE_PLAYER_NAME = "whitePlayer";
 
-	private static CheckersGame game;
 	private static Player player;
-	private static Piece piece;
-
-	private static MoveValidator moveValidator;
 
 	private static CheckersBoardBuilder boardBuilder;
 
@@ -29,22 +25,9 @@ public class MoveValidatorTest {
 	public static void testSetup() {
 
 		// Build dependent objects
-		player = new Player(RED_PLAYER_NAME);
-		piece = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
+		player = new Player(WHITE_PLAYER_NAME);
 
-
-		// Mock dependents
-		game = mock(CheckersGame.class);
-
-		boardBuilder = CheckersBoardBuilder.aBoard();
-
-
-		// Setup behaviors
-		when(game.getBoard()).thenReturn(boardBuilder.getBoard());
-		when(game.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
-
-
-		moveValidator = new MoveValidator(player, Piece.Color.WHITE);
+		boardBuilder = CheckersBoardBuilder.aStartingBoard();
 	}
 
 	@Test
@@ -53,10 +36,12 @@ public class MoveValidatorTest {
 
 		Move diagonalMove = new Move(
 				new Position(2,1),
-				new Position(3,0)
+				new Position(3,0),
+				player,
+				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(board, diagonalMove));
+		assertTrue(MoveValidator.validateMove(board, diagonalMove));
 	}
 
 	@Test
@@ -73,13 +58,23 @@ public class MoveValidatorTest {
 
 		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
-		when(game.getBoard()).thenReturn(boardWithKing);
 
 		Move kingMoveBackwards = new Move(
 				kingPosition,
-				new Position(3, 2)
+				new Position(3, 2),
+				player,
+				Piece.Color.WHITE
 		);
 
-		assertTrue(moveValidator.validateMove(board, kingMoveBackwards));
+		assertTrue(MoveValidator.validateMove(board, kingMoveBackwards));
+	}
+
+	@Test
+	@Disabled
+	public void test_areMovesAvailable(){
+		Piece.Color color = Piece.Color.WHITE;
+		// Tests against a starting board
+		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
+		// TODO: Test on a board set up with no moves
 	}
 }

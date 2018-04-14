@@ -3,89 +3,135 @@ package com.webcheckers.model;
 import java.util.logging.Logger;
 
 /**
- * Move validator controller consumes a CheckersGame, Move, and Player
- * and determines if the Move is a valid one
+ * Move validation requires several things:
+ * - a board to validate the move against
+ * - a player, and the color of their pieces
+ * - the move to validate
+ *
+ * Move validation has two modes of operation:
+ * 1. Given a board and a move (start, end, player, color) - It will determine if the move is valid on the board
+ *
+ * 2. Given a board and a player color it will determine if that player has any moves available
+ *
  */
 public class MoveValidator {
 
     private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
-
-    private Player player;
-    private Piece.Color playerColor;
-
-
-    /**
-     * MoveValidator constructor for seeding info needed for the algorithm
-     *
-     * @param color  - active player's color
-     * @param player - Player whose turn it is
-     */
-    public MoveValidator(Player player, Piece.Color color) {
-
-        this.player = player;
-        this.playerColor = color;
-
-        LOG.fine(String.format("MoveValidator initialized for Player [%s]", player.getName()));
-    }
 
     /**
      * Entrypoint to move validation algorithm - kicks off the process
      *
      * @return - true if the move is valid
      */
-    public boolean validateMove(Space[][] matrix, Move move) {
+    public static boolean validateMove(Space[][] board, Move move) {
 
-        LOG.fine(String.format("Validating move for Player [%s]", player.getName()));
+        LOG.fine(String.format("Validating move for Player [%s]", move.getPlayerName()));
 
         logMoveCoordinates(move);
-        logMoveStates(matrix, move);
 
-        return validateMoveByStep(matrix, move);
+        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        logMove(board, move);
+
+        boolean isMoveValidOnBoard = move.isValid() &&
+									isMoveInRightDirection(board, move) &&
+									isEndSpaceOpen(board, move) &&
+									(move.isSingleSpace() || isMoveJumpingAPiece(board, move)) &&
+                                    areWeMovingMyPiece(board, move);
+
+        LOG.fine(String.format("Move validity has been determined to be %s", isMoveValidOnBoard));
+
+        return isMoveValidOnBoard;
     }
 
     /**
-     * Facade of move validation steps
+     * Checks to see if there are any available moves for the player color
      *
-     * @return - boolean if the given move is a valid one or not
+     * @return true if there are available moves, false otherwise
      */
-    private boolean validateMoveByStep(Space[][] matrix, Move move) {
+    public static boolean areMovesAvailableForPlayer(Space[][] board, Player player, Piece.Color color){
+        boolean movesLeft = false;
 
-        return isMoveDiagonal(move) &&
-                (isMoveSingleSpace(move) || isMoveJump(move)) &&
-                isMoveInRightDirection(matrix, move) &&
-                isEndSpaceOpen(matrix, move);
+        LOG.fine(String.format("Determining if %s player has any moves left", color));
+
+        boardWalk: {
+            // for each row
+            for(int i = 0; i < 8; i++){
+                // for each cell
+                for(int j = 0; j < 8; j++){
+
+                    if(board[i][j].isOccupied() && board[i][j].getPiece().getColor() == color){
+                        Position currentPos = new Position(i, j);
+
+                        Move checkMove;
+
+                        for(int row = -1; row < 2; row += 2){
+
+                            for(int col = -1; col < 2; col += 2){
+
+                                int destRow = i + row;
+                                int destCell = j + col;
+
+                                if (destRow < 0 || destCell < 0)
+                                    continue;
+
+                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
+                                    continue;
+
+                                Position place = new Position(destRow, destCell);
+                                checkMove = new Move(currentPos, place, player, color);
+
+                                if(validateMove(board, checkMove)) {
+                                    LOG.finest(String.format("Found a valid move! %s", checkMove.toString()));
+                                    movesLeft = true;
+                                    break boardWalk;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        String condition = (movesLeft) ? "has" : "does not have";
+
+        LOG.fine(String.format("%s Player %s moves left", color, condition));
+
+        return movesLeft;
     }
-
 
     /**
      * Logs the move as a pair of coordinates
      *
      * @param move - Move being made
      */
-    private void logMoveCoordinates(Move move) {
-        // "RED Player [username] wants to move from <0,1> to <1,2>"
-        LOG.finest(String.format("%s Player [%s] wants to move from %s",
-                playerColor,
-                player.getName(),
+    private static void logMoveCoordinates(Move move) {
+        LOG.finer(String.format("%s Player [%s] wants to move from %s",
+                move.getPieceColor(),
+                move.getPlayerName(),
                 move.toString()));
     }
 
     /**
      * Logs the current state of affairs at the two spaces involved in the move
      */
-    private void logMoveStates(Space[][] matrix, Move move) {
+    private static void logMove(Space[][] matrix, Move move) {
         Space startSpace = getSpace(matrix, move.getStart());
         Space endSpace = getSpace(matrix, move.getEnd());
 
-        LOG.finest(String.format("Starting position state is [%s]", startSpace.getState()));
+        LOG.finest(String.format("Starting position state is [%s] by a %s Piece", startSpace.getState(),
+                startSpace.getPiece().getColor()));
         LOG.finest(String.format("End position state is [%s]", endSpace.getState()));
 
+
+        // I'm so sorry. This is to assist debugging hell
+        LOG.finest(String.format("Validate move.isValid() - %s", move.isValid()));
+        LOG.finest(String.format("Validate     └─ start.isOnBoard() -  %s", move.getStart().isOnBoard()));
+        LOG.finest(String.format("Validate     └─ end.isOnBoard() -  %s", move.getEnd().isOnBoard()));
+        LOG.finest(String.format("Validate     └─ isSingleSpace() -  %s", move.isSingleSpace()));
+        LOG.finest(String.format("Validate     └─ isJump() -  %s", move.isJump()));
+        LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
     }
-
-
-    /**
-     * MOVE VALIDATION STEPS
-     */
 
     /**
      * Given a move is the end position open
@@ -93,10 +139,14 @@ public class MoveValidator {
      * @param move - Move being made
      * @return - true if the space being moved to is a valid, unoccupied space
      */
-    private boolean isEndSpaceOpen(Space[][] matrix, Move move) {
+    private static boolean isEndSpaceOpen(Space[][] matrix, Move move) {
         Space endSpace = getSpace(matrix, move.getEnd());
 
-        return endSpace.isOpen();
+        boolean conditionTruth = endSpace.isOpen();
+
+        LOG.finest(String.format("Validate isEndSpaceOpen(): %s", conditionTruth));
+
+        return conditionTruth;
     }
 
     /**
@@ -105,57 +155,35 @@ public class MoveValidator {
      * @param move - Move being made
      * @return - True, if it does, false otherwise
      */
-    private boolean isMoveInRightDirection(Space[][] matrix, Move move) {
+    private static boolean isMoveInRightDirection(Space[][] matrix, Move move) {
         Piece piece = getSpace(matrix, move.getStart()).getPiece();
+        boolean conditionTruth = false;
 
         // If the piece is a king then they can move bi-directionally
         if (piece != null && piece.getType() == Piece.Type.KING) {
-            return true;
+            conditionTruth = true;
+        } else {
+
+            // White players start at top, move down board
+            // Red players start at bottom, move up board
+
+            int startRow = move.getStartRow();
+            int endRow = move.getEndRow();
+
+            switch (move.getPieceColor()) {
+                case RED:
+                    conditionTruth = (endRow < startRow);
+                    break;
+                case WHITE:
+                    conditionTruth = (endRow > startRow);
+                    break;
+            }
         }
 
-        // White players start at top, move down board
-        // Red players start at bottom, move up board
+        LOG.finest(String.format("Validate isMoveInRightDirection(): %s", conditionTruth));
 
-        int startRow = move.getStartRow();
-        int endRow = move.getEndRow();
+        return conditionTruth;
 
-        switch (playerColor) {
-            case RED:
-                return (endRow < startRow);
-            case WHITE:
-                return (endRow > startRow);
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks to see if we are only moving one space away
-     *
-     * @param move - Move being made
-     * @return boolean - true if the move is moving one space away from start position, false otherwise
-     */
-    private boolean isMoveSingleSpace(Move move) {
-        int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
-        int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
-
-        LOG.finest(String.format("Move distance is %d ROWS and %d CELLS", deltaY, deltaX));
-
-        return (deltaY == 1 && deltaX == 1);
-
-    }
-
-    /**
-     * All moves must be diagonal, therefore rise==run
-     *
-     * @param move - Move being made
-     * @return boolean - true if the move being made is diagonal from the starting position
-     */
-    private boolean isMoveDiagonal(Move move) {
-        int deltaY = Math.abs(move.getStartRow() - move.getEndRow());
-        int deltaX = Math.abs(move.getStartCell() - move.getEndCell());
-
-        return (deltaY == deltaX);
     }
 
     /**
@@ -164,17 +192,40 @@ public class MoveValidator {
      *
      * @return - true if the move is a jump move, false otherwise
      */
-    private boolean isMoveJump(Move move) {
-        return false;
+    private static boolean isMoveJumpingAPiece(Space[][] board, Move move) {
+        boolean conditionTruth = false;
+
+        LOG.finest(String.format("Validate isMoveJumpingAPiece(): %s", conditionTruth));
+
+    	return conditionTruth;
     }
 
     /**
-     * Matrix lookup function - given a position it will return the enumerated state
+     * Guard condition to prevent malicious moves sent from browser.
+     * We must only move a piece located at the start that we own
+     * @param board
+     * @param move
+     * @return boolean - if the player owns the piece at the start position
+     */
+    private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
+        boolean conditionTruth = false;
+
+        Space start = getSpace(board, move.getStart());
+
+        conditionTruth = start.getPiece().getColor() == move.getPieceColor();
+
+        LOG.finest(String.format("Validate areWeMovingMyPiece(): %s", conditionTruth));
+
+    	return conditionTruth;
+    }
+
+    /**
+     * Board lookup convenience method - given a position it will return the enumerated state
      *
      * @param pos - end position of the move
      * @return SpaceState - current state of the position being moved to
      */
-    private Space getSpace(Space[][] matrix, Position pos) {
+    private static Space getSpace(Space[][] matrix, Position pos) {
         return matrix[pos.getRow()][pos.getCell()];
     }
 }

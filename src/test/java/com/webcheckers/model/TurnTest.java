@@ -17,6 +17,7 @@ public class TurnTest {
 	private static CheckersGame checkersGame;
 	private static Space[][] checkersBoard;
 	private static Player player;
+	private static Piece.Color playerColor;
 	private Turn CuT;
 	private static Move validMove;
 	private static Move invalidMove;
@@ -26,20 +27,24 @@ public class TurnTest {
 	public static void setupTest() {
 		// build our real components
 		player = new Player("Testy McTestFace");
+		playerColor = Piece.Color.WHITE;
 
 		validMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(END_ROW, END_CELL)
+				new Position(END_ROW, END_CELL),
+				player, playerColor
 		);
 
 		invalidMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(3, 3)
+				new Position(3, 3),
+				player, playerColor
 		);
 
 		jumpMove = new Move(
 				new Position(START_ROW, START_CELL),
-				new Position(START_ROW + 2, START_CELL + 2)
+				new Position(START_ROW + 2, START_CELL + 2),
+				player, playerColor
 		);
 
 		// create mocks
@@ -55,18 +60,14 @@ public class TurnTest {
 	public void setupCuT() {
 		checkersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
 
-		// TODO: Refactor this need out of MoveValidator so its passed in a board
-		// MoveValidator will become a static class
-		when(checkersGame.getBoard()).thenReturn(checkersBoard);
-
-		CuT = new Turn(checkersGame, checkersBoard, player);
+		CuT = new Turn(checkersBoard, player, playerColor);
 
 		assertEquals(Turn.State.EMPTY_TURN, CuT.getState());
 	}
 
 	@Test
 	public void constructor() {
-		CuT = new Turn(checkersGame, checkersBoard, player);
+		CuT = new Turn(checkersBoard, player, playerColor);
 	}
 
 	@Test
@@ -97,7 +98,7 @@ public class TurnTest {
 		when(checkersGame.getBoard()).thenReturn(board);
 
 		// Setup a new turn with this board
-		CuT = new Turn(checkersGame, board, player);
+		CuT = new Turn(board, player, playerColor);
 
 		assertTrue(CuT.validateMove(jumpMove));
 

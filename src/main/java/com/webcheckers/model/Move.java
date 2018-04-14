@@ -1,9 +1,16 @@
 package com.webcheckers.model;
 
+/**
+ * A move is identified by a start and end position, and a piece color
+ */
 public class Move {
+
     //instance variable
     private Position start;
     private Position end;
+
+    private Player player;
+    private Piece.Color pieceColor;
 
     /**
      * param constructor take in the start and end position
@@ -14,6 +21,22 @@ public class Move {
     Move(Position start, Position end) {
         this.start = start;
         this.end = end;
+        player = null;
+        pieceColor = null;
+    }
+
+    /**
+     * constructor used when building a Move in tests and prediction
+     * @param start
+     * @param end
+     * @param player
+     * @param color
+     */
+    Move(Position start, Position end, Player player, Piece.Color color) {
+        this.start = start;
+        this.end = end;
+        this.player = player;
+        this.pieceColor = color;
     }
 
     /**
@@ -71,20 +94,72 @@ public class Move {
         return end.getCell();
     }
 
+
+    public Piece.Color getPieceColor() {
+        return pieceColor;
+    }
+
+    public String getPlayerName() {
+        return player.getName();
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setPieceColor(Piece.Color color) {
+        this.pieceColor = color;
+    }
+
+    /**
+     * Is the move to and from valid places on the checkers board?
+     * Is the move a single space, or jump move?
+     * Is the move diagonal?
+     *
+     * @return boolean
+     */
+    public boolean isValid() {
+        return (start.isOnBoard() && end.isOnBoard()) &&
+                (isSingleSpace() || isJump()) &&
+                isDiagonal();
+    }
+
     /**
      * Determines if a jump move was attempted
      *
      * @return - true if the jump move was attempted
      */
-    public boolean isAJumpMoveAttempt() {
+    public boolean isJump() {
         Position diff = Position.absoluteDifference(end, start);
         return diff.getCell() == 2 && diff.getRow() == 2;
     }
 
-    public boolean isASingleMoveAttempt(){
-        Position diff = Position.absoluteDifference(end, start);
-        return diff.getCell() == 1 && diff.getRow() == 1;
+    /**
+     * Checks to see if we are only moving one space away
+     *
+     * @return boolean - true if the move is moving one space away from start position, false otherwise
+     */
+    public boolean isSingleSpace() {
+        int deltaY = Math.abs(start.getRow() - getEndRow());
+        int deltaX = Math.abs(start.getCell() - end.getCell());
+
+        return (deltaY == 1 && deltaX == 1);
+
     }
+
+	/**
+     * All moves must be diagonal, therefore rise==run
+     *
+     * @return boolean - true if the move being made is diagonal from the starting position
+     */
+    public boolean isDiagonal() {
+        int deltaY = Math.abs(start.getRow() - end.getRow());
+        int deltaX = Math.abs(getStartCell() - getEndCell());
+
+        return (deltaY == deltaX);
+    }
+
+
 
     /**
      * This generates a string representing the state of the Move object
