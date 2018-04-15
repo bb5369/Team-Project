@@ -69,7 +69,7 @@ public class Turn {
                 playerColor,
                 player.getName(),
                 move.toString()));
-        updateMove(move);
+        updateMove(move, false);
         if(move.isSingleSpace() && (MoveState.JUMP_MOVE == moveState || MoveState.MULT_JUMP_MOVE == moveState ||
                                                                     MoveValidator.forcedJump(getLatestBoard(), move))){
             return false;
@@ -106,7 +106,7 @@ public class Turn {
                     player.getName(),
                     pendingMoves.size(),
                     state, moveState));
-            updateMove(move);
+            updateMove(move, true);
             return true;
 
         } else {
@@ -145,7 +145,7 @@ public class Turn {
                     } else {
                         Space startSpace = matrix[start.getRow()][start.getCell()];
                         Space endSpace = matrix[end.getRow()][end.getCell()];
-                        updateMove(move);
+                        updateMove(move, true);
 
                         return endSpace.movePieceFrom(startSpace);
                     }
@@ -216,20 +216,22 @@ public class Turn {
         return this.state;
     }
 
-    private void updateMove(Move move){
+    private void updateMove(Move move, boolean checkEnd){
         if(state == State.EMPTY_TURN)
             this.moveState = MoveState.NO_MOVE;
         if(moveState == MoveState.SINGLE_MOVE)
             this.moveState = MoveState.MOVE_DONE;
-        else if(move.isSingleSpace() && moveState == MoveState.NO_MOVE)
+        if(move.isSingleSpace() && moveState == MoveState.NO_MOVE)
             this.moveState = MoveState.SINGLE_MOVE;
-        if(moveState == MoveState.JUMP_MOVE || moveState == MoveState.MULT_JUMP_MOVE) {
-            if(MoveValidator.isJumpMove(getLatestBoard(), move.getStart(), move.getPieceColor()))
+        if(moveState == MoveState.MULT_JUMP_MOVE)
+            if(checkEnd && MoveValidator.isJumpMove(getLatestBoard(), move.getStart(), move.getPieceColor()))
+                this.moveState = MoveState.MOVE_DONE;
+        if(moveState == MoveState.JUMP_MOVE)
+            if(MoveValidator.isJumpMove(getLatestBoard(), move.getEnd(), move.getPieceColor()))
                 this.moveState = MoveState.MULT_JUMP_MOVE;
             else
                 this.moveState = MoveState.MOVE_DONE;
-        }
-        else if(moveState == MoveState.NO_MOVE && move.isJump())
+        if(moveState == MoveState.NO_MOVE && move.isJump())
             this.moveState = MoveState.JUMP_MOVE;
     }
 
