@@ -133,10 +133,20 @@ public class CheckersGame {
         CheckersBoardBuilder builder = CheckersBoardBuilder.aBoard();
 
         switch (playerRed.getName()) {
-            case "kingMe":
+            case "noMoreMoves":
                 builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 0)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 2)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(0, 3)
+                ).withPieceAt(
                         new Piece(Piece.Type.SINGLE, Piece.Color.RED),
-                        new Position(1, 0));
+                        new Position(3, 0)
+                );
                 break;
 
             case "endgame":
@@ -148,6 +158,25 @@ public class CheckersGame {
                         new Position(2, 1)
                 );
                 break;
+
+            case "kingMe":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(1, 0)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(6, 1)
+                ).withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+                        new Position(1, 2)
+                );
+                break;
+
+            case "noPieces":
+                builder.withPieceAt(
+                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        new Position(1, 0)
+                );
 
             default:
                 // I don't actually have a public method to place starting pieces.. otherwise that woudl go here
@@ -191,16 +220,16 @@ public class CheckersGame {
     }
 
     public void makeKings(){
-        // King white pieces
+        // King red pieces
         for(int cell = 0; cell < 8; cell++){
             if(board[0][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.RED){
                 board[0][cell].getPiece().kingMe();
             }
         }
 
-        // King red pieces
+        // King white pieces
         for(int cell = 0; cell < 8; cell++){
-            if(board[7][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.WHITE){
+            if(board[7][cell].isOccupied() && board[7][cell].getPiece().getColor() == Piece.Color.WHITE){
                 board[7][cell].getPiece().kingMe();
             }
         }
