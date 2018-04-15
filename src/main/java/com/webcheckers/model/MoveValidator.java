@@ -228,16 +228,15 @@ public class MoveValidator {
     }
 
     /**
-     * Checks if there are any possible jump moves
+     * Checks if there are any possible jump moves for any piece owned by a player
+     * (ownership is checked through Color of piece)
      * @param board
-     * @param move
      * @return boolean - true if there is a jump move, false otherwise
      */
-    public static boolean forcedJump (Space[][] board, Move move){
-        Piece piece = getSpace(board, move.getStart()).getPiece();
+    public static boolean areJumpsAvailableForPlayer(Space[][] board, Piece.Color playerColor){
         for (int row = 0; row < board.length; row++) {
             for (int cell = 0; cell < board[row].length; cell++) {
-                if (canJump(board, row, cell, piece.getColor()))
+                if (canJump(board, row, cell, playerColor))
                     return true;
             }
         }
@@ -245,7 +244,16 @@ public class MoveValidator {
     }
 
     //Called after a move is made, so the starting postion should be the ending row and cell
-    public static boolean isJumpMove(Space[][]board, Position pos, Piece.Color piece){
+
+    /**
+     * This MoveValidator entry-point assumes the given position is the result of a multi-jump
+     * It determines if the multi-jump can continue
+     * @param board
+     * @param pos
+     * @param piece
+     * @return
+     */
+    public static boolean canContinueJump(Space[][]board, Position pos, Piece.Color piece){
         boolean condition;
         int row = pos.getRow();
         int cell = pos.getCell();
