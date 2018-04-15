@@ -94,31 +94,6 @@ public class Space{
     }
 
     /**
-     *
-     * @param source - starting space that is being moved from
-     * @param jumped - space inbetween the start and end of the jump
-     * @return returns true is not null, isoccupied or has not piece
-     */
-    public boolean jumpPieceMove(Space source, Space jumped){
-        if (source == null) {
-            return false;
-        }
-
-        if (state != State.OPEN || !jumped.isOccupied()) {
-            return false;
-        }
-
-        if (source.getPiece() == null || jumped.getPiece() == null) {
-            return false;
-        }
-
-        addPiece(source.getPiece());
-        source.removePiece();
-        jumped.removePiece();
-        return true;
-    }
-
-    /**
      * Add a piece to this Space
      *
      * @param piece - piece being moved onto the space
