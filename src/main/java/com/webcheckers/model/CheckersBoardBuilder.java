@@ -33,7 +33,7 @@ public class CheckersBoardBuilder {
      * Returns a builder that starts with a board and red and white player pieces
      * @return
      */
-    private CheckersBoardBuilder withStartingPieces() {
+    public CheckersBoardBuilder withStartingPieces() {
         addStartingPieces(board);
 
         return this;
