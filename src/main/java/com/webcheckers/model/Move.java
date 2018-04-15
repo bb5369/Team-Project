@@ -58,6 +58,22 @@ public class Move {
     }
 
     /**
+     * Returns the middle Position between the start and end in this move
+     * If the move is a single space, we return the start space.
+     * @return Position - midpoint between start and end
+     */
+    public Position getMidpoint() {
+    	if (isJump()) {
+            int midRow = getStartRow() + (getEndRow() - getStartRow()) / 2;
+            int midCell = getStartCell() + (getEndCell() - getStartCell()) / 2;
+
+            return new Position(midRow, midCell);
+        } else {
+            return start;
+        }
+    }
+
+    /**
      * Used to access the x coordinate of the start position
      *
      * @return - x coordinate of the start position
@@ -95,18 +111,34 @@ public class Move {
     }
 
 
+    /**
+     * Get the color of the piece we are moving
+     * @return
+     */
     public Piece.Color getPieceColor() {
         return pieceColor;
     }
 
+    /**
+     * Get the player name who is making the move
+     * @return
+     */
     public String getPlayerName() {
         return player.getName();
     }
 
+    /**
+     * Set the player making the move
+     * @param player
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Set the piece color being moved
+     * @param color
+     */
     public void setPieceColor(Piece.Color color) {
         this.pieceColor = color;
     }
@@ -158,8 +190,6 @@ public class Move {
 
         return (deltaY == deltaX);
     }
-
-
 
     /**
      * This generates a string representing the state of the Move object
