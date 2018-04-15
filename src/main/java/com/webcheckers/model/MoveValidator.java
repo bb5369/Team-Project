@@ -198,7 +198,7 @@ public class MoveValidator {
     private static boolean isMoveJumpingAPiece(Space[][] board, Move move) {
         boolean conditionTruth = false;
         if (move.isJump()) {
-            Space space = getSpace(board, Position.midPosition(move.getEnd(), move.getStart()));
+            Space space = getSpace(board, move.getMidpoint());
             Piece piece = getSpace(board, move.getStart()).getPiece();
             if (space.isOccupied() && !space.getPiece().getColor().equals(piece.getColor())) {
                 conditionTruth = true;
