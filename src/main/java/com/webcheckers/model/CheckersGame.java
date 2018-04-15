@@ -219,6 +219,9 @@ public class CheckersGame {
         return false;
     }
 
+    /**
+     * When pieces reach the proper end row, the piece will be kinged
+     */
     public void makeKings(){
         // King red pieces
         for(int cell = 0; cell < 8; cell++){
