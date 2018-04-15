@@ -1,8 +1,8 @@
 package com.webcheckers.model;
 
-import javafx.geometry.Pos;
-
 import java.util.logging.Logger;
+
+import static com.webcheckers.model.CheckersBoardHelper.getSpace;
 
 /**
  * Move validation requires several things:
@@ -294,14 +294,4 @@ public class MoveValidator {
         }
         return false;
     }
-
-    /**
-         * Board lookup convenience method - given a position it will return the enumerated state
-         *
-         * @param pos - end position of the move
-         * @return SpaceState - current state of the position being moved to
-         */
-        private static Space getSpace (Space[][]board, Position pos){
-            return board[pos.getRow()][pos.getCell()];
-        }
 }
