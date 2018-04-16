@@ -49,14 +49,14 @@ public class PostSubmitTurnRouteTest {
 
     @Test
     public void runCorrect(){
-        when(game.submitTurn(player)).thenReturn(true);
+        //when(game.submitTurn(player)).thenReturn(true);
 
         CuT.handle(request, response);
     }
 
     @Test
     public void runFail(){
-        when(game.submitTurn(player)).thenReturn(false);
+        //when(game.submitTurn(player)).thenReturn(false);
 
         CuT.handle(request, response);
     }
