@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("Model-tier")
 public class PositionTest {
@@ -50,6 +50,15 @@ public class PositionTest {
 	public void testMidPositon(){
 		Move test = new Move(new Position(0,0), new Position(2, 2));
 		Position mid = new Position(1,1);
-		assertEquals(mid, Position.midPosition(test.getEnd(), test.getStart()));
+		assertEquals(mid, test.getMidpoint());
+	}
+
+	@Test void outOfBounds(){
+		Position test = new Position(4209, 428042);
+		Position test2 = new Position(8, 0);
+
+		assertFalse(test.isOnBoard());
+		assertFalse(test2.isOnBoard());
+		assertTrue(new Position(ROW, CELL).isOnBoard());
 	}
 }
