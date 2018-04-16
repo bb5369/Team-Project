@@ -248,6 +248,12 @@ In true Object Oriented spirit we have tried to make our domain model rich and a
 * Who uses CheckersBoardBuilder
 * Relationship of Piece, Position, Move
 
+
+#### `Move` - State Machine
+The `Move` model component implements a full state machine which helps solidify the behaviors available in each state. In the diagram below we show the four discrete states a Turn can be in. On the frontend, the state `STABLE_TURN` means a move has been made. The states `JUMP_MOVE` and `SINGLE_MOVE` inside the Turn indicate a `STABLE_TURN` in the client UI terminology.
+
+\ ![Move State Machine](diagrams/state/Turn-State.png)
+
 ### Dynamic models
 
 *NOTE: We do have some models already made for dynamic interaction. I chose not to include them now since they need updating*
@@ -256,6 +262,8 @@ In true Object Oriented spirit we have tried to make our domain model rich and a
 * When a new player turn takes effect
 * When a move is validated
 * When a turn is submitted
+
+
 
 \pagebreak
 
