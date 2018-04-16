@@ -60,9 +60,10 @@ public class Piece {
     @Override
     public boolean equals(Object other)
     {
-        if(other == null && other instanceof Piece)
+        if(other == null)
             return false;
-
+        if(!(other instanceof Piece))
+            return false;
         if(this.ty != ((Piece)other).ty)
             return false;
         if(this.col != ((Piece)other).col)
