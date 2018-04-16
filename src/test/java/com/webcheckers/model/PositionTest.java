@@ -50,15 +50,17 @@ public class PositionTest {
 	public void testMidPositon(){
 		Move test = new Move(new Position(0,0), new Position(2, 2));
 		Position mid = new Position(1,1);
-		assertEquals(mid, test.getMidpoint());
+		assertEquals(mid.toString(), test.getMidpoint().toString());
 	}
 
 	@Test void outOfBounds(){
 		Position test = new Position(4209, 428042);
 		Position test2 = new Position(8, 0);
+		Position test3 = new Position(3, -32);
 
 		assertFalse(test.isOnBoard());
 		assertFalse(test2.isOnBoard());
+		assertFalse(test3.isOnBoard());
 		assertTrue(new Position(ROW, CELL).isOnBoard());
 	}
 }

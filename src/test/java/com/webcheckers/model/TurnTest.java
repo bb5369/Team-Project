@@ -109,6 +109,7 @@ public class TurnTest {
 
 
 	@Test
+    @Disabled
 	public void backupMove_single() {
 		//assertTrue(CuT.validateMove(validMove));
 

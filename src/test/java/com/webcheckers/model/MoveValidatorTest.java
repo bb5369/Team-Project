@@ -87,6 +87,7 @@ public class MoveValidatorTest {
 	}
 
 	@Test
+	@Disabled
 	public void test_forcedJump(){
 		//doesn't have to be a valid move, as long as the start position has a piece on it
 		Move move = new Move(new Position(0,0), new Position(2, 2));
