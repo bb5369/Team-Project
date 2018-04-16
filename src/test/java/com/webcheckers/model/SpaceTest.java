@@ -238,6 +238,7 @@ public class SpaceTest {
 		test = new Space(1, Space.State.OPEN);
 		assertFalse(test.equals(test2));
 		assertFalse(test.equals(new Object()));
+		assertFalse(test.equals(null));
 		test = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 		test2 = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
 		assertFalse(test2.equals(test));
