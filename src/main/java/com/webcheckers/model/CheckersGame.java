@@ -134,6 +134,8 @@ public class CheckersGame {
 
         switch (playerRed.getName()) {
             case "noMoreMoves":
+                builder = CheckersBoardBuilder.aBoard();
+
                 builder.withPieceAt(
                         new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
                         new Position(1, 0)
@@ -150,6 +152,8 @@ public class CheckersGame {
                 break;
 
             case "endgame":
+                builder = CheckersBoardBuilder.aBoard();
+
                 builder.withPieceAt(
                         new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
                         new Position(1, 0)
@@ -160,6 +164,8 @@ public class CheckersGame {
                 break;
 
             case "kingMe":
+                builder = CheckersBoardBuilder.aBoard();
+
                 builder.withPieceAt(
                         new Piece(Piece.Type.SINGLE, Piece.Color.RED),
                         new Position(1, 0)
@@ -173,6 +179,7 @@ public class CheckersGame {
                 break;
 
             case "noPieces":
+                builder = CheckersBoardBuilder.aBoard();
                 builder.withPieceAt(
                         new Piece(Piece.Type.SINGLE, Piece.Color.RED),
                         new Position(1, 0)
@@ -180,6 +187,38 @@ public class CheckersGame {
 
             default:
                 // I don't actually have a public method to place starting pieces.. otherwise that woudl go here
+
+                // Red pieces (start row 5-7)
+//                for(int row = 5; row < 8; row++){
+//                    for(int cell = 0; cell < 8; cell+=2){
+//                        LOG.info(String.format("row: [%i] cell: [%i]", row, cell));
+//                        // Adds one for the offset
+//                        if(row %2 == 0)
+//                            cell++;
+//                        builder.withPieceAt(
+//                                new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+//                                new Position(row, cell)
+//                        );
+//                    }
+//                }
+//
+//                // White pieces (start row 0-2)
+//                for(int row = 0; row < 8; row++){
+//                    for(int cell = 0; cell < 8; cell+=2){
+//                        LOG.info(String.format("row: [%i] cell: [%i]", row, cell));
+//                        // Adds one for the offset
+//                        if(row %2 == 1)
+//                            cell++;
+//                        builder.withPieceAt(
+//                                new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+//                                new Position(cell, row)
+//                        );
+//                    }
+//                }
+
+                builder = CheckersBoardBuilder.aStartingBoard();
+
+                break;
         }
 
 
