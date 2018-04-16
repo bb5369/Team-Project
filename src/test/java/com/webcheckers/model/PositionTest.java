@@ -54,13 +54,17 @@ public class PositionTest {
 	}
 
 	@Test void outOfBounds(){
-		Position test = new Position(4209, 428042);
-		Position test2 = new Position(8, 0);
-		Position test3 = new Position(3, -32);
+		int low = -13;
+		int high = 8;
+		Position test = new Position(low, CELL);
+		Position test2 = new Position(high, CELL);
+		Position test3 = new Position(ROW, high);
+		Position test4 = new Position(ROW, low);
 
 		assertFalse(test.isOnBoard());
 		assertFalse(test2.isOnBoard());
 		assertFalse(test3.isOnBoard());
+		assertFalse(test4.isOnBoard());
 		assertTrue(new Position(ROW, CELL).isOnBoard());
 	}
 }
