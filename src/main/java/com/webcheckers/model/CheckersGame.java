@@ -159,9 +159,9 @@ public class CheckersGame {
      */
     public Message submitTurn(Player player) {
         if (player.equals(getPlayerActive())) {
-        	Message finalizedMessage = activeTurn.isFinalized();
+        	Message finalizedMessage = getTurn().isFinalized();
         	if (finalizedMessage.getType() == Message.MessageType.info) {
-                board = activeTurn.getLatestBoard();
+                board = getTurn().getLatestBoard();
                 changeActivePlayer();
             }
             return finalizedMessage;

@@ -133,7 +133,7 @@ public class MoveValidator {
         LOG.finest(String.format("Validate     └─ end.isOnBoard() -  %s", move.getEnd().isOnBoard()));
         LOG.finest(String.format("Validate     └─ isSingleSpace() -  %s", move.isSingleSpace()));
         LOG.finest(String.format("Validate     └─ isJump() -  %s", move.isJump()));
-        LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
+        //LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
     }
 
     /**

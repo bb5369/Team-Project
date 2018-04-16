@@ -152,8 +152,7 @@ public class Move {
      */
     public boolean isValid() {
         return (start.isOnBoard() && end.isOnBoard()) &&
-                (isSingleSpace() || isJump()) &&
-                isDiagonal();
+                (isSingleSpace() || isJump());
     }
 
     /**
@@ -183,13 +182,13 @@ public class Move {
      * All moves must be diagonal, therefore rise==run
      *
      * @return boolean - true if the move being made is diagonal from the starting position
-     */
+
     public boolean isDiagonal() {
         int deltaY = Math.abs(start.getRow() - end.getRow());
         int deltaX = Math.abs(getStartCell() - getEndCell());
 
         return (deltaY == deltaX);
-    }
+    }*/
 
     /**
      * This generates a string representing the state of the Move object
