@@ -243,7 +243,7 @@ public class SpaceTest {
 		assertFalse(test2.equals(test));
 		test = new Space(SPACE_ID, Space.State.OPEN);
 		test2 = new Space(SPACE_ID, Space.State.INVALID);
-		//assertFalse(test.equals(test2));
+		assertFalse(test.equals(test2));
 
 	}
 	//TODO: Add testing for removing a jump piece
