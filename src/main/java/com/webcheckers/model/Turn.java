@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import java.util.Stack;
 import java.util.logging.Logger;
 import static com.webcheckers.model.CheckersBoardHelper.getSpace;
+import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
 
 /**
  * Turn handles the lifecycle of a player's turn
@@ -81,7 +82,7 @@ public class Turn {
         Space[][] board = getLatestBoard();
 
         LOG.finest("The board we are using for this validateMove()");
-        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        LOG.finest(formatBoardString(board));
 
         boolean isMoveValid = false;
         Message moveValidMessage = new Message("Move is invalid.", Message.MessageType.error);

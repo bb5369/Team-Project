@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import java.util.logging.Logger;
 
 import static com.webcheckers.model.CheckersBoardHelper.getSpace;
+import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
 
 /**
  * Move validation requires several things:
@@ -31,7 +32,7 @@ public class MoveValidator {
 
         logMoveCoordinates(move);
 
-        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        LOG.finest(formatBoardString(board));
         logMove(board, move);
 
         boolean isMoveValidOnBoard = move.isValid() &&
