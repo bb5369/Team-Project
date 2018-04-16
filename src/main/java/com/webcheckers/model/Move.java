@@ -63,7 +63,7 @@ public class Move {
      * @return Position - midpoint between start and end
      */
     public Position getMidpoint() {
-    	if (isJump()) {
+    	if (!isSingleSpace()) {
             int midRow = getStartRow() + (getEndRow() - getStartRow()) / 2;
             int midCell = getStartCell() + (getEndCell() - getStartCell()) / 2;
 

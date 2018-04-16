@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 
+import com.google.gson.Gson;
+
 public class Message {
     //enum
     public enum MessageType {
@@ -42,5 +44,13 @@ public class Message {
      */
     public MessageType getType() {
         return type;
+    }
+
+    public String toJson() {
+    	return (new Gson()).toJson(this);
+	}
+
+	public String toString() {
+        return String.format("[%s] %s", type, text);
     }
 }

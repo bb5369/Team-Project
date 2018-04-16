@@ -94,6 +94,7 @@ public class CheckersGame {
         } else {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+            // TODO: Do a win thing
         }
 
     }
@@ -150,20 +151,24 @@ public class CheckersGame {
     }
 
     /**
-	 * Allow the active player to submit their turn
+	 * Allow the active player to submit their turn if preconditions have been met
+     * Preconditions are:
+     *   1. Turn is finalized (no more jump moves, at least one move queued)
      * @param player
-     * @return
+     * @return Message indicating reason for turn submission
      */
-    public boolean submitTurn(Player player) {
-        if (player.equals(getPlayerActive()) && activeTurn.isStable() && getTurn().mulitJumpDone()) {
-            board = activeTurn.getLatestBoard();
+    public Message submitTurn(Player player) {
+        if (player.equals(getPlayerActive())) {
+        	Message finalizedMessage = activeTurn.isFinalized();
+        	if (finalizedMessage.getType() == Message.MessageType.info) {
+                board = activeTurn.getLatestBoard();
+                changeActivePlayer();
+            }
+            return finalizedMessage;
 
-            changeActivePlayer();
-
-            return true;
+        } else {
+            return new Message("It is not your turn", Message.MessageType.error);
         }
-
-        return false;
     }
 
     /**
