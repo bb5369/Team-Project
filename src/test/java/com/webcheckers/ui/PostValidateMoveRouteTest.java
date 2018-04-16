@@ -51,7 +51,7 @@ public class PostValidateMoveRouteTest {
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(request.body()).thenReturn("{\"start\":{\"row\":5,\"cell\":2},\"end\":{\"row\":4,\"cell\":3}}");
-        when(turn.validateMove(move)).thenReturn(true);
+        //when(turn.validateMove(move)).thenReturn(true);
 
         CuT.handle(request, response);
     }
@@ -62,7 +62,7 @@ public class PostValidateMoveRouteTest {
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(request.body()).thenReturn("");
-        when(turn.validateMove(move)).thenReturn(false);
+        //when(turn.validateMove(move)).thenReturn(false);
 
         CuT.handle(request, response);
     }
