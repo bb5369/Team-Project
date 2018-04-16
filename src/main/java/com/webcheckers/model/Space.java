@@ -166,7 +166,7 @@ public class Space{
     @Override
     public boolean equals(Object other)
     {
-        if(other == null && other instanceof Space)
+        if(other == null  || !(other instanceof Space))
             return false;
 
         if(this.cellIdx != ((Space)other).cellIdx)
