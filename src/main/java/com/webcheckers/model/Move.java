@@ -151,7 +151,8 @@ public class Move {
      * @return boolean
      */
     public boolean isValid() {
-        return (start.isOnBoard() && end.isOnBoard());
+        return (start.isOnBoard() && end.isOnBoard()
+                && this.getPieceColor() != null && this.getPlayerName() != null);
     }
 
     /**

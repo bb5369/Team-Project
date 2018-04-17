@@ -163,7 +163,7 @@ public class MoveValidator {
         boolean conditionTruth = false;
 
         // If the piece is a king then they can move bi-directionally
-        if (piece != null && piece.getType() == Piece.Type.KING) {
+        if (piece.getType() == Piece.Type.KING) {
             conditionTruth = true;
         } else {
 
@@ -218,7 +218,7 @@ public class MoveValidator {
      * @return boolean - if the player owns the piece at the start position
      */
     private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
-        boolean conditionTruth = false;
+        boolean conditionTruth;
 
         Space start = getSpace(board, move.getStart());
 
