@@ -190,8 +190,10 @@ public class Space{
     public Space clone()
     {
 
-        if(currPiece == null)
+        if(currPiece == null && state == State.OPEN)
             return new Space(cellIdx, currPiece);
+        else if(state == State.INVALID)
+            return new Space(cellIdx, State.INVALID);
 
         return new Space(cellIdx, currPiece.clone());
     }
