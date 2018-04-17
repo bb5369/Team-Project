@@ -93,6 +93,17 @@ public final class TestCheckersBoards {
 	/**
 	 * For this board I did something special. I realized that we had too many magic numbers
 	 * so I created some constants, and a constant red piece that tests can use to start their move
+	 *
+	 * BOARD
+	 * . _ . _ . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . _ . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . _ . _ . _
+	 * _ . _ . _ . _ .
+	 * . W . _ . _ . _
+	 * R . _ . _ . _ .
+	 *
 	 * @return CheckersBoardBuilder
 	 */
 	public static CheckersBoardBuilder singleJumpToEnd() {
