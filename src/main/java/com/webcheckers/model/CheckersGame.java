@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class CheckersGame {
@@ -131,7 +133,20 @@ public class CheckersGame {
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void initStartingBoard() {
-        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+        CheckersBoardBuilder builder;
+
+        // Paging Mike Rowe - we've got a dirty job
+        // This is our backdoor into setting up a starting board for testing
+        // If the red player is named one of the public static methods in TestCheckersBoards
+        // then we use that board builder
+        try {
+            Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerRed.getName());
+
+            builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
+            builder = CheckersBoardBuilder.aStartingBoard();
+        }
 
         LOG.finest("Starting board:");
         LOG.finest(builder.formatBoardString());
