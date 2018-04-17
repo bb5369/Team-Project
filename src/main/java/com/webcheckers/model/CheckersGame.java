@@ -145,6 +145,8 @@ public class CheckersGame {
             builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
+            System.out.println(e.toString());
+            e.printStackTrace();
             builder = CheckersBoardBuilder.aStartingBoard();
         }
 

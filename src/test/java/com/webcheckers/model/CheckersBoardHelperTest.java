@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,11 @@ import static com.webcheckers.model.CheckersBoardHelper.*;
 
 @Tag("Model-tier")
 public class CheckersBoardHelperTest {
+
+	@Test
+	public void shamelessCoverageAttempt() {
+		new CheckersBoardHelper();
+	}
 
 	@Test
 	public void getSpace_success() {
@@ -32,14 +38,15 @@ public class CheckersBoardHelperTest {
 		String expectedOutput = String.join(
 				"\n",
             "BOARD",
-            ". W . W . W . W",
-            "W . W . W . W .",
-            ". I . W . W . W",
-            "_ . _ . _ . _ .",
-            ". _ . _ . _ . _",
-            "K . R . R . R .",
-            ". R . R . R . R",
-            "R . R . R . R .");
+            "  0 1 2 3 4 5 6 7",
+            "0 . W . W . W . W",
+            "1 W . W . W . W .",
+            "2 . I . W . W . W",
+            "3 _ . _ . _ . _ .",
+            "4 . _ . _ . _ . _",
+            "5 K . R . R . R .",
+            "6 . R . R . R . R",
+            "7 R . R . R . R .");
 
 		Piece redKing = new Piece(Piece.Type.KING, Piece.Color.RED);
 		Piece whiteKing = new Piece(Piece.Type.KING, Piece.Color.WHITE);

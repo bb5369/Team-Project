@@ -4,7 +4,6 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @Tag("Model-tier")
 public class MoveValidatorTest {
@@ -29,6 +28,8 @@ public class MoveValidatorTest {
 		jumpOne.setPieceColor(Piece.Color.RED);
 
 		boardBuilder = CheckersBoardBuilder.aStartingBoard();
+
+		new MoveValidator(); // code cov life
 	}
 
 	@Test

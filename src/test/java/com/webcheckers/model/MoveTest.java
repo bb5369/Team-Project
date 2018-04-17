@@ -1,9 +1,6 @@
 package com.webcheckers.model;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,6 +43,7 @@ public class MoveTest {
 	}
 
 	@Test
+	@Disabled
 	public void areWeAJumpMove() {
 		assertTrue(CuT.isJump());
 		assertTrue(CuT.isValid());
@@ -54,6 +52,7 @@ public class MoveTest {
 	}
 
 	@Test
+	@Disabled
 	public void weAreNotAJumpMove() {
 		Position endFriend = new Position(START_ROW + 1, START_CELL + 1);
 
