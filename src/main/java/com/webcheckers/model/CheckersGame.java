@@ -223,7 +223,7 @@ public class CheckersGame {
     }
 
     /**
-     * Indiciates if this game is resigned
+     * Indicates if this game is resigned
      * @return boolean
      */
     public boolean isResigned() {

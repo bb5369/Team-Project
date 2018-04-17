@@ -174,7 +174,7 @@ public class GameManager {
      *
      * @param game - game being removed
      */
-    public void destoryGame(CheckersGame game) {
+    public void destroyGame(CheckersGame game) {
         this.gameList.remove(game);
     }
 }

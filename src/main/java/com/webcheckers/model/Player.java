@@ -7,8 +7,13 @@ import java.util.Objects;
  */
 public class Player {
 
+    // Determines whether a player is in tournament mode or not
+    public enum GameType {NORMAL, TOURNAMENT};
+
     //instance variable
     public final String name;
+
+    public final GameType type;
 
 
     /**
@@ -16,9 +21,11 @@ public class Player {
      * Intializes the name of the player
      *
      * @param name - Player name String
+     * @param type - Player GameType
      */
-    public Player(String name) {
+    public Player(String name, GameType type) {
         this.name = name;
+        this.type = type;
     }
 
     /**
@@ -29,6 +36,13 @@ public class Player {
     public String getName() {
         return this.name;
     }
+
+    /**
+     * Used to get the player's type
+     *
+     * @return - the player's type
+     */
+    public Player.GameType getType(){ return this.type; }
 
     /**
      * This method is used to compare two Player objects
@@ -53,6 +67,7 @@ public class Player {
     public int hashCode() {
         return Objects.hash(this.name);
     }
+
 
     /**
      * Generates and returns a string of the player's name

@@ -6,8 +6,6 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import static spark.Spark.halt;
@@ -44,6 +42,7 @@ public class GetSignOutRoute implements Route {
     public Object handle(Request request, Response response) {
         Player player = request.session().attribute("Player");
         String playerName = player.getName();
+        Player.GameType type = player.getType();
 
         CheckersGame game = gameManager.getGame(player);
 
@@ -54,8 +53,8 @@ public class GetSignOutRoute implements Route {
             request.session().removeAttribute(playerName);
             player = null;
             if(game != null) {
-                gameManager.resignGame(new Player(playerName));
-                gameManager.destoryGame(game);
+                gameManager.resignGame(new Player(playerName, type));
+                gameManager.destroyGame(game);
                 game = null;
             }
         }

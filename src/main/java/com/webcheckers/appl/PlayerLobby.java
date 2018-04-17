@@ -69,7 +69,7 @@ public class PlayerLobby {
      * @param name - name of the new player
      * @return - a new Player
      */
-    public Player newPlayer(String name) {
+    public Player newPlayer(String name, Player.GameType type) {
 
         if (!isValidName(name)) {
             throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_INVALID);
@@ -79,7 +79,7 @@ public class PlayerLobby {
             throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_TAKEN);
         }
 
-        final Player newPlayer = new Player(name);
+        final Player newPlayer = new Player(name, type);
 
         // Add the player to our lobby
         this.activePlayers.put(name, newPlayer);
