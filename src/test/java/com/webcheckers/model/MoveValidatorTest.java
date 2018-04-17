@@ -59,24 +59,21 @@ public class MoveValidatorTest {
 		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
 
 
-		Move kingMoveBackwards = new Move(
-				kingPosition,
-				new Position(3, 2),
-				player,
-				Piece.Color.WHITE
-		);
-		//assertTrue(MoveValidator.areMovesAvailableForPlayer(board,player, kingMoveBackwards.getPieceColor()));
+		Move kingMoveBackwards = new Move(kingPosition, new Position(3, 2), player, Piece.Color.WHITE);
+		assertTrue(MoveValidator.areMovesAvailableForPlayer(board,player, kingMoveBackwards.getPieceColor()));
 		assertTrue(MoveValidator.validateMove(boardWithKing, kingMoveBackwards));
 	}
 
 	@Test
 	public void test_areMovesAvailable(){
 		Piece.Color color = Piece.Color.WHITE;
-		Space[][] board = TestCheckersBoards.singleJumpToEnd().getBoard();
+		Space[][] board = boardBuilder.getBoard();
 		// Tests against a starting board
 		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
+		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, new Player(RED_PLAYER_NAME), Piece.Color.RED));
 		board = CheckersBoardBuilder.aBoard().getBoard();
 		assertFalse(MoveValidator.areMovesAvailableForPlayer(board, player, color));
+		assertFalse(MoveValidator.areMovesAvailableForPlayer(board, new Player(RED_PLAYER_NAME), Piece.Color.RED));
 	}
 
 	@Test
@@ -85,10 +82,19 @@ public class MoveValidatorTest {
 		assertTrue(MoveValidator.areJumpsAvailableForPlayer(board, jumpOne.getPieceColor()));
 		assertFalse(MoveValidator.areJumpsAvailableForPlayer(board, Piece.Color.WHITE));
 		assertFalse(MoveValidator.canContinueJump(board, jumpOne.getEnd(), jumpOne.getPieceColor()));
-		Move test = new Move(jumpOne.getStart(), new Position(1,0));
-		test.setPieceColor(Piece.Color.RED);
-		test.setPlayer(new Player(RED_PLAYER_NAME));
-		//assertFalse(MoveValidator.validateMove(board, test));
+	}
+
+	@Test
+	public void test_fail(){
+		Space[][] board = boardBuilder.getBoard();
+		Move test = new Move(new Position(2,5), new Position(4,5));
+		test.setPieceColor(Piece.Color.WHITE);
+		test.setPlayer(player);
+		assertFalse(MoveValidator.validateMove(board, test));
+		test = new Move(new Position(2,3), new Position(5,2));
+		test.setPieceColor(Piece.Color.WHITE);
+		test.setPlayer(player);
+		assertFalse(MoveValidator.validateMove(board, test));
 	}
 
 }
