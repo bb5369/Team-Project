@@ -2,6 +2,8 @@ package com.webcheckers.model;
 
 import java.util.Stack;
 import java.util.logging.Logger;
+import static com.webcheckers.model.CheckersBoardHelper.getSpace;
+import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
 
 /**
  * Turn handles the lifecycle of a player's turn
@@ -13,11 +15,25 @@ import java.util.logging.Logger;
 public class Turn {
     private static final Logger LOG = Logger.getLogger(Turn.class.getName());
 
+    public static final String NO_MOVES_MSG          = "You have not made any moves this turn.";
+    public static final String JUMP_MOVE_AVAIL_MSG   = "You have a jump move available and must take it.";
+    public static final String JUMP_MOVE_PARTIAL_MSG = "You can continue your jump.";
+    public static final String JUMP_MOVE_ONLY_MSG    = "You can only make jumps during a jump-move";
+    public static final String SINGLE_MOVE_ONLY_MSG  = "You can only make one single move in a turn.";
+
+    public static final String VALID_SINGLE_MOVE_MSG = "Valid single move! Submit your turn.";
+    public static final String VALID_JUMP_MOVE_MSG   = "Valid jump move!";
+
+    public static final String TURN_FINALIZED_MSG    = "Turn has been finalized";
+
+
     // Purposely mismatching frontend
     // If a Turn is SUBMITTED then this Turn instance will no longer exist
-    public enum State {
+    public enum State{
         EMPTY_TURN,
-        STABLE_TURN
+        SINGLE_MOVE,
+        JUMP_MOVE,
+        SUBMITTED
     }
 
     private Space[][] startingBoard;
@@ -25,7 +41,7 @@ public class Turn {
     private Piece.Color playerColor;
     private Stack<Space[][]> pendingMoves;
     private State state;
-    private boolean single;
+    private Move lastValidMove;
 
 
     /**
@@ -44,10 +60,9 @@ public class Turn {
         this.playerColor = color;
 
         pendingMoves = new Stack<>();
-        single = false;
         state = State.EMPTY_TURN;
 
-        LOG.fine(String.format("Turn initialized in [%s] state", this.state));
+        LOG.fine(String.format("Turn initialized in [%s] state", state));
     }
 
     /**
@@ -55,83 +70,109 @@ public class Turn {
      *
      * @param move - move being validated
      * @return - true if move was validated, otherwise false
+	 * @return - Message - to be used in the UI to indicate to the player if their move was successful
+	 * or why not.
      */
-    public boolean validateMove(Move move) {
+    public Message validateMove(Move move) {
         LOG.info(String.format("%s Player [%s] is validating move %s",
                 playerColor,
                 player.getName(),
                 move.toString()));
 
-        // TODO: run this through with the team. Not sure if best approach, but allowed for making
-        // move validator fully static
         move.setPieceColor(playerColor);
         move.setPlayer(player);
 
         Space[][] board = getLatestBoard();
 
         LOG.finest("The board we are using for this validateMove()");
-        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        LOG.finest(formatBoardString(board));
 
-        if (!single && MoveValidator.validateMove(board, move)) {
-            LOG.finer("Move has been validated successfully");
+        boolean isMoveValid = false;
+        Message moveValidMessage = new Message("Move is invalid.", Message.MessageType.error);
 
-            // Now that the move has been validated, lets clone the board and execute the move
-            Space[][] newBoard = CheckersBoardBuilder.cloneBoard(board);
-            makeMove(newBoard, move);
+        // TODO: Handle the logic of each case in a seperate method
+        switch (state) {
+            case EMPTY_TURN:
+                if (move.isSingleSpace() && MoveValidator.areJumpsAvailableForPlayer(board, playerColor)) {
+                	moveValidMessage = new Message(JUMP_MOVE_AVAIL_MSG, Message.MessageType.error);
+                } else if (MoveValidator.validateMove(board, move)) {
+					String message = (move.isSingleSpace()) ? VALID_SINGLE_MOVE_MSG : VALID_JUMP_MOVE_MSG;
+					moveValidMessage = new Message(message, Message.MessageType.info);
+				}
+                break;
 
-            pendingMoves.push(newBoard);
+            case SINGLE_MOVE:
+            	// If they have made a single move, they cannot make another
+                moveValidMessage = new Message(SINGLE_MOVE_ONLY_MSG, Message.MessageType.error);
+                break;
 
-            state = State.STABLE_TURN;
-
-            if(move.isSingleSpace()) {
-                LOG.finer("This is a single-space move. No more moves can be validated.");
-                single = true;
-            }
-
-            LOG.info(String.format("%s Player [%s] has %d queued moves in [%s] state",
-                    playerColor,
-                    player.getName(),
-                    pendingMoves.size(),
-                    state));
-
-            return true;
-
-        } else {
-            LOG.info("Move was not valid");
-            return false;
-
+            case JUMP_MOVE:
+                if (move.isSingleSpace()) {
+                	moveValidMessage =  new Message(JUMP_MOVE_ONLY_MSG, Message.MessageType.error);
+				} else if (MoveValidator.validateMove(board, move)) {
+                	moveValidMessage = new Message(VALID_JUMP_MOVE_MSG, Message.MessageType.info);
+                }
+                break;
         }
+
+        if ( moveValidMessage.getType() == Message.MessageType.info) {
+        	// The final test is if we can execute the move on the board
+        	recordMove(move);
+		}
+
+		LOG.info(String.format("Move Validated. Result [%s]", moveValidMessage.toString()));
+
+		LOG.finest(String.format("%s Player [%s] has %d queued moves in [%s] state",
+				playerColor,
+				player.getName(),
+				pendingMoves.size(),
+				state));
+
+		return moveValidMessage;
+
     }
 
     /**
      * This method make moves pieces on the board
      *
-     * @param matrix - represents the checkers board
      * @param move   - move to be made on the checkers board
      * @return - true if the pieces where moved successfully
      */
-    public boolean makeMove(Space[][] matrix, Move move) {
-        LOG.info(String.format("%s Player [%s] turn - executing move %s",
-                playerColor,
-                player.getName(),
-                move.toString()));
+    public boolean recordMove(Move move){
+		LOG.info(String.format("%s Player [%s] turn - executing move %s",
+				playerColor,
+				player.getName(),
+				move.toString()));
 
-        Position start = move.getStart();
-        Position end = move.getEnd();
+		Space[][] matrix = CheckersBoardBuilder.cloneBoard(getLatestBoard());
 
-        if (move.isJump()) {
-            //TODO jump move logic goes here
-            return true;
+		if (move.isJump()) {
+			// remove the piece at the midpoint
+			Space jumpedSpace = getSpace(matrix, move.getMidpoint());
+			jumpedSpace.removePiece();
+		}
 
-        } else {
-            Space startSpace = matrix[start.getRow()][start.getCell()];
-            Space endSpace = matrix[end.getRow()][end.getCell()];
-            single = true;
+		Space startSpace = getSpace(matrix, move.getStart());
+		Space endSpace = getSpace(matrix, move.getEnd());
 
-            return endSpace.movePieceFrom(startSpace);
-        }
+		endSpace.movePieceFrom(startSpace);
+		LOG.finest("Move successfully made on board");
+
+		pendingMoves.push(matrix);
+		lastValidMove = move;
+
+		setStateAfterMove(move);
+
+		return true;
     }
 
+    private void setStateAfterMove(Move move) {
+        if (move.isSingleSpace()) {
+            state = State.SINGLE_MOVE;
+        } else if (move.isJump()) {
+        	state = State.JUMP_MOVE;
+		}
+    }
 
     /**
      * When planning a turn a player may wish to backup and try a new strategy
@@ -141,20 +182,18 @@ public class Turn {
      */
     public boolean backupMove() {
         if (!pendingMoves.isEmpty()) {
-            Space[][] badMove = pendingMoves.pop();
+            pendingMoves.pop();
 
             LOG.info(String.format("Removing last move from %s's history",
                     player.getName()));
 
             // Return Turn state to EMPTY_TURN if they have no pending moves
             if (pendingMoves.isEmpty()) {
-                LOG.finest(String.format("%s has reversed all planned moves", player.getName()));
                 state = State.EMPTY_TURN;
+                LOG.finest(String.format("%s has reversed all planned moves", player.getName()));
             }
-            single = false;
             return true;
         }
-
         return false;
     }
 
@@ -167,18 +206,35 @@ public class Turn {
         return this.player.equals(player);
     }
 
-    /**
-     * A stable turn is one where a player has made one or more moves
-     * @return
-     */
-    public boolean isStable() {
-        return state == State.STABLE_TURN;
-    }
+	/**
+	 * Determine if the Turn can be submitted
+	 * A "finalized" turn requires:
+	 *   1. A move to have been made
+	 *   2. Multi-jump to be completed fully
+	 * @return
+	 */
+	public Message isFinalized() {
+		Message finalizedMessage = new Message(TURN_FINALIZED_MSG, Message.MessageType.info);
+		switch (state) {
+			case SINGLE_MOVE:
+				return finalizedMessage;
 
-    public boolean canResign(){
-        return this.state == State.EMPTY_TURN;
-    }
+			case JUMP_MOVE:
+				if (MoveValidator.canContinueJump(getLatestBoard(), lastValidMove.getEnd(), playerColor)) {
+					return new Message(JUMP_MOVE_PARTIAL_MSG, Message.MessageType.error);
+				} else {
+					return finalizedMessage;
+				}
 
+			default:
+				return new Message(NO_MOVES_MSG, Message.MessageType.error);
+		}
+
+	}
+
+	public boolean canResign(){
+        return state == State.EMPTY_TURN;
+    }
 
     /**
      * Return the player whose turn it is

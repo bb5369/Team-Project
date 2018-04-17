@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class CheckersGame {
@@ -94,6 +96,7 @@ public class CheckersGame {
         } else {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
+            // TODO: Do a win thing
         }
 
     }
@@ -130,7 +133,22 @@ public class CheckersGame {
      * Uses our static CheckersBoardBuilder to generate the starting Checkers Board
      */
     private void initStartingBoard() {
-        CheckersBoardBuilder builder = CheckersBoardBuilder.aStartingBoard();
+        CheckersBoardBuilder builder;
+
+        // Paging Mike Rowe - we've got a dirty job
+        // This is our backdoor into setting up a starting board for testing
+        // If the red player is named one of the public static methods in TestCheckersBoards
+        // then we use that board builder
+        try {
+            Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerRed.getName());
+
+            builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
+            System.out.println(e.toString());
+            e.printStackTrace();
+            builder = CheckersBoardBuilder.aStartingBoard();
+        }
 
         LOG.finest("Starting board:");
         LOG.finest(builder.formatBoardString());
@@ -150,20 +168,24 @@ public class CheckersGame {
     }
 
     /**
-	 * Allow the active player to submit their turn
+	 * Allow the active player to submit their turn if preconditions have been met
+     * Preconditions are:
+     *   1. Turn is finalized (no more jump moves, at least one move queued)
      * @param player
-     * @return
+     * @return Message indicating reason for turn submission
      */
-    public boolean submitTurn(Player player) {
-        if (player.equals(getPlayerActive()) && activeTurn.isStable()) {
-            board = activeTurn.getLatestBoard();
+    public Message submitTurn(Player player) {
+        if (player.equals(getPlayerActive())) {
+        	Message finalizedMessage = getTurn().isFinalized();
+        	if (finalizedMessage.getType() == Message.MessageType.info) {
+                board = getTurn().getLatestBoard();
+                changeActivePlayer();
+            }
+            return finalizedMessage;
 
-            changeActivePlayer();
-
-            return true;
+        } else {
+            return new Message("It is not your turn", Message.MessageType.error);
         }
-
-        return false;
     }
 
     /**

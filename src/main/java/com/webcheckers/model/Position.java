@@ -48,7 +48,7 @@ public class Position {
      */
     public boolean isOnBoard(){
     	return (row >= 0 && row < CheckersBoardBuilder.ROWS) &&
-                (cell >= 0 && row < CheckersBoardBuilder.CELLS);
+                (cell >= 0 && cell < CheckersBoardBuilder.CELLS);
     }
 
     /**

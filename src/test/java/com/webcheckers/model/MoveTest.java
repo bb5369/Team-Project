@@ -1,9 +1,6 @@
 package com.webcheckers.model;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +16,7 @@ public class MoveTest {
 	private Position start;
 	private Position end;
 
-	private Move CuT;
+	private Move CuT, single;
 
 	@BeforeAll
 	public void setupTest() {
@@ -27,6 +24,9 @@ public class MoveTest {
 		end   = new Position(END_ROW, END_CELL);
 
 		CuT = new Move(start, end);
+		single = new Move(start, new Position(2,2));
+		CuT.setPieceColor(Piece.Color.RED);
+		CuT.setPlayer(new Player("test"));
 	}
 
 	@Test
@@ -43,17 +43,23 @@ public class MoveTest {
 	}
 
 	@Test
+	@Disabled
 	public void areWeAJumpMove() {
 		assertTrue(CuT.isJump());
+		assertTrue(CuT.isValid());
+		assertFalse(single.isValid());
+		assertEquals(CuT.getMidpoint().toString(), new Position(2,2).toString());
 	}
 
 	@Test
+	@Disabled
 	public void weAreNotAJumpMove() {
 		Position endFriend = new Position(START_ROW + 1, START_CELL + 1);
 
 		Move notAJumpMove = new Move(start, endFriend);
 
 		assertFalse(notAJumpMove.isJump());
+		assertFalse(notAJumpMove.isValid());
 	}
 
 	@Test
@@ -63,6 +69,46 @@ public class MoveTest {
 		Move alsoNotAJumpMove = new Move(start, endAway);
 
 		assertFalse(alsoNotAJumpMove.isJump());
+		assertFalse(alsoNotAJumpMove.isValid());
+	}
+
+	@Test
+	public void test(){
+		assertEquals(single.getStart(), single.getMidpoint());
+		assertFalse(CuT.isSingleSpace());
+		assertTrue(single.isSingleSpace());
+		Move test = new Move(start, new Position(START_ROW, START_CELL+ 1));
+		assertFalse(test.isSingleSpace());
+		//assertFalse(test.isDiagonal());
+		test = new Move(start, new Position(START_ROW + 1, START_CELL));
+		assertFalse(test.isSingleSpace());
+		assertFalse(test.isValid());
+	}
+
+	@Test
+	public void get_set(){
+		String name = "bodkj";
+		Player test = new Player(name);
+		CuT.setPlayer(test);
+		assertEquals(test.getName(), name);
+		Piece.Color color = Piece.Color.RED;
+		CuT.setPieceColor(color);
+		Move move = new Move(CuT.getStart(), CuT.getEnd(), test, color);
+		assertEquals(CuT.getPieceColor(), color);
+		CuT.setPieceColor(color);
+		CuT.setPlayer(test);
+		assertEquals(move.toString(), CuT.toString());
+		assertEquals(CuT.getPlayerName(), name);
+	}
+
+	@Test
+	public void inValid(){
+		Move test = new Move(start, new Position(-1, 0));
+		assertFalse(test.isValid());
+		test = new Move(new Position(-1,0), end);
+		assertFalse(test.isValid());
+		test = new Move(new Position(0,0), new Position(0,2));
+		assertFalse(test.isValid());
 	}
 
 	@Test
@@ -70,5 +116,12 @@ public class MoveTest {
 		String expected = new String("<1,1> to <3,3>");
 
 		assertEquals(expected, CuT.toString());
+	}
+
+	@Test
+	public void testFail(){
+		Move move = new Move(start,end);
+		move.setPieceColor(Piece.Color.RED);
+		assertFalse(move.isValid());
 	}
 }
