@@ -3,6 +3,7 @@ package com.webcheckers.model;
 public final class TestCheckersBoards {
 
 	public static final Piece RED_SINGLE_PIECE = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
+	public static final Piece RED_KING_PIECE = new Piece(Piece.Type.KING, Piece.Color.RED);
 	public static final Piece WHITE_SINGLE_PIECE = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
 
 	/*
@@ -124,6 +125,45 @@ public final class TestCheckersBoards {
 				.withPieceAt(
                         RED_SINGLE_PIECE,
                         new Position(7, 4));
+	}
+
+	/**
+	 * Built off multiJump board, we place another RED piece on the board
+	 * In the normal rules of checkers you must take the force jump and you should
+	 * not be able to move the added RED piece
+	 *
+	 * . _ . W . _ . _
+	 * _ . _ . _ . _ .
+	 * . W . W . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . W . W . _
+	 * _ . _ . _ . _ .
+	 * . W . W . W . _
+	 * R . _ . R . _ .
+	 *
+	 * @return CheckersBoardBuilder
+	 */
+	public static CheckersBoardBuilder forceAJumpWithOptions() {
+		return forceAJump()
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						new Position(6, 3))
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						new Position(6, 5))
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						new Position(4, 5))
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						new Position(2, 3))
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						new Position(2, 1)
+				)
+				.withPieceAt(
+						RED_KING_PIECE,
+						new Position(7, 4));
 	}
 
 
