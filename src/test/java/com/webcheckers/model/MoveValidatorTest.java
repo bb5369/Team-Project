@@ -95,6 +95,23 @@ public class MoveValidatorTest {
 		test.setPieceColor(Piece.Color.WHITE);
 		test.setPlayer(player);
 		assertFalse(MoveValidator.validateMove(board, test));
+		test = new Move(new Position(2,3), new Position(3,4));
+		test.setPieceColor(Piece.Color.RED);
+		test.setPlayer(new Player(RED_PLAYER_NAME));
+		assertFalse(MoveValidator.validateMove(board, test));
+		test = new Move(new Position(6,1), new Position(4,3));
+		test.setPieceColor(Piece.Color.RED);
+		test.setPlayer(new Player(RED_PLAYER_NAME));
+		assertFalse(MoveValidator.validateMove(board, test));
+		Piece king = new Piece(Piece.Type.KING, Piece.Color.WHITE);
+		Position kingPosition = new Position(4, 1);
+
+		Space[][] boardWithKing = CheckersBoardBuilder.aBoard().withPieceAt(king, kingPosition).getBoard();
+
+
+		Move kingMoveBackwards = new Move(kingPosition, new Position(3, 2), new Player(RED_PLAYER_NAME), Piece.Color.RED);
+		assertFalse(MoveValidator.validateMove(boardWithKing, kingMoveBackwards));
+		assertFalse(MoveValidator.areMovesAvailableForPlayer(boardWithKing, new Player(RED_PLAYER_NAME), Piece.Color.RED));
 	}
 
 }
