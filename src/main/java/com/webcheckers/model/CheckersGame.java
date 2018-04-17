@@ -36,6 +36,8 @@ public class CheckersGame {
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
         this.state = State.IN_PLAY;
+        this.winner = null;
+        this.loser = null;
 
         initStartingBoard();
 
@@ -70,6 +72,8 @@ public class CheckersGame {
      * @return - player whose turn it is
      */
     public Player getPlayerActive() {
+        if(activeTurn == null)
+            return winner;
         return this.activeTurn.getPlayer();
     }
 
@@ -92,13 +96,17 @@ public class CheckersGame {
         }
 
         // make sure the next player has moves available
-        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
+        if (MoveValidator.playerHasPieces(board, nextPlayerColor) &&
+                MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)){
             // setup their turn
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
         } else {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
-            winCases();
+            this.winner = activePlayer;
+            this.loser = nextPlayer;
+            this.state = State.WON;
+            this.activeTurn = null;
         }
     }
 
@@ -181,27 +189,11 @@ public class CheckersGame {
         	if (finalizedMessage.getType() == Message.MessageType.info) {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
-            }
+            };
             return finalizedMessage;
 
         } else {
             return new Message("It is not your turn", Message.MessageType.error);
-        }
-    }
-
-    private void winCases(){
-        Player inactivePlayer;
-        if(getPlayerColor(getPlayerActive()) == getPlayerColor(playerRed))
-            inactivePlayer = playerWhite;
-        else
-            inactivePlayer = playerRed;
-        // If activePlayer has no moves or pieces left, they lose
-        if(!MoveValidator.areMovesAvailableForPlayer(board, getPlayerActive(), getPlayerColor(getPlayerActive())) ||
-                !MoveValidator.playerHasPieces(board, getPlayerActive(), getPlayerColor(getPlayerActive()))) {
-            LOG.info(String.format("%s has no more moves. Sad! %s wins.", getPlayerActive().getName(), inactivePlayer.getName()));
-            this.winner = inactivePlayer;
-            this.loser = getPlayerActive();
-            this.state = State.WON;
         }
     }
 

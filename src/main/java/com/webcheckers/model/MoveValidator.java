@@ -110,7 +110,7 @@ public class MoveValidator {
      *
      * @return - true if the player has pieces, false otherwise
      */
-    public static boolean playerHasPieces(Space[][] board, Player player, Piece.Color color){
+    public static boolean playerHasPieces(Space[][] board, Piece.Color color){
         // for each row
         for(int i = 0; i < 8; i++) {
             // for each cell

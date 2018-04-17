@@ -221,9 +221,6 @@ public final class TestCheckersBoards {
 
 	public static CheckersBoardBuilder noMoreMoves() {
 		return CheckersBoardBuilder.aBoard().withPieceAt(
-				new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
-				new Position(1, 0)
-				).withPieceAt(
 						new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
 						new Position(1, 2)
 				).withPieceAt(
@@ -231,14 +228,33 @@ public final class TestCheckersBoards {
 						new Position(0, 3)
 				).withPieceAt(
 						new Piece(Piece.Type.SINGLE, Piece.Color.RED),
-						new Position(3, 0));
-	}
-	public static CheckersBoardBuilder endgame() {
-		return CheckersBoardBuilder.aBoard().withPieceAt(
+						new Position(2, 1)
+				).withPieceAt(
 				new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+				new Position(0, 1)
+		);
+	}
+	/**
+ 	* For this board I did something special. I realized that we had too many magic numbers
+ 	* so I created some constants, and a constant red piece that tests can use to start their move
+ 	*
+ 	* BOARD
+ 	* . _ . _ . _ . _
+ 	* K . _ . _ . _ .
+ 	* . W . _ . _ . _
+ 	* _ . _ . _ . _ .
+ 	* . _ . _ . _ . _
+ 	* _ . _ . _ . _ .
+ 	* . _ . _ . _ . _
+ 	* _ . _ . _ . _ .
+ 	*
+ 	* @return CheckersBoardBuilder*/
+	public static CheckersBoardBuilder endGame() {
+		return CheckersBoardBuilder.aBoard().withPieceAt(
+				new Piece(Piece.Type.KING, Piece.Color.RED),
 				new Position(1, 0)
 				).withPieceAt(
-					new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+					new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
 					new Position(2, 1));
 	}
 

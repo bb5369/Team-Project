@@ -156,6 +156,12 @@ public class GetGameRoute implements Route {
             LOG.fine(String.format("Playing game between [%s] and [%s]", sessionPlayer.getName(), opponentPlayer.getName()));
             game = gameManager.getGame(sessionPlayer, opponentPlayer);
         }
+
+        if (game.isWon()) {
+            if (vm.get("message") == null) {
+                vm.put("message", new Message(String.format("Game won by %s", game.getWinner().getName()), Message.MessageType.info));
+            }
+        }
         return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
     }
 
