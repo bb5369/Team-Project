@@ -27,7 +27,7 @@ public class TurnTest {
 	public static void setupTest() {
 		// build our real components
 		player = new Player("Testy McTestFace");
-		playerColor = Piece.Color.WHITE;
+		playerColor = Piece.Color.RED;
 
 		validMove = new Move(
 				new Position(START_ROW, START_CELL),
@@ -36,8 +36,8 @@ public class TurnTest {
 		);
 
 		invalidMove = new Move(
-				new Position(START_ROW, START_CELL),
-				new Position(3, 3),
+				TestCheckersBoards.RED_PAWN_POSITION,
+				new Position(0, 0),
 				player, playerColor
 		);
 
@@ -49,16 +49,18 @@ public class TurnTest {
 
 		// create mocks
 		checkersGame = mock(CheckersGame.class);
-		when(checkersGame.getPlayerColor(player)).thenReturn(Piece.Color.WHITE);
-
 	}
 
 	/**
 	 * We start each test with a new Turn for predicable state
+	 * The Turn tests use the `singleJumpToEnd` board
 	 */
 	@BeforeEach
 	public void setupCuT() {
-		checkersBoard = CheckersBoardBuilder.aStartingBoard().getBoard();
+		checkersBoard = TestCheckersBoards.singleJumpToEnd().getBoard();
+
+		System.out.println("The board we are using for this test:");
+		System.out.println(CheckersBoardHelper.formatBoardString(checkersBoard));
 
 		CuT = new Turn(checkersBoard, player, playerColor);
 
@@ -70,41 +72,57 @@ public class TurnTest {
 		CuT = new Turn(checkersBoard, player, playerColor);
 	}
 
+	/**
+	 * This unit test ensures the Turn can advance to a stable situation in the JUMP_MOVE state
+	 * We then roll back the move
+	 */
 	@Test
-	@Disabled
 	public void validateMove_valid() {
-		//assertTrue(CuT.validateMove(validMove));
 
-		assertEquals(Turn.State.EMPTY_TURN ,CuT.getState());
+		Message validateMoveMessage = CuT.validateMove(TestCheckersBoards.RED_FIRST_JUMP_MOVE);
+		assertEquals(Message.MessageType.info, validateMoveMessage.getType());
+
+		assertEquals(Turn.State.JUMP_MOVE, CuT.getState());
+
+		assertTrue(CuT.backupMove());
+
+		assertEquals(Turn.State.EMPTY_TURN, CuT.getState());
+
 	}
 
+	/**
+	 * Given an invalid Move, Turn should fail validation and hold its EMPTY_TURN state
+	 */
 	@Test
-	@Disabled
 	public void validateMove_invalid() {
-		//assertFalse(CuT.validateMove(invalidMove));
 
+		Message validateMoveMessage = CuT.validateMove(invalidMove);
+
+		assertEquals(Message.MessageType.error, validateMoveMessage.getType());
 		assertEquals(Turn.State.EMPTY_TURN, CuT.getState());
 	}
 
+
+	/**
+	 * Given a valid jump move, I expect the latest board to have the jumped piece removed
+	 */
 	@Test
-	@Disabled // We do not have jump moves working
 	public void validateMove_jump() {
-		Piece opponentPiece = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
-		Position jumpPosition = new Position(START_ROW+1, START_CELL+1);
 
-		// Build a board with a piece to jump
-		CheckersBoardBuilder jumpBoardBuilder = CheckersBoardBuilder.aStartingBoard()
-				.withPieceAt(opponentPiece, jumpPosition);
+		Space jumpedSpace = CheckersBoardHelper.getSpace(checkersBoard, TestCheckersBoards.WHITE_JUMPED_POSITION);
 
-		Space[][] board = jumpBoardBuilder.getBoard();
-		when(checkersGame.getBoard()).thenReturn(board);
+		Message validateMoveMessage = CuT.validateMove(TestCheckersBoards.RED_FIRST_JUMP_MOVE);
+		assertEquals(Message.MessageType.info, validateMoveMessage.getType());
+		assertEquals(Turn.State.JUMP_MOVE, CuT.getState());
 
-		// Setup a new turn with this board
-		CuT = new Turn(board, player, playerColor);
+		// Space is not affected on original board
+		assertFalse(jumpedSpace.isOpen());
 
-		//assertTrue(CuT.validateMove(jumpMove));
+		Space[][] boardAfterJump = CuT.getLatestBoard();
 
-		//assertEquals(Turn.State.STABLE_TURN, CuT.getState());
+		jumpedSpace = CheckersBoardHelper.getSpace(boardAfterJump, TestCheckersBoards.WHITE_JUMPED_POSITION);
+
+		assertTrue(jumpedSpace.isOpen());
 	}
 
 

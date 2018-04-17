@@ -8,7 +8,30 @@ public final class TestCheckersBoards {
 	 */
 	public static final int RED_PAWN_ROW = 7;
 	public static final int RED_PAWN_CELL = 0;
+
+	// The starting position of the RED piece to move
 	public static final Position RED_PAWN_POSITION = new Position(RED_PAWN_ROW, RED_PAWN_CELL);
+
+	// The end position of the first jump
+	public static final Position RED_PAWN_JUMP_POSITION = new Position(
+			RED_PAWN_ROW - 2,
+			RED_PAWN_CELL + 2);
+
+	// This is the first piece that gets jumped
+	public static final Position WHITE_JUMPED_POSITION = new Position(
+			RED_PAWN_ROW - 1,
+			RED_PAWN_CELL + 1);
+
+	// The end of position of a first single move
+	public static final Position RED_PAWN_SINGLE_POSITION = new Position(
+			RED_PAWN_ROW - 1,
+			RED_PAWN_CELL + 1);
+
+	// These are placed here for convenience. Unit tests use them.
+	public static final Move RED_FIRST_JUMP_MOVE = new Move(RED_PAWN_POSITION, RED_PAWN_JUMP_POSITION, null, Piece.Color.RED);
+
+	public static final Move RED_FIRST_SINGLE_MOVE = new Move(RED_PAWN_POSITION, RED_PAWN_SINGLE_POSITION, null, Piece.Color.RED);
+
 
 	/**
 	 * A checkers board where the RED player can jump over two white player pieces
@@ -30,7 +53,7 @@ public final class TestCheckersBoards {
 		return CheckersBoardBuilder.aBoard()
 			.withPieceAt(
 					new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
-					new Position(6, 1))
+					WHITE_JUMPED_POSITION)
 			.withPieceAt(
 					new Piece (Piece.Type.SINGLE, Piece.Color.RED),
 					RED_PAWN_POSITION)
