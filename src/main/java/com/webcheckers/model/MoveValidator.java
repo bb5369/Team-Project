@@ -173,14 +173,11 @@ public class MoveValidator {
             int startRow = move.getStartRow();
             int endRow = move.getEndRow();
 
-            switch (move.getPieceColor()) {
-                case RED:
-                    conditionTruth = (endRow < startRow);
-                    break;
-                case WHITE:
-                    conditionTruth = (endRow > startRow);
-                    break;
-            }
+            if(move.getPieceColor() == Piece.Color.RED)
+                conditionTruth = (endRow < startRow);
+            else
+                conditionTruth = (endRow > startRow);
+
         }
 
         LOG.finest(String.format("Validate isMoveInRightDirection(): %s", conditionTruth));
@@ -201,8 +198,10 @@ public class MoveValidator {
         if (move.isJump()) {
             Space space = getSpace(board, move.getMidpoint());
             Piece piece = getSpace(board, move.getStart()).getPiece();
-            if (space.isOccupied() && !space.getPiece().getColor().equals(piece.getColor())) {
-                conditionTruth = true;
+            if (space.isOccupied()) {
+                if (!space.getPiece().getColor().equals(piece.getColor())) {
+                    conditionTruth = true;
+                }
             }
         }
         LOG.finest(String.format("Validate areWeMovingMyPiece(): %s", conditionTruth));
