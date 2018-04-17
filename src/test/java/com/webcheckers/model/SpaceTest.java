@@ -59,7 +59,8 @@ public class SpaceTest {
 		Space testSpace = new Space(SPACE_ID, Space.State.INVALID);
 		Space testSpace2 = new Space(SPACE_ID, Space.State.OCCUPIED);
 
-		assertFalse(testSpace.isValid() || testSpace2.isValid());
+		assertFalse(testSpace.isValid());
+		assertFalse(testSpace2.isValid());
 
 	}
 
@@ -68,9 +69,9 @@ public class SpaceTest {
 	 */
 	@Test
 	public void validSpacePiece() {
-		Space testSpace = new Space(SPACE_ID, mockPiece);
+		Space testSpace = new Space(SPACE_ID, Space.State.OPEN);
 
-		assertTrue(!testSpace.isValid());
+		assertTrue(testSpace.isValid());
 	}
 
 	/**
@@ -223,6 +224,28 @@ public class SpaceTest {
 		Space toClone = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
 		Space clone = toClone.clone();
 		assertEquals(toClone, clone);
+
+		Space clone2 = new Space(SPACE_ID, Space.State.OPEN);
+		clone = clone2.clone();
+		assertNull(clone.getPiece());
 	}
 
+	@Test
+	public void testEquals(){
+		Space test = null;
+		assertFalse(mockPiece.equals(test));
+		Space test2 = new Space(SPACE_ID, Space.State.OPEN);
+		test = new Space(1, Space.State.OPEN);
+		assertFalse(test.equals(test2));
+		assertFalse(test.equals(new Object()));
+		assertFalse(test.equals(null));
+		test = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.RED));
+		test2 = new Space(SPACE_ID, new Piece(Piece.Type.SINGLE, Piece.Color.WHITE));
+		assertFalse(test2.equals(test));
+		test = new Space(SPACE_ID, Space.State.OPEN);
+		test2 = new Space(SPACE_ID, Space.State.INVALID);
+		assertFalse(test.equals(test2));
+
+	}
+	//TODO: Add testing for removing a jump piece
 }
