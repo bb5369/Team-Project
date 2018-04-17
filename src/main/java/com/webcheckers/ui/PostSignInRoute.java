@@ -63,11 +63,24 @@ public class PostSignInRoute implements Route {
 
         String playerName = request.queryParams("name");
 
+        String casual = request.queryParams("casual");
+        //String tournament = request.queryParams("tournament");
+
+        Player.GameType type;
+
+        if(casual == null) {
+            type = Player.GameType.TOURNAMENT;
+            LOG.info(String.format("Player [%s] is in TOURNAMENT mode.", playerName));
+        }else {
+            type = Player.GameType.NORMAL;
+            LOG.info(String.format("Player [%s] is in NORMAL mode.", playerName));
+        }
+
         Player newPlayer;
 
         try {
-            
-            newPlayer = playerLobby.newPlayer(playerName, Player.GameType.NORMAL);
+
+            newPlayer = playerLobby.newPlayer(playerName, type);
             // Add the new Player's model to their session
             request.session().attribute("Player", newPlayer);
 
