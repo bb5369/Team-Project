@@ -18,10 +18,13 @@ public class Turn {
     public static final String NO_MOVES_MSG          = "You have not made any moves this turn.";
     public static final String JUMP_MOVE_AVAIL_MSG   = "You have a jump move available and must take it.";
     public static final String JUMP_MOVE_PARTIAL_MSG = "You can continue your jump.";
+    public static final String JUMP_MOVE_ONLY_MSG    = "You can only make jumps during a jump-move";
     public static final String SINGLE_MOVE_ONLY_MSG  = "You can only make one single move in a turn.";
 
     public static final String VALID_SINGLE_MOVE_MSG = "Valid single move! Submit your turn.";
     public static final String VALID_JUMP_MOVE_MSG   = "Valid jump move!";
+
+    public static final String TURN_FINALIZED_MSG    = "Turn has been finalized";
 
 
     // Purposely mismatching frontend
@@ -105,7 +108,7 @@ public class Turn {
 
             case JUMP_MOVE:
                 if (move.isSingleSpace()) {
-                	moveValidMessage =  new Message(JUMP_MOVE_PARTIAL_MSG, Message.MessageType.error);
+                	moveValidMessage =  new Message(JUMP_MOVE_ONLY_MSG, Message.MessageType.error);
 				} else if (MoveValidator.validateMove(board, move)) {
                 	moveValidMessage = new Message(VALID_JUMP_MOVE_MSG, Message.MessageType.info);
                 }
@@ -152,18 +155,15 @@ public class Turn {
 		Space startSpace = getSpace(matrix, move.getStart());
 		Space endSpace = getSpace(matrix, move.getEnd());
 
-		if (endSpace.movePieceFrom(startSpace)) {
-			LOG.finest("Move successfully made on board");
+		endSpace.movePieceFrom(startSpace);
+		LOG.finest("Move successfully made on board");
 
-		    pendingMoves.push(matrix);
-		    lastValidMove = move;
+		pendingMoves.push(matrix);
+		lastValidMove = move;
 
-		    setStateAfterMove(move);
+		setStateAfterMove(move);
 
-		    return true;
-        } else {
-			return false;
-		}
+		return true;
     }
 
     private void setStateAfterMove(Move move) {
@@ -214,7 +214,7 @@ public class Turn {
 	 * @return
 	 */
 	public Message isFinalized() {
-		Message finalizedMessage = new Message("Turn has been finalized", Message.MessageType.info);
+		Message finalizedMessage = new Message(TURN_FINALIZED_MSG, Message.MessageType.info);
 		switch (state) {
 			case SINGLE_MOVE:
 				return finalizedMessage;
