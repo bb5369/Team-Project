@@ -120,8 +120,7 @@ public class Move {
      */
     public boolean isValid() {
         return (start.isOnBoard() && end.isOnBoard()) &&
-                (isSingleSpace() || isJump()) &&
-                isDiagonal();
+                (isSingleSpace() || isJump());
     }
 
     /**
