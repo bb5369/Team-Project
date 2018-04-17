@@ -14,20 +14,20 @@ public class Piece {
     public enum Color {RED, WHITE}
 
     //instance
-    private Type ty;
-    private Color col;
+    private Type type;
+    private Color color;
 
     /**
      * Parameterized constructor
      * This initializes the type and color
      * to the passed in values
      *
-     * @param ty  - type of the piece (SINGLE, KING)
-     * @param col - Color of the PIECE (RED, WHITE)
+     * @param type  - type of the piece (SINGLE, KING)
+     * @param color - Color of the PIECE (RED, WHITE)
      */
-    public Piece(Type ty, Color col) {
-        this.ty = ty;
-        this.col = col;
+    public Piece(Type type, Color color) {
+        this.type = type;
+        this.color = color;
     }
 
     /**
@@ -36,16 +36,16 @@ public class Piece {
      * @return - type of the piece
      */
     public Type getType() {
-        return ty;
+        return type;
     }
 
     /**
-     * getter for col (color)
+     * getter for color
      *
      * @return - color of the piece
      */
     public Color getColor() {
-        return col;
+        return color;
     }
 
     /**
@@ -54,7 +54,14 @@ public class Piece {
      */
     public Piece clone()
     {
-        return new Piece(this.ty, this.col);
+        return new Piece(this.type, this.color);
+    }
+
+    /**
+     * Makes the piece a king
+     */
+    public void kingMe(){
+        this.type = Type.KING;
     }
 
     @Override
@@ -64,9 +71,9 @@ public class Piece {
             return false;
         if(!(other instanceof Piece))
             return false;
-        if(this.ty != ((Piece)other).ty)
+        if(this.type != ((Piece)other).type)
             return false;
-        if(this.col != ((Piece)other).col)
+        if(this.color != ((Piece)other).color)
             return false;
 
         return true;
@@ -79,8 +86,8 @@ public class Piece {
      */
     public String toString() {
         return new String("Piece: "
-                + ((col == Color.RED) ? "Red " : "White ")
-                + ((ty == Type.SINGLE) ? "Single" : "King"));
+                + ((color == Color.RED) ? "Red " : "White ")
+                + ((type == Type.SINGLE) ? "Single" : "King"));
     }
 
 }

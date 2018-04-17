@@ -178,11 +178,31 @@ public class CheckersGame {
         	if (finalizedMessage.getType() == Message.MessageType.info) {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
+                makeKings();
             }
-            return finalizedMessage;
+			return finalizedMessage;
 
         } else {
             return new Message("It is not your turn", Message.MessageType.error);
+        }
+    }
+
+    /**
+     * When pieces reach the proper end row, the piece will be kinged
+     */
+    private void makeKings(){
+        // King red pieces
+        for(int cell = 0; cell < 8; cell++){
+            if(board[0][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.RED){
+                board[0][cell].getPiece().kingMe();
+            }
+        }
+
+        // King white pieces
+        for(int cell = 0; cell < 8; cell++){
+            if(board[7][cell].isOccupied() && board[7][cell].getPiece().getColor() == Piece.Color.WHITE){
+                board[7][cell].getPiece().kingMe();
+            }
         }
     }
 
