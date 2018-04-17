@@ -28,6 +28,8 @@ public class MoveTest {
 
 		CuT = new Move(start, end);
 		single = new Move(start, new Position(2,2));
+		CuT.setPieceColor(Piece.Color.RED);
+		CuT.setPlayer(new Player("test"));
 	}
 
 	@Test
@@ -47,7 +49,7 @@ public class MoveTest {
 	public void areWeAJumpMove() {
 		assertTrue(CuT.isJump());
 		assertTrue(CuT.isValid());
-		assertTrue(single.isValid());
+		assertFalse(single.isValid());
 		assertEquals(CuT.getMidpoint().toString(), new Position(2,2).toString());
 	}
 
@@ -58,7 +60,7 @@ public class MoveTest {
 		Move notAJumpMove = new Move(start, endFriend);
 
 		assertFalse(notAJumpMove.isJump());
-		assertTrue(notAJumpMove.isValid());
+		assertFalse(notAJumpMove.isValid());
 	}
 
 	@Test
@@ -115,5 +117,12 @@ public class MoveTest {
 		String expected = new String("<1,1> to <3,3>");
 
 		assertEquals(expected, CuT.toString());
+	}
+
+	@Test
+	public void testFail(){
+		Move move = new Move(start,end);
+		move.setPieceColor(Piece.Color.RED);
+		assertFalse(move.isValid());
 	}
 }

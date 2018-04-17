@@ -152,7 +152,7 @@ public class Move {
      */
     public boolean isValid() {
         return (start.isOnBoard() && end.isOnBoard()
-                && this.getPieceColor() != null && this.getPlayerName() != null);
+                && this.getPieceColor() != null && this.player != null);
     }
 
     /**
