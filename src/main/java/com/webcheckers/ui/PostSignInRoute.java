@@ -66,8 +66,8 @@ public class PostSignInRoute implements Route {
         Player newPlayer;
 
         try {
-
-            newPlayer = playerLobby.newPlayer(playerName);
+            
+            newPlayer = playerLobby.newPlayer(playerName, Player.GameType.NORMAL);
             // Add the new Player's model to their session
             request.session().attribute("Player", newPlayer);
 
