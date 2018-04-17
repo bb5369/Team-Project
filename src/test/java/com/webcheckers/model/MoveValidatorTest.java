@@ -1,9 +1,6 @@
 package com.webcheckers.model;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -20,12 +17,16 @@ public class MoveValidatorTest {
 	private static CheckersBoardBuilder boardBuilder;
 
 	private Space[][] board;
+	private Move jumpOne, jumpTwo;
 
-	@BeforeAll
-	public static void testSetup() {
+	@BeforeEach
+	public void testSetup() {
 
 		// Build dependent objects
 		player = new Player(WHITE_PLAYER_NAME);
+		jumpOne = new Move(new Position(0,0), new Position(2,2));
+		jumpTwo = new Move(jumpOne.getEnd(), new Position(4,4));
+		jumpOne.setPieceColor(Piece.Color.RED);
 
 		boardBuilder = CheckersBoardBuilder.aStartingBoard();
 	}
@@ -45,7 +46,6 @@ public class MoveValidatorTest {
 	}
 
 	@Test
-	@Disabled
 	public void test_aKingMoveBackwards() {
 		board = boardBuilder.getBoard();
 
@@ -65,33 +65,30 @@ public class MoveValidatorTest {
 				player,
 				Piece.Color.WHITE
 		);
-
-		assertTrue(MoveValidator.validateMove(board, kingMoveBackwards));
+		//assertTrue(MoveValidator.areMovesAvailableForPlayer(board,player, kingMoveBackwards.getPieceColor()));
+		assertTrue(MoveValidator.validateMove(boardWithKing, kingMoveBackwards));
 	}
 
 	@Test
-	@Disabled
 	public void test_areMovesAvailable(){
 		Piece.Color color = Piece.Color.WHITE;
+		Space[][] board = TestCheckersBoards.singleJumpToEnd().getBoard();
 		// Tests against a starting board
 		assertTrue(MoveValidator.areMovesAvailableForPlayer(board, player, color));
-		// TODO: Test on a board set up with no moves
+		board = CheckersBoardBuilder.aBoard().getBoard();
+		assertFalse(MoveValidator.areMovesAvailableForPlayer(board, player, color));
 	}
 
 	@Test
-	@Disabled
 	public void test_jumpMove(){
-		Move testJump;
-		// assertTrue(MoveValidator.validateMove(board, testJump));
-		// TODO: Test on a board set up with a jump move
+		Space[][] board = TestCheckersBoards.multiJumpToEnd().getBoard();
+		assertTrue(MoveValidator.areJumpsAvailableForPlayer(board, jumpOne.getPieceColor()));
+		assertFalse(MoveValidator.areJumpsAvailableForPlayer(board, Piece.Color.WHITE));
+		assertFalse(MoveValidator.canContinueJump(board, jumpOne.getEnd(), jumpOne.getPieceColor()));
+		Move test = new Move(jumpOne.getStart(), new Position(1,0));
+		test.setPieceColor(Piece.Color.RED);
+		test.setPlayer(new Player(RED_PLAYER_NAME));
+		//assertFalse(MoveValidator.validateMove(board, test));
 	}
 
-	@Test
-	@Disabled
-	public void test_forcedJump(){
-		//doesn't have to be a valid move, as long as the start position has a piece on it
-		Move move = new Move(new Position(0,0), new Position(2, 2));
-		move.setPieceColor(Piece.Color.RED);
-		assertFalse(MoveValidator.areJumpsAvailableForPlayer(board, move.getPieceColor()));
-	}
 }
