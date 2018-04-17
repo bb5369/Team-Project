@@ -17,6 +17,14 @@ public class CheckersBoardHelper {
 	}
 
 	/**
+	 *
+	 */
+	public static Piece.Color getSpacePieceColor(Space[][] board, Position position)
+	{
+		return getSpace(board, position).getPiece().getColor();
+	}
+
+	/**
 	 * Returns a string format of the given board matrix
 	 *
 	 * A starting board looks like this.

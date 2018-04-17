@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import static com.webcheckers.model.CheckersBoardHelper.getSpace;
 import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
+import static com.webcheckers.model.CheckersBoardHelper.getSpacePieceColor;
 
 /**
  * Move validation requires several things:
@@ -20,6 +21,7 @@ import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
 public class MoveValidator {
 
     private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
+    private static final int JUMP_DIFF = 2;
 
     /**
      * Entrypoint to move validation algorithm - kicks off the process
@@ -265,41 +267,46 @@ public class MoveValidator {
     private static boolean canJump(Space[][] board, int row, int cell, Piece.Color piece) {
         Space cur = board[row][cell];
         if (cur.isOccupied() && piece.equals(cur.getPiece().getColor())) {
-            Move test;
+            Move testMove;
             Position start = new Position(row, cell);
             if (cell + 2 < board[row].length) {
                 if (row + 2 < board.length) {
-                    test = new Move(start, new Position(row + 2, cell + 2));
-                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    testMove = new Move(start, new Position(row + JUMP_DIFF, cell + JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
                     //test.setPlayer(new Player(move.getPlayerName()));
-                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                    if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
-                    test = new Move(start, new Position(row - 2, cell + 2));
-                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    testMove = new Move(start, new Position(row - JUMP_DIFF, cell + JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
                     //test.setPlayer(new Player(move.getPlayerName()));
-                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                    if (canJumpValidation(board,testMove))
                         return true;
                 }
             }
             if (cell - 2 >= 0) {
                 if (row + 2 < board.length) {
-                    test = new Move(start, new Position(row + 2, cell - 2));
-                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    testMove = new Move(start, new Position(row + JUMP_DIFF, cell - JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
                     //test.setPlayer(new Player(move.getPlayerName()));
-                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                    if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
-                    test = new Move(start, new Position(row - 2, cell - 2));
-                    test.setPieceColor(getSpace(board, test.getStart()).getPiece().getColor());
+                    testMove = new Move(start, new Position(row - JUMP_DIFF, cell - JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
                     //test.setPlayer(new Player(move.getPlayerName()));
-                    if (isMoveJumpingAPiece(board, test) && isEndSpaceOpen(board, test) && isMoveInRightDirection(board, test))
+                    if (canJumpValidation(board,testMove))
                         return true;
                 }
             }
         }
         return false;
+    }
+
+    public static boolean canJumpValidation(Space[][] board, Move move)
+    {
+        return isMoveJumpingAPiece(board, move) && isEndSpaceOpen(board, move) && isMoveInRightDirection(board, move);
     }
 }
