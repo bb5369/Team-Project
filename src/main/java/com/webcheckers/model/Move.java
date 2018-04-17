@@ -151,8 +151,7 @@ public class Move {
      * @return boolean
      */
     public boolean isValid() {
-        return (start.isOnBoard() && end.isOnBoard()) &&
-                (isSingleSpace() || isJump());
+        return (start.isOnBoard() && end.isOnBoard());
     }
 
     /**
