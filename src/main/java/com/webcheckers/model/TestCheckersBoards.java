@@ -2,6 +2,9 @@ package com.webcheckers.model;
 
 public final class TestCheckersBoards {
 
+	public static final Piece RED_SINGLE_PIECE = new Piece(Piece.Type.SINGLE, Piece.Color.RED);
+	public static final Piece WHITE_SINGLE_PIECE = new Piece(Piece.Type.SINGLE, Piece.Color.WHITE);
+
 	/*
 	We define pawn in this case to mean 'piece that will be moved'
 	Get your chess outta here.
@@ -9,29 +12,64 @@ public final class TestCheckersBoards {
 	public static final int RED_PAWN_ROW = 7;
 	public static final int RED_PAWN_CELL = 0;
 
-	// The starting position of the RED piece to move
+	// The starting position of the RED piece moved in unit tests
 	public static final Position RED_PAWN_POSITION = new Position(RED_PAWN_ROW, RED_PAWN_CELL);
 
-	// The end position of the first jump
+	// The end Position of the first jump
 	public static final Position RED_PAWN_JUMP_POSITION = new Position(
 			RED_PAWN_ROW - 2,
 			RED_PAWN_CELL + 2);
 
-	// This is the first piece that gets jumped
+	// The end Position of the second jump
+	public static final Position RED_PAWN_JUMP_SECOND_POSITION = new Position(
+			RED_PAWN_ROW - 4,
+			RED_PAWN_CELL + 4);
+
+	// This is the Position first WHITE piece that gets jumped
 	public static final Position WHITE_JUMPED_POSITION = new Position(
 			RED_PAWN_ROW - 1,
 			RED_PAWN_CELL + 1);
 
-	// The end of position of a first single move
+	// The end Position of a first single move
 	public static final Position RED_PAWN_SINGLE_POSITION = new Position(
 			RED_PAWN_ROW - 1,
 			RED_PAWN_CELL + 1);
 
+	// This is the Position of the WHITE piece that remains untouched
+	public static final Position WHITE_SINGLE_PIECE_POSITION= new Position(0, 3);
+
 	// These are placed here for convenience. Unit tests use them.
 	public static final Move RED_FIRST_JUMP_MOVE = new Move(RED_PAWN_POSITION, RED_PAWN_JUMP_POSITION, null, Piece.Color.RED);
 
+	public static final Move RED_SECOND_JUMP_MOVE = new Move(RED_PAWN_JUMP_POSITION, RED_PAWN_JUMP_SECOND_POSITION, null, Piece.Color.RED);
+
 	public static final Move RED_FIRST_SINGLE_MOVE = new Move(RED_PAWN_POSITION, RED_PAWN_SINGLE_POSITION, null, Piece.Color.RED);
 
+
+	/**
+	 * A checkers board where the RED player can only move a single space
+	 * but not affect any WHITE player pieces.
+	 *
+	 * . _ . W . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . _ . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . _ . _ . _
+	 * _ . _ . _ . _ .
+	 * . _ . _ . _ . _
+	 * R . _ . _ . _ .
+	 *
+	 * @return CheckersBoardBuilder
+	 */
+	public static CheckersBoardBuilder singleMove() {
+		return CheckersBoardBuilder.aBoard()
+				.withPieceAt(
+						RED_SINGLE_PIECE,
+						RED_PAWN_POSITION)
+				.withPieceAt(
+						WHITE_SINGLE_PIECE,
+						WHITE_SINGLE_PIECE_POSITION);
+	}
 
 	/**
 	 * A checkers board where the RED player can jump over two white player pieces
@@ -52,17 +90,17 @@ public final class TestCheckersBoards {
 	public static CheckersBoardBuilder multiJump() {
 		return CheckersBoardBuilder.aBoard()
 			.withPieceAt(
-					new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+					WHITE_SINGLE_PIECE,
 					WHITE_JUMPED_POSITION)
 			.withPieceAt(
-					new Piece (Piece.Type.SINGLE, Piece.Color.RED),
+					RED_SINGLE_PIECE,
 					RED_PAWN_POSITION)
 			.withPieceAt(
-					new Piece (Piece.Type.SINGLE, Piece.Color.WHITE),
+					WHITE_SINGLE_PIECE,
 					new Position(4, 3))
 			.withPieceAt(
-					new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
-					new Position(0, 3));
+					WHITE_SINGLE_PIECE,
+					WHITE_SINGLE_PIECE_POSITION);
 	}
 
 	/**
@@ -84,7 +122,7 @@ public final class TestCheckersBoards {
 	public static CheckersBoardBuilder forceAJump() {
 		return multiJump()
 				.withPieceAt(
-                        new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+                        RED_SINGLE_PIECE,
                         new Position(7, 4));
 	}
 
@@ -110,7 +148,7 @@ public final class TestCheckersBoards {
 	 */
 	public static CheckersBoardBuilder multiJumpToEnd() {
 		return multiJump()
-				.withoutPieceAt(new Position(0, 3));
+				.withoutPieceAt(WHITE_SINGLE_PIECE_POSITION);
 	}
 
 	/**
@@ -132,11 +170,11 @@ public final class TestCheckersBoards {
 	public static CheckersBoardBuilder singleJumpToEnd() {
 		return CheckersBoardBuilder.aBoard()
 				.withPieceAt(
-						new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+						WHITE_SINGLE_PIECE,
 						new Position(RED_PAWN_ROW - 1, RED_PAWN_CELL + 1)
 				)
 				.withPieceAt(
-						new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+						RED_SINGLE_PIECE,
 						RED_PAWN_POSITION
 				);
 	}

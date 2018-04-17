@@ -29,54 +29,58 @@ public class CheckersBoardHelper {
 	 *      [R] = Red Single Piece
 	 *      [K] = Red King Piece
 
-	 . W . W . W . W
-	 W . W . W . W .
-	 . W . W . W . W
-	 _ . _ . _ . _ .
-	 . _ . _ . _ . _
-	 R . R . R . R .
-	 . R . R . R . R
-	 R . R . R . R .
+	   0 1 2 3 4 5 6 7
+	 0  . W . W . W . W
+	 1  W . W . W . W .
+	 2  . W . W . W . W
+	 3  _ . _ . _ . _ .
+	 4  . _ . _ . _ . _
+	 5  R . R . R . R .
+	 6  . R . R . R . R
+	 7  R . R . R . R .
 
 	 * @return
 	 */
 	public static String formatBoardString(Space[][] board) {
 
-		StringJoiner row;
+		StringJoiner rowString;
 		StringJoiner boardStringJoiner = new StringJoiner("\n");
 
 		boardStringJoiner.add("BOARD");
+		boardStringJoiner.add("  0 1 2 3 4 5 6 7");
 
-		for (Space[] r : board) {
+		for (int row=0; row < CheckersBoardBuilder.ROWS; row++) {
 
-			row = new StringJoiner(" ");
+			Space[] r = board[row];
+			rowString = new StringJoiner(" ");
+			rowString.add(row + ""); // m4d l33t h4x
 
 			for (Space c : r) {
 				if (c.isOpen()) {
-					row.add("_");
+					rowString.add("_");
 					continue;
 				}
 
 				if (c.getState() == Space.State.INVALID) {
-					row.add(".");
+					rowString.add(".");
 				} else {
 					switch (c.getPiece().getColor()) {
 						case WHITE:
 							if (c.getPiece().getType() == KING)
-								row.add("I");
+								rowString.add("I");
 							else
-								row.add("W");
+								rowString.add("W");
 							break;
 						case RED:
 							if (c.getPiece().getType() == KING)
-								row.add("K");
+								rowString.add("K");
 							else
-								row.add("R");
+								rowString.add("R");
 							break;
 					}
 				}
 			}
-			boardStringJoiner.add(row.toString());
+			boardStringJoiner.add(rowString.toString());
 		}
 
 		return boardStringJoiner.toString();
