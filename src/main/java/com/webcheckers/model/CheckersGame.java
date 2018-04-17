@@ -180,10 +180,8 @@ public class CheckersGame {
         	if (finalizedMessage.getType() == Message.MessageType.info) {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
+                makeKings();
             }
-            makeKings();
-            changeActivePlayer();
-
 			return finalizedMessage;
 
         } else {
@@ -194,7 +192,7 @@ public class CheckersGame {
     /**
      * When pieces reach the proper end row, the piece will be kinged
      */
-    public void makeKings(){
+    private void makeKings(){
         // King red pieces
         for(int cell = 0; cell < 8; cell++){
             if(board[0][cell].isOccupied() && board[0][cell].getPiece().getColor() == Piece.Color.RED){
