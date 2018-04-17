@@ -218,4 +218,33 @@ public final class TestCheckersBoards {
 						RED_PAWN_POSITION
 				);
 	}
+
+	public static CheckersBoardBuilder noMoreMoves() {
+		return CheckersBoardBuilder.aBoard().withPieceAt(
+				new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+				new Position(1, 0)
+				).withPieceAt(
+						new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+						new Position(1, 2)
+				).withPieceAt(
+						new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+						new Position(0, 3)
+				).withPieceAt(
+						new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+						new Position(3, 0));
+	}
+	public static CheckersBoardBuilder endgame() {
+		return CheckersBoardBuilder.aBoard().withPieceAt(
+				new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+				new Position(1, 0)
+				).withPieceAt(
+					new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+					new Position(2, 1));
+	}
+
+	public static CheckersBoardBuilder noPieces() {
+		return CheckersBoardBuilder.aBoard().withPieceAt(
+				new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+				new Position(1, 0));
+	}
 }
