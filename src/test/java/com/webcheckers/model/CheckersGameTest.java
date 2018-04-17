@@ -73,4 +73,25 @@ public class CheckersGameTest {
     public void gameOver(){
         //ToDo: create a board to Win a Thing
     }
+
+    @Test
+    public void changeActivePlayer_endGame() {
+    	// This uses TestCheckersBoards to give us a board that will end in one turn
+        red = new Player("singleJumpToEnd");
+
+        game = new CheckersGame(red, white);
+
+        Move endingMove = new Move(
+                TestCheckersBoards.RED_PAWN_POSITION,
+                // We are jumping up and to the right
+                new Position(TestCheckersBoards.RED_PAWN_ROW - 2, TestCheckersBoards.RED_PAWN_CELL + 2));
+
+        Message validatedMoveResponse = game.getTurn().validateMove(endingMove);
+        assertEquals(Message.MessageType.info, validatedMoveResponse.getType());
+
+        Message submittedTurnResponse = game.submitTurn(red);
+        assertEquals(Message.MessageType.info, submittedTurnResponse.getType());
+
+
+    }
 }

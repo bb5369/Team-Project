@@ -2,6 +2,14 @@ package com.webcheckers.model;
 
 public final class TestCheckersBoards {
 
+	/*
+	We define pawn in this case to mean 'piece that will be moved'
+	Get your chess outta here.
+	 */
+	public static final int RED_PAWN_ROW = 7;
+	public static final int RED_PAWN_CELL = 0;
+	public static final Position RED_PAWN_POSITION = new Position(RED_PAWN_ROW, RED_PAWN_CELL);
+
 	/**
 	 * A checkers board where the RED player can jump over two white player pieces
 	 * We place an additional white piece on the board so an end game is not triggered.
@@ -25,7 +33,7 @@ public final class TestCheckersBoards {
 					new Position(6, 1))
 			.withPieceAt(
 					new Piece (Piece.Type.SINGLE, Piece.Color.RED),
-					new Position(7, 0))
+					RED_PAWN_POSITION)
 			.withPieceAt(
 					new Piece (Piece.Type.SINGLE, Piece.Color.WHITE),
 					new Position(4, 3))
@@ -80,5 +88,22 @@ public final class TestCheckersBoards {
 	public static CheckersBoardBuilder multiJumpToEnd() {
 		return multiJump()
 				.withoutPieceAt(new Position(0, 3));
+	}
+
+	/**
+	 * For this board I did something special. I realized that we had too many magic numbers
+	 * so I created some constants, and a constant red piece that tests can use to start their move
+	 * @return CheckersBoardBuilder
+	 */
+	public static CheckersBoardBuilder singleJumpToEnd() {
+		return CheckersBoardBuilder.aBoard()
+				.withPieceAt(
+						new Piece(Piece.Type.SINGLE, Piece.Color.WHITE),
+						new Position(RED_PAWN_ROW - 1, RED_PAWN_CELL + 1)
+				)
+				.withPieceAt(
+						new Piece(Piece.Type.SINGLE, Piece.Color.RED),
+						RED_PAWN_POSITION
+				);
 	}
 }
