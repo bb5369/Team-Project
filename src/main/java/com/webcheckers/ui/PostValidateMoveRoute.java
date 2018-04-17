@@ -65,18 +65,12 @@ public class PostValidateMoveRoute implements Route {
             if (positionAsJson.isEmpty()) {
                 return formatMessageJson(Message.MessageType.error, NO_POSITION_PROVIDED_MESSAGE);
             }
+
             Move requestedMove = gson.fromJson(positionAsJson, Move.class);
 
-            boolean isValidMove = turn.validateMove(requestedMove);
+            return turn.validateMove(requestedMove).toJson();
 
-            if (isValidMove) {
-                LOG.fine("Move was found to be valid!");
-                return formatMessageJson(Message.MessageType.info, "Good move");
-            } else {
-                LOG.fine("Move was found to be invalid!");
-                return formatMessageJson(Message.MessageType.error, INVALID_MOVE_MESSAGE);
-            }
-        }catch(Error e){
+        } catch(Error e){
             LOG.warning(e.getMessage());
             return formatMessageJson(Message.MessageType.error, "You can't move to a space occupied by a piece");
         }

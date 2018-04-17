@@ -51,12 +51,6 @@ public class PostSubmitTurnRoute implements Route {
         Player sessionPlayer = request.session().attribute("Player");
         CheckersGame game = gameManager.getGame(sessionPlayer);
 
-        if(game.submitTurn(sessionPlayer)) {
-            return (new Gson()).toJson(new Message("Move Made", Message.MessageType.info));
-
-        } else {
-
-            return (new Gson()).toJson(new Message("No move has been made", Message.MessageType.error));
-        }
+        return game.submitTurn(sessionPlayer).toJson();
     }
 }

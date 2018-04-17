@@ -166,14 +166,15 @@ public class Space{
     @Override
     public boolean equals(Object other)
     {
-        if(other == null && other instanceof Space)
+        if(other == null)
             return false;
-
+        if(!(other instanceof Space))
+            return false;
+        if(this.state != ((Space)other).state)
+            return false;
         if(this.cellIdx != ((Space)other).cellIdx)
             return false;
         if(!this.currPiece.equals(((Space) other).currPiece))
-            return false;
-        if(this.state != ((Space)other).state)
             return false;
 
         return true;
@@ -189,8 +190,10 @@ public class Space{
     public Space clone()
     {
 
-        if(currPiece == null)
+        if(currPiece == null && state == State.OPEN)
             return new Space(cellIdx, currPiece);
+        else if(state == State.INVALID)
+            return new Space(cellIdx, State.INVALID);
 
         return new Space(cellIdx, currPiece.clone());
     }

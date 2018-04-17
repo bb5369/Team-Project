@@ -2,6 +2,10 @@ package com.webcheckers.model;
 
 import java.util.logging.Logger;
 
+import static com.webcheckers.model.CheckersBoardHelper.getSpace;
+import static com.webcheckers.model.CheckersBoardHelper.formatBoardString;
+import static com.webcheckers.model.CheckersBoardHelper.getSpacePieceColor;
+
 /**
  * Move validation requires several things:
  * - a board to validate the move against
@@ -17,6 +21,7 @@ import java.util.logging.Logger;
 public class MoveValidator {
 
     private static final Logger LOG = Logger.getLogger(MoveValidator.class.getName());
+    private static final int JUMP_DIFF = 2;
 
     /**
      * Entrypoint to move validation algorithm - kicks off the process
@@ -29,7 +34,7 @@ public class MoveValidator {
 
         logMoveCoordinates(move);
 
-        LOG.finest(CheckersBoardBuilder.formatBoardString(board));
+        LOG.finest(formatBoardString(board));
         logMove(board, move);
 
         boolean isMoveValidOnBoard = move.isValid() &&
@@ -130,7 +135,7 @@ public class MoveValidator {
         LOG.finest(String.format("Validate     └─ end.isOnBoard() -  %s", move.getEnd().isOnBoard()));
         LOG.finest(String.format("Validate     └─ isSingleSpace() -  %s", move.isSingleSpace()));
         LOG.finest(String.format("Validate     └─ isJump() -  %s", move.isJump()));
-        LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
+        //LOG.finest(String.format("Validate     └─ isDiagonal() -  %s", move.isDiagonal()));
     }
 
     /**
@@ -160,7 +165,7 @@ public class MoveValidator {
         boolean conditionTruth = false;
 
         // If the piece is a king then they can move bi-directionally
-        if (piece != null && piece.getType() == Piece.Type.KING) {
+        if (piece.getType() == Piece.Type.KING) {
             conditionTruth = true;
         } else {
 
@@ -170,14 +175,11 @@ public class MoveValidator {
             int startRow = move.getStartRow();
             int endRow = move.getEndRow();
 
-            switch (move.getPieceColor()) {
-                case RED:
-                    conditionTruth = (endRow < startRow);
-                    break;
-                case WHITE:
-                    conditionTruth = (endRow > startRow);
-                    break;
-            }
+            if(move.getPieceColor() == Piece.Color.RED)
+                conditionTruth = (endRow < startRow);
+            else
+                conditionTruth = (endRow > startRow);
+
         }
 
         LOG.finest(String.format("Validate isMoveInRightDirection(): %s", conditionTruth));
@@ -187,17 +189,26 @@ public class MoveValidator {
     }
 
     /**
-     * :TODO implement is a valid jump move, For now return false for test
-     * purposes assuming no valid jump move will me made
+     * Determines if a piece is a valid jump move
      *
+     * @param board
+     * @param move
      * @return - true if the move is a jump move, false otherwise
      */
     private static boolean isMoveJumpingAPiece(Space[][] board, Move move) {
         boolean conditionTruth = false;
+        if (move.isJump()) {
+            Space space = getSpace(board, move.getMidpoint());
+            Piece piece = getSpace(board, move.getStart()).getPiece();
+            if (space.isOccupied()) {
+                if (!space.getPiece().getColor().equals(piece.getColor())) {
+                    conditionTruth = true;
+                }
+            }
+        }
+        LOG.finest(String.format("Validate areWeMovingMyPiece(): %s", conditionTruth));
 
-        LOG.finest(String.format("Validate isMoveJumpingAPiece(): %s", conditionTruth));
-
-    	return conditionTruth;
+        return conditionTruth;
     }
 
     /**
@@ -208,24 +219,94 @@ public class MoveValidator {
      * @return boolean - if the player owns the piece at the start position
      */
     private static boolean areWeMovingMyPiece(Space[][] board, Move move) {
-        boolean conditionTruth = false;
+        boolean conditionTruth;
 
         Space start = getSpace(board, move.getStart());
 
         conditionTruth = start.getPiece().getColor() == move.getPieceColor();
 
-        LOG.finest(String.format("Validate areWeMovingMyPiece(): %s", conditionTruth));
+        return conditionTruth;
 
-    	return conditionTruth;
     }
 
     /**
-     * Board lookup convenience method - given a position it will return the enumerated state
-     *
-     * @param pos - end position of the move
-     * @return SpaceState - current state of the position being moved to
+     * Checks if there are any possible jump moves for any piece owned by a player
+     * (ownership is checked through Color of piece)
+     * @param board
+     * @return boolean - true if there is a jump move, false otherwise
      */
-    private static Space getSpace(Space[][] matrix, Position pos) {
-        return matrix[pos.getRow()][pos.getCell()];
+    public static boolean areJumpsAvailableForPlayer(Space[][] board, Piece.Color playerColor){
+        for (int row = 0; row < board.length; row++) {
+            for (int cell = 0; cell < board[row].length; cell++) {
+                if (canJump(board, row, cell, playerColor))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    //Called after a move is made, so the starting postion should be the ending row and cell
+
+    /**
+     * This MoveValidator entry-point assumes the given position is the result of a multi-jump
+     * It determines if the multi-jump can continue
+     * @param board
+     * @param pos
+     * @param piece
+     * @return
+     */
+    public static boolean canContinueJump(Space[][]board, Position pos, Piece.Color piece){
+        boolean condition;
+        int row = pos.getRow();
+        int cell = pos.getCell();
+        condition = canJump(board, row, cell, piece);
+        LOG.fine(String.format("Can Mutlt-jump: %b", condition));
+        return condition;
+    }
+
+    private static boolean canJump(Space[][] board, int row, int cell, Piece.Color piece) {
+        Space cur = board[row][cell];
+        if (cur.isOccupied() && piece.equals(cur.getPiece().getColor())) {
+            Move testMove;
+            Position start = new Position(row, cell);
+            if (cell + 2 < board[row].length) {
+                if (row + 2 < board.length) {
+                    testMove = new Move(start, new Position(row + JUMP_DIFF, cell + JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (canJumpValidation(board,testMove))
+                        return true;
+                }
+                if (row - 2 >= 0) {
+                    testMove = new Move(start, new Position(row - JUMP_DIFF, cell + JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (canJumpValidation(board,testMove))
+                        return true;
+                }
+            }
+            if (cell - 2 >= 0) {
+                if (row + 2 < board.length) {
+                    testMove = new Move(start, new Position(row + JUMP_DIFF, cell - JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (canJumpValidation(board,testMove))
+                        return true;
+                }
+                if (row - 2 >= 0) {
+                    testMove = new Move(start, new Position(row - JUMP_DIFF, cell - JUMP_DIFF));
+                    testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
+                    //test.setPlayer(new Player(move.getPlayerName()));
+                    if (canJumpValidation(board,testMove))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean canJumpValidation(Space[][] board, Move move)
+    {
+        return isMoveJumpingAPiece(board, move) && isEndSpaceOpen(board, move) && isMoveInRightDirection(board, move);
     }
 }
