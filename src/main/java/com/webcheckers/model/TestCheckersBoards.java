@@ -170,43 +170,29 @@ public final class TestCheckersBoards {
 	 * Builds a board that is one turn away from making all the pieces on the
 	 * ths field a king
 	 *
-	 * . R . R . R . _
+	 * . _ . _ . _ . _
 	 * _ . _ . _ . R .
 	 * . _ . _ . _ . _
 	 * _ . _ . _ . _ .
 	 * . _ . _ . _ . _
 	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * W . W . W . W .
+	 * . _ . _ . W . _
+	 * R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
-	public static CheckersBoardBuilder kingAll(){
+	public static CheckersBoardBuilder kingMe(){
 		return CheckersBoardBuilder.aBoard()
 				.withPieceAt(
-						WHITE_SINGLE_PIECE,
+						RED_SINGLE_PIECE,
 						new Position(7, 0))
 				.withPieceAt(
 						WHITE_SINGLE_PIECE,
-						new Position(7, 2))
-				.withPieceAt(
-						WHITE_SINGLE_PIECE,
-						new Position(7, 4))
-				.withPieceAt(
-						WHITE_SINGLE_PIECE,
-						new Position(7, 6))
+						new Position(6, 5))
 				.withPieceAt(
 						RED_SINGLE_PIECE,
-						new Position(0, 1))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(0, 3))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(0, 5))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(1, 6));
+						new Position(1, 6))
+				;
 	}
 
 	// ENDING BOARDS - one move will end the game
