@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @Tag("Application-tier")
 public class GameManagerTest {
@@ -27,8 +26,8 @@ public class GameManagerTest {
     @BeforeEach
     public void setup(){
         CuT = new GameManager();
-        redPlayer = mock(Player.class);
-        whitePlayer = mock(Player.class);
+        redPlayer = new Player("red");
+        whitePlayer = new Player("white");
         nullPlayer = null;
     }
 
