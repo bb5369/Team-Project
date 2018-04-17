@@ -18,6 +18,7 @@ public class MoveTest {
 
 	private Position start;
 	private Position end;
+	private String name = "test";
 
 	private Move CuT;
 
@@ -27,6 +28,8 @@ public class MoveTest {
 		end   = new Position(END_ROW, END_CELL);
 
 		CuT = new Move(start, end);
+		CuT.setPlayer(new Player(name));
+		CuT.setPieceColor(Piece.Color.RED);
 	}
 
 	@Test
@@ -40,11 +43,17 @@ public class MoveTest {
 
 		assertEquals(END_ROW, CuT.getEndRow());
 		assertEquals(END_CELL, CuT.getEndCell());
+
+		assertEquals(Piece.Color.RED, CuT.getPieceColor());
+		assertEquals(name, CuT.getPlayerName());
 	}
 
 	@Test
 	public void areWeAJumpMove() {
 		assertTrue(CuT.isJump());
+		assertTrue(CuT.isDiagonal());
+		assertTrue(CuT.isValid());
+		assertFalse(CuT.isSingleSpace());
 	}
 
 	@Test
@@ -59,10 +68,16 @@ public class MoveTest {
 	@Test
 	public void weAreLongWayFromHome() {
 		Position endAway = new Position(START_ROW + 1, START_CELL + 2);
+		Position endAway2 = new Position(START_ROW + 2, START_CELL + 1);
 
 		Move alsoNotAJumpMove = new Move(start, endAway);
 
 		assertFalse(alsoNotAJumpMove.isJump());
+		assertFalse(alsoNotAJumpMove.isValid());
+		assertFalse(alsoNotAJumpMove.isSingleSpace());
+		assertFalse(new Move(start, endAway2).isSingleSpace());
+		assertTrue(new Move(endAway, endAway2).isSingleSpace());
+		assertFalse(alsoNotAJumpMove.isDiagonal());
 	}
 
 	@Test
@@ -70,5 +85,11 @@ public class MoveTest {
 		String expected = new String("<1,1> to <3,3>");
 
 		assertEquals(expected, CuT.toString());
+	}
+
+	@Test
+	public void testOtherConstruct(){
+		Move move = new Move(start, end, new Player(name), Piece.Color.WHITE);
+
 	}
 }
