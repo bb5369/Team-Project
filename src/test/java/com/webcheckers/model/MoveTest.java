@@ -48,6 +48,7 @@ public class MoveTest {
 		assertTrue(CuT.isJump());
 		assertTrue(CuT.isValid());
 		assertTrue(single.isValid());
+		assertEquals(CuT.getMidpoint().toString(), new Position(2,2).toString());
 	}
 
 	@Test
@@ -91,7 +92,12 @@ public class MoveTest {
 		assertEquals(test.getName(), name);
 		Piece.Color color = Piece.Color.RED;
 		CuT.setPieceColor(color);
+		Move move = new Move(CuT.getStart(), CuT.getEnd(), test, color);
 		assertEquals(CuT.getPieceColor(), color);
+		CuT.setPieceColor(color);
+		CuT.setPlayer(test);
+		assertEquals(move.toString(), CuT.toString());
+		assertEquals(CuT.getPlayerName(), name);
 	}
 
 	@Test
