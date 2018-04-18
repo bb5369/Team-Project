@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static spark.Spark.halt;
+import static spark.Spark.redirect;
 
 /**
  * Create the Spark Route (UI controller) for the
@@ -30,6 +31,7 @@ public class GetGameRoute implements Route {
     private final String VIEW_TITLE = "Checkers Game";
 
     private final String VIEW_NAME = "game.ftl";
+    private String viewMode, redirect;
 
     private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
@@ -52,6 +54,8 @@ public class GetGameRoute implements Route {
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
+        this.viewMode = "PLAY";
+        this.redirect = WebServer.HOME_URL;
 
         LOG.config("GetHomeRoute is initialized.");
     }
@@ -78,10 +82,20 @@ public class GetGameRoute implements Route {
             request.session().removeAttribute("message");
             vm.put("message", messageToRender);
         }
-
         // TODO: Refactor the conditional game set-up logic below into GameManager
-        if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
-            return renderGame(vm, currentPlayer, null);
+        if (currentPlayer != null && (gameManager.isPlayerASpectator(currentPlayer) || gameManager.isPlayerInAGame(currentPlayer))){
+                if (gameManager.isPlayerInAGame(currentPlayer)){
+                    viewMode = "PLAY";
+                    redirect = WebServer.HOME_URL;
+                    return renderGame(vm, currentPlayer, null);
+                }
+                else{
+                    viewMode = "SPECTATOR";
+                    redirect = WebServer.ENDSPECTATE_URL;
+                    CheckersGame game = gameManager.getSpectatorGame(currentPlayer);
+                    LOG.fine(String.format("Rendering a Spectator for: %s",game.toString()));
+                    return renderGame(vm, game.getPlayerRed(), game.getPlayerWhite());
+                }
 
         } else if (currentPlayer != null && haveParam(request, "whitePlayer")) {
             // We are setting up a new game
@@ -98,7 +112,7 @@ public class GetGameRoute implements Route {
                 redirectWithType(request, response, new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
 
-            if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer)) {
+            if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer) || gameManager.isPlayerInAGame(currentPlayer)) {
                 redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
             if (redPlayer.getType() != whitePlayer.getType()){
@@ -170,11 +184,17 @@ public class GetGameRoute implements Route {
         }
         if(game.isResigned()){
             if (vm.get("message") == null) {
-                vm.put("message", new Message(String.format("%s has resigned, %s has won the game <a href='/'>return to lobby</a>.",
-                        game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
+                if(VIEW_NAME == "PLAY") {
+                    vm.put("message", new Message(String.format("%s has resigned, %s has won the game <a href='/'>return to lobby</a>.",
+                            game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
+                }
+                else{
+                    vm.put("message", new Message(String.format("%s has resigned, %s has won the game. Click the Exit Spectate button to return to the lobby",
+                            game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
+                }
             }
         }
-        return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
+        return templateEngine.render(new ModelAndView(renderGame(vm, sessionPlayer, opponentPlayer), VIEW_NAME));
     }
 
     /**
@@ -195,9 +215,9 @@ public class GetGameRoute implements Route {
         final Player redPlayer = game.getPlayerRed();
         final Player whitePlayer = game.getPlayerWhite();
 
-        vm.put("title", viewTitle);
+        vm.put("title", VIEW_TITLE);
         vm.put("currentPlayer", sessionPlayer);
-        vm.put("viewMode", "PLAY");
+        vm.put("viewMode", viewMode);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
         vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));
@@ -213,7 +233,7 @@ public class GetGameRoute implements Route {
 
         // This is a really bad place to put something as important as this
 	    // Now that we've rendered the game for the final time, get rid of it!
-        if (game.isResigned()) {
+        if (game.isResigned() || (game.isWon() && game.getLoser().equals(sessionPlayer))) {
             gameManager.clearGame(sessionPlayer);
         }
 

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="refresh" content="10">
-    <title>${title} | Web Checkers</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="refresh" content="10">
+        <title>${title} | Web Checkers</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+    </head>
 <body>
-  <div class="page">
-  
+<div class="page">
+
     <h1>Web Checkers</h1>
-    
+
     <div class="navigation">
         <a href="/">home</a>
         <#if currentPlayer??>
@@ -35,7 +35,10 @@
             <table width ="80%">
             <tr>
                 <th align="left">Casual Players</th>
+
                 <th align="left">Tournament Players</th.
+
+                <th align="left">Active Games</th>
             </tr>
             <tr>
                 <td>
@@ -49,6 +52,13 @@
                         </#if>
                         </#list>
                         </ul>
+                    <ul>
+                        <#list activePlayers?keys as key>
+                        <#if activePlayers[key].name != currentPlayer.name>
+                            <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
+                            </#if>
+                        </#list>
+                    </ul>
                     </p>
                 </td>
                 <td>
@@ -66,6 +76,16 @@
                 </td>
             </tr>
 
+                    <ul>
+                        <#if hasGames == true>
+                        <#list activeGames?keys as key>
+                            <li><a href="${spectatorRoute}?redPlayer=${activeGames[key].getPlayerRed().getName()}">${activeGames[key].toString()}</a></li>
+                        </#list>
+                        </#if>
+                    </ul>
+                    </p>
+                </td>
+            </tr>
         <#else>
             <p>Welcome to the world of online Checkers.</p>
         </#if>
@@ -81,6 +101,7 @@
         </#if>
 
     </div>
-  </div>
+</div>
 </body>
 </html>
+

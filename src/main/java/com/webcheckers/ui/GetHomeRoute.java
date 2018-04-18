@@ -65,7 +65,6 @@ public class GetHomeRoute implements Route {
         Map<String, Object> vm = new HashMap<>();
 
         vm.put("title", "Welcome!");
-
         Player currentPlayer = request.session().attribute("Player");
 
         if ( ! playerLobby.isPlayerInLobby(currentPlayer)) {
@@ -80,10 +79,11 @@ public class GetHomeRoute implements Route {
             vm.put("currentPlayer", currentPlayer);
             vm.put("activePlayers", playerLobby.getActivePlayers());
             vm.put("gameRoute", WebServer.GAME_URL);
+            vm.put("hasGames", gameManager.getGameList().size() > 0);
+            vm.put("activeGames", gameManager.getGameList());
+            vm.put("spectatorRoute", WebServer.SPECTATE_URL);
 
-            if(gameManager.isPlayerInAGame(currentPlayer) && !gameManager.getGame(currentPlayer).isResigned()){
-                if(gameManager.isPlayerInAGame(currentPlayer) && gameManager.getGame(currentPlayer).isWon())
-                    gameManager.destoryGame(gameManager.getGame(currentPlayer));
+            if(!gameManager.isPlayerASpectator(currentPlayer) && gameManager.isPlayerInAGame(currentPlayer) && !gameManager.getGame(currentPlayer).isResigned()){
                 response.redirect(WebServer.GAME_URL);
             }
 

@@ -46,6 +46,8 @@ public class WebServer {
 	public static final String SIGNOUT_URL = "/signout";
 	public static final String RESIGN_URL = "/resignGame";
 	public static final String SCOREBOARD_URL = "/scoreboard";
+	public static final String SPECTATE_URL = "/spectate";
+	public static final String ENDSPECTATE_URL = "/exitSpectate";
 
 	//
 	// Attributes
@@ -112,6 +114,8 @@ public class WebServer {
 		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby, tournamentScoreboard));
 		get(SIGNOUT_URL, new GetSignOutRoute(playerLobby, gameManager));
 		get(SCOREBOARD_URL, new GetScoreboardRoute(tournamentScoreboard, templateEngine));
+		get(SPECTATE_URL, new GetSpectateRoute(playerLobby, gameManager));
+		post(ENDSPECTATE_URL, new PostEndSpectateRoute(gameManager));
 
 		// Game operation
 		get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));

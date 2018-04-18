@@ -58,8 +58,6 @@ public class GetSignOutRoute implements Route {
             player = null;
             if(game != null) {
                 gameManager.resignGame(new Player(playerName, type));
-                gameManager.destoryGame(game);
-                //game = null;
             }
         }
         // Redirect to homepage which should show the Signed Out page

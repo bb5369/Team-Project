@@ -263,6 +263,7 @@ public class CheckersGame {
                 winner = playerWhite;
             else
                 winner = playerRed;
+            this.activeTurn = null;
             return true;
         }
 
@@ -304,4 +305,9 @@ public class CheckersGame {
      * @return - the loser
      */
     public Player getLoser(){ return this.loser; }
+
+    @Override
+    public String toString(){
+        return this.getPlayerRed().getName() + " vs. " + this.getPlayerWhite().getName();
+    }
 }

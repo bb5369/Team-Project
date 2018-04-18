@@ -142,6 +142,9 @@ public class MoveTest {
 		move = new Move(bad, end, new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 		assertFalse(move.isValid());
 		move = new Move(start, new Position(START_ROW + 3, START_CELL + 3), new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
+		move = new Move(bad, end, new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
+		assertFalse(move.isValid());
+		move = new Move(start, new Position(START_ROW + 3, START_CELL + 3), new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 		assertTrue(move.isValid());
 	}
 

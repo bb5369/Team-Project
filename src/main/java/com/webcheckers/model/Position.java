@@ -13,7 +13,7 @@ public class Position {
      * @param row  - row ID of the cell
      * @param cell - space ID within the row
      */
-    Position(int row, int cell) {
+    public Position(int row, int cell) {
         this.row = row;
         this.cell = cell;
     }
