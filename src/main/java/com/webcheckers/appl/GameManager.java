@@ -71,6 +71,21 @@ public class GameManager {
         }
         return games;
     }
+
+    public HashMap<Player, Player> clearGameSpectators(Player player, HashMap<Player, Player> specs){
+        if(spectators.containsValue(player)){
+            for(Player player1: specs.keySet()){
+                if(specs.get(player1).equals(player)){
+                    specs.remove(player1);
+                    break;
+                }
+            }
+            return clearGameSpectators(player, specs);
+        }
+        else{
+            return specs;
+        }
+    }
     /**
      * This is a private method that checks if the player is in a game
      *
@@ -171,10 +186,12 @@ public class GameManager {
     }
 
     public void clearGame(Player player) {
+        spectators = clearGameSpectators(getGame(player).getPlayerRed(), spectators);
         gameList.remove(getGame(player));
     }
 
     public void clearGames() {
+        this.spectators.clear();
         this.gameList.clear();
     }
 
@@ -201,6 +218,7 @@ public class GameManager {
      * @param game - game being removed
      */
     public void destoryGame(CheckersGame game) {
+        spectators = clearGameSpectators(game.getPlayerRed(), spectators);
         this.gameList.remove(game);
 
     }
