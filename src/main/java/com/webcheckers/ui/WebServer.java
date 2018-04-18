@@ -45,6 +45,7 @@ public class WebServer {
 	public static final String CHECK_TURN_URL = "/checkTurn";
 	public static final String SIGNOUT_URL = "/signout";
 	public static final String RESIGN_URL = "/resignGame";
+	public static final String SCOREBOARD_URL = "/scoreboard";
 
 	//
 	// Attributes
@@ -110,6 +111,7 @@ public class WebServer {
 		get(SIGNIN_URL, new GetSignInRoute(templateEngine));
 		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby, tournamentScoreboard));
 		get(SIGNOUT_URL, new GetSignOutRoute(playerLobby, gameManager));
+		get(SCOREBOARD_URL, new GetScoreboardRoute(tournamentScoreboard, templateEngine));
 
 		// Game operation
 		get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));
