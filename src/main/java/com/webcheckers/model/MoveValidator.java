@@ -69,18 +69,24 @@ public class MoveValidator {
 
                         Move checkMove;
 
-                        for(int row = -2; row < 2; row += 2){
+                        for(int row = -2; row <= 2; row += 1){
 
-                            for(int col = -2; col < 2; col += 2){
+                            for(int col = -2; col <= 2; col += 1){
 
                                 int destRow = i + row;
                                 int destCell = j + col;
 
-                                if (destRow < 0 || destCell < 0)
-                                    continue;
+                                LOG.info(String.format("Checking space <%d, %d>", destRow, destCell));
 
-                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
+                                if (destRow < 0 || destCell < 0) {
+                                    LOG.info("Row or Cell is less than 0.");
                                     continue;
+                                }
+
+                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS) {
+                                    LOG.info("Row or Cell is greater than the number of rows or cells.");
+                                    continue;
+                                }
 
                                 Position place = new Position(destRow, destCell);
                                 checkMove = new Move(currentPos, place, player, color);
