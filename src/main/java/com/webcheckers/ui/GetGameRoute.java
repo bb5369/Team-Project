@@ -175,6 +175,15 @@ public class GetGameRoute implements Route {
         return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
     }
 
+    /**
+     * renderGame method
+     * This method renders the game
+     * @param game - game object
+     * @param sessionPlayer - the player session object
+     * @param vm - A map of key value pairs need for rendering the game
+     * @param viewTitle - the Title of the view that need to be rendered
+     * @return A map with all the key value pair needed to render the game
+     */
     public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, Map<String, Object> vm, String viewTitle) {
         LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
                 game.getPlayerRed().getName(),

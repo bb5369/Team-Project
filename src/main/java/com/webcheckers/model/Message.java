@@ -46,10 +46,20 @@ public class Message {
         return type;
     }
 
+    /**
+     * toJson method
+     * This method is used to construct a Json string
+     * @return string construct of the Json
+     */
     public String toJson() {
     	return (new Gson()).toJson(this);
 	}
 
+    /**
+     * toString method
+     * This is used to print the state of the object
+     * @return- String represent the state of the object
+     */
 	public String toString() {
         return String.format("[%s] %s", type, text);
     }

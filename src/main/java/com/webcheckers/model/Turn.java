@@ -237,6 +237,12 @@ public class Turn {
 
 	}
 
+    /**
+     * canResign method
+     * This method determines if the game can be resigned
+     * based on the current state of the turn
+     * @return - true if can, otherwise false
+     */
 	public boolean canResign(){
         return state == State.EMPTY_TURN;
     }
@@ -258,6 +264,11 @@ public class Turn {
         return this.state;
     }
 
+    /**
+     * getLatestBoard method
+     * THis method return a board in a stable state
+     * @return  a 2-d Space array representing the board
+     */
     public Space[][] getLatestBoard() {
         return (pendingMoves.empty()) ? startingBoard : pendingMoves.peek();
     }

@@ -292,14 +292,12 @@ public class MoveValidator {
                 if (row + 2 < board.length) {
                     testMove = new Move(start, new Position(row + JUMP_DIFF, cell + JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
                     testMove = new Move(start, new Position(row - JUMP_DIFF, cell + JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
@@ -308,14 +306,12 @@ public class MoveValidator {
                 if (row + 2 < board.length) {
                     testMove = new Move(start, new Position(row + JUMP_DIFF, cell - JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
                     testMove = new Move(start, new Position(row - JUMP_DIFF, cell - JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }

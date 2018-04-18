@@ -163,6 +163,14 @@ public class Space{
         return currPiece;
     }
 
+
+    /**
+     * equals method
+     * This method varifies if the two object are the same
+     * based on the the attribute rather than its address
+     * @param other
+     * @return true if are equal, otherwise false
+     */
     @Override
     public boolean equals(Object other)
     {
