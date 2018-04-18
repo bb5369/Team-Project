@@ -23,6 +23,13 @@
 
             <p>Welcome, ${currentPlayer.name}.</p>
 
+            <#if message??>
+                <div id="message" class="${message.type}">${message.text}</div>
+            <#else>
+                <div id="message" class="info" style="display:none">
+                </div>
+            </#if>
+
             <table width ="80%">
             <tr>
                 <th align="left">Casual Players</th>
@@ -31,14 +38,6 @@
             <tr>
                 <td>
                     <p>
-
-                        <#if message??>
-                            <div id="message" class="${message.type}">${message.text}</div>
-                        <#else>
-                            <div id="message" class="info" style="display:none">
-                            </div>
-                        </#if>
-
                         <ul>
                         <#list activePlayers?keys as key>
                         <#if activePlayers[key].name != currentPlayer.name>
@@ -52,14 +51,6 @@
                 </td>
                 <td>
                     <p>
-
-                        <#if message??>
-                            <div id="message" class="${message.type}">${message.text}</div>
-                        <#else>
-                            <div id="message" class="info" style="display:none">
-                            </div>
-                        </#if>
-
                         <ul>
                         <#list activePlayers?keys as key>
                         <#if activePlayers[key].name != currentPlayer.name>
