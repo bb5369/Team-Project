@@ -94,7 +94,7 @@ public class PostCheckTurnRouteTest {
         when(game.isResigned()).thenReturn(true);
         when(game.getLoser()).thenReturn(currPlayer);
         when(game.getWinner()).thenReturn(currPlayer);
-        
+
         CuT.handle(request, response);
     }
 

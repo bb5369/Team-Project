@@ -87,12 +87,30 @@ public class PostSignInRouteTest {
 	 * Signing in should result in a redirect to the homepage
 	 */
 	@Test
-	@Disabled
-	public void signInValidPlayer() {
+	public void signInValidPlayerCasual() {
 
 		when(session.attribute("Player")).thenReturn(player1);
 		when(request.queryParams("name")).thenReturn(PLAYER1_NAME);
+		when(request.queryParams("casual")).thenReturn("casual");
+		when(session.attribute("player")).thenReturn(player1);
+		when(request.session()).thenReturn(session);
 		when(playerLobby.newPlayer(PLAYER1_NAME, Player.GameType.NORMAL)).thenReturn(player1);
+
+		CuT.handle(request, response);
+
+		verify(response, times(1)).redirect(WebServer.HOME_URL);
+	}
+
+	@Test
+	@Disabled
+	public void signInValidPlayerTournament() {
+
+		when(session.attribute("Player")).thenReturn(player1);
+		when(request.queryParams("name")).thenReturn(PLAYER1_NAME);
+		when(playerLobby.newPlayer(PLAYER1_NAME, Player.GameType.TOURNAMENT)).thenReturn(player1);
+		when(request.queryParams("casual")).thenReturn(null);
+		when(session.attribute("player")).thenReturn(player1);
+		when(request.session()).thenReturn(session);
 
 		CuT.handle(request, response);
 

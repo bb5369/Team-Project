@@ -69,7 +69,6 @@ public class PostSignInRoute implements Route {
         String playerName = request.queryParams("name");
 
         String casual = request.queryParams("casual");
-        //String tournament = request.queryParams("tournament");
 
         Player.GameType type;
 
