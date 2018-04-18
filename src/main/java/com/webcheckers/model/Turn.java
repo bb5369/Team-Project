@@ -90,7 +90,7 @@ public class Turn {
         boolean isMoveValid = false;
         Message moveValidMessage = new Message("Move is invalid.", Message.MessageType.error);
 
-        // TODO: Handle the logic of each case in a seperate method
+        // TODO: Handle the logic of each case in a separate method
         switch (state) {
             case EMPTY_TURN:
                 if (move.isSingleSpace() && MoveValidator.areJumpsAvailableForPlayer(board, playerColor)) {
@@ -166,6 +166,11 @@ public class Turn {
 		return true;
     }
 
+    /**
+     * Determines the state of the turn -- either single
+     * or jump move
+     * @param move
+     */
     private void setStateAfterMove(Move move) {
         if (move.isSingleSpace()) {
             state = State.SINGLE_MOVE;

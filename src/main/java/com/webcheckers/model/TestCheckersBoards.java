@@ -51,14 +51,15 @@ public final class TestCheckersBoards {
 	 * A checkers board where the RED player can only move a single space
 	 * but not affect any WHITE player pieces.
 	 *
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * R . _ . _ . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . W . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . _ . _ . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . _ . _ . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . _ . _ . _ . _
+	 * 7 R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
@@ -77,14 +78,15 @@ public final class TestCheckersBoards {
 	 * We place an additional white piece on the board so an end game is not triggered.
 	 * For a board that ends in a win for RED use multiJumpToEnd
 	 *
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . W . _ . _ . _
-	 * R . _ . _ . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . W . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . _ . _ . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . W . _ . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . W . _ . _ . _
+	 * 7 R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
@@ -109,14 +111,15 @@ public final class TestCheckersBoards {
 	 * In the normal rules of checkers you must take the force jump and you should
 	 * not be able to move the added RED piece
 	 *
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . W . _ . _ . _
-	 * R . _ . R . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . W . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . _ . _ . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . W . _ . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . W . _ . _ . _
+	 * 7 R . _ . R . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
@@ -132,14 +135,15 @@ public final class TestCheckersBoards {
 	 * In the normal rules of checkers you must take the force jump and you should
 	 * not be able to move the added RED piece
 	 *
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . W . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . W . W . _
-	 * _ . _ . _ . _ .
-	 * . W . W . W . _
-	 * R . _ . R . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . W . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . W . W . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . W . W . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . W . W . W . _
+	 * 7 R . _ . R . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
@@ -167,46 +171,33 @@ public final class TestCheckersBoards {
 	}
 
 	/**
-	 * Builds a board that is one turn away from making all the pieces on the
-	 * ths field a king
+	 * Builds a board that is one turn away from making a piece for each color
+	 * into a king
 	 *
-	 * . R . R . R . _
-	 * _ . _ . _ . R .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * W . W . W . W .
+	 *    0 1 2 3 4 5 6 7
+	 *  0 . _ . _ . _ . _
+	 *  1 _ . _ . _ . R .
+	 *  2 . _ . _ . _ . _
+	 *  3 _ . _ . _ . _ .
+	 *  4 . _ . _ . _ . _
+	 *  5 _ . _ . _ . _ .
+	 *  6 . _ . _ . W . _
+	 *  7 R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
-	public static CheckersBoardBuilder kingAll(){
+	public static CheckersBoardBuilder kingMe(){
 		return CheckersBoardBuilder.aBoard()
 				.withPieceAt(
-						WHITE_SINGLE_PIECE,
+						RED_SINGLE_PIECE,
 						new Position(7, 0))
 				.withPieceAt(
 						WHITE_SINGLE_PIECE,
-						new Position(7, 2))
-				.withPieceAt(
-						WHITE_SINGLE_PIECE,
-						new Position(7, 4))
-				.withPieceAt(
-						WHITE_SINGLE_PIECE,
-						new Position(7, 6))
+						new Position(6, 5))
 				.withPieceAt(
 						RED_SINGLE_PIECE,
-						new Position(0, 1))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(0, 3))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(0, 5))
-				.withPieceAt(
-						RED_SINGLE_PIECE,
-						new Position(1, 6));
+						new Position(1, 6))
+				;
 	}
 
 	// ENDING BOARDS - one move will end the game
@@ -216,14 +207,15 @@ public final class TestCheckersBoards {
 	 * This allows the RED player to multi jump over the last two WHITE pieces
 	 * and win the game.
 	 *
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . W . _ . _
-	 * _ . _ . _ . _ .
-	 * . W . _ . _ . _
-	 * R . _ . _ . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . _ . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . _ . _ . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . W . _ . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . W . _ . _ . _
+	 * 7 R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 *
@@ -237,15 +229,15 @@ public final class TestCheckersBoards {
 	 * For this board I did something special. I realized that we had too many magic numbers
 	 * so I created some constants, and a constant red piece that tests can use to start their move
 	 *
-	 * BOARD
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . _ . _ . _ . _
-	 * _ . _ . _ . _ .
-	 * . W . _ . _ . _
-	 * R . _ . _ . _ .
+	 *   0 1 2 3 4 5 6 7
+	 * 0 . _ . _ . _ . _
+	 * 1 _ . _ . _ . _ .
+	 * 2 . _ . _ . _ . _
+	 * 3 _ . _ . _ . _ .
+	 * 4 . _ . _ . _ . _
+	 * 5 _ . _ . _ . _ .
+	 * 6 . W . _ . _ . _
+	 * 7 R . _ . _ . _ .
 	 *
 	 * @return CheckersBoardBuilder
 	 */
