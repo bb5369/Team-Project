@@ -84,8 +84,6 @@ public class GetHomeRoute implements Route {
             vm.put("spectatorRoute", WebServer.SPECTATE_URL);
 
             if(!gameManager.isPlayerASpectator(currentPlayer) && gameManager.isPlayerInAGame(currentPlayer) && !gameManager.getGame(currentPlayer).isResigned()){
-                if(gameManager.isPlayerInAGame(currentPlayer) && gameManager.getGame(currentPlayer).isWon())
-                    gameManager.destoryGame(gameManager.getGame(currentPlayer));
                 response.redirect(WebServer.GAME_URL);
             }
 

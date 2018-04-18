@@ -76,8 +76,8 @@ public class PostCheckTurnRoute implements Route {
             String WON_GAME_NOTIFICATION_STRING = game.getWinner().getName() + WON_GAME_NOTIFICATION_APPEND;
 
             //request.session().attribute("message", new Message(WON_GAME_NOTIFICATION_STRING, Message.MessageType.info));
-
-            return new Message(String.format("Game won by %s", game.getWinner().getName()), Message.MessageType.error).toJson();
+            Message message = new Message(String.format("Game won by %s", game.getWinner().getName()), Message.MessageType.error);
+            return message.toJson();
 
         } else if (currentPlayer.equals(game.getPlayerActive())) {
             return formatMessageJson(thisPlayersTurn);

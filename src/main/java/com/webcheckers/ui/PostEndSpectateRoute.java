@@ -10,7 +10,7 @@ import spark.Route;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class GetEndSpectateRoute implements Route {
+public class PostEndSpectateRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostBackupMoveRoute.class.getName());
     private final GameManager gameManager;
 
@@ -19,7 +19,7 @@ public class GetEndSpectateRoute implements Route {
      *
      * @param gameManager - game manager used to access games
      */
-    GetEndSpectateRoute(final GameManager gameManager) {
+    PostEndSpectateRoute(final GameManager gameManager) {
         Objects.requireNonNull(gameManager, "Game Manager must not be null");
 
         this.gameManager = gameManager;
@@ -34,7 +34,7 @@ public class GetEndSpectateRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        LOG.fine("GetEndSpectateRoute invoked");
+        LOG.fine("PostEndSpectateRoute invoked");
         Player spectator = request.session().attribute("Player");
 
         gameManager.removeSpectator(spectator);

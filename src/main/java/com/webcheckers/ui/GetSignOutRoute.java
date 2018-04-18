@@ -55,7 +55,7 @@ public class GetSignOutRoute implements Route {
             player = null;
             if(game != null) {
                 gameManager.resignGame(new Player(playerName));
-                gameManager.destoryGame(game);
+                //gameManager.destoryGame(game);
                 game = null;
             }
         }
