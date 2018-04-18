@@ -12,7 +12,7 @@ public class CheckersGameTest {
     private CheckersGame game;
     @BeforeEach
     public void setUp(){
-        red = new Player("red", Player.GameType.NORMAL);
+        red = new Player("Tester", Player.GameType.NORMAL);
         white = new Player("White", Player.GameType.NORMAL);
         game = new CheckersGame(red, white);
     }
@@ -40,7 +40,7 @@ public class CheckersGameTest {
     @Test
     public void test_resigning(){
         assertFalse(game.isResigned());
-        //assertTrue(game.resignGame());
+        assertTrue(game.resignGame(red));
         assertTrue(game.isResigned());
     }
 
@@ -73,12 +73,12 @@ public class CheckersGameTest {
 
     @Test
     public void gameOver(){
-        Player redPlayer = new Player("endGame", Player.GameType.NORMAL);
-        CheckersGame gameOver = new CheckersGame(redPlayer, white);
+        white = new Player("endGame", Player.GameType.NORMAL);
+        CheckersGame gameOver = new CheckersGame(red, white);
         Move move = new Move(new Position(1,0), new Position(3,2));
         gameOver.getTurn().validateMove(move);
         assertFalse(gameOver.isWon());
-        assertEquals(Message.MessageType.info, gameOver.submitTurn(redPlayer).getType());
+        assertEquals(Message.MessageType.info, gameOver.submitTurn(red).getType());
         assertEquals(gameOver.getPlayerRed(), gameOver.getWinner());
         assertEquals(gameOver.getPlayerWhite(), gameOver.getLoser());
         assertEquals(CheckersGame.State.WON, gameOver.getState());
@@ -87,31 +87,33 @@ public class CheckersGameTest {
 
     @Test
     public void unableToMove(){
-        Player red = new Player("noMoreMoves", Player.GameType.NORMAL);
+        white = new Player("noMoreMoves", Player.GameType.NORMAL);
         CheckersGame gameTest = new CheckersGame(red, white);
         Move move = new Move(new Position(2,1), new Position(1,0));
         Move move2 = new Move(new Position(1,2), new Position(2,3));
         gameTest.getTurn().validateMove(move);
         gameTest.submitTurn(red);
-        gameTest.getTurn().validateMove(move2);
-        gameTest.submitTurn(white);
-        assertTrue(gameTest.isWon());
+
+        assertEquals(CheckersGame.State.WON, gameTest.getState());
+
+        Player winner = gameTest.getWinner();
+        assertEquals(white, winner);
     }
 
     @Test
     public void kingMe(){
-        Player redPlayer = new Player("kingMe", Player.GameType.NORMAL);
-        CheckersGame game = new CheckersGame(redPlayer, white);
+        white = new Player("kingMe", Player.GameType.NORMAL);
+        CheckersGame game = new CheckersGame(red, white);
         Move move = new Move(new Position(1,6), new Position(0,7));
         game.getTurn().validateMove(move);
-        game.submitTurn(redPlayer);
-        assertEquals(game.getBoard()[0][5].getPiece().getType(), Piece.Type.KING);
+        game.submitTurn(red);
+        assertEquals(game.getBoard()[0][7].getPiece().getType(), Piece.Type.KING);
     }
 
     @Test
     public void changeActivePlayer_endGame() {
     	// This uses TestCheckersBoards to give us a board that will end in one turn
-        red = new Player("singleJumpToEnd", Player.GameType.NORMAL);
+        white = new Player("singleJumpToEnd", Player.GameType.NORMAL);
 
         game = new CheckersGame(red, white);
 

@@ -96,21 +96,25 @@ public class CheckersGame {
             nextPlayerColor = Piece.Color.WHITE;
         }
 
+        makeKings();
+
         boolean nextPlayerHasPieces = MoveValidator.playerHasPieces(board, nextPlayerColor);
         boolean nextPlayerHasMoves  = MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor);
 
         boolean isActivePlayerOutOfMoves = ! MoveValidator.areMovesAvailableForPlayer(board, activePlayer, activePlayerColor);
 
 
-        if (isActivePlayerOutOfMoves && !nextPlayerHasPieces) {
+        if (!nextPlayerHasPieces) {
+            LOG.fine(String.format("WON: %s won, %s lost. (%s has no pieces)", activePlayer, nextPlayer, nextPlayer));
         	recordEndGame(activePlayer, nextPlayer);
 
         } else if (nextPlayerHasPieces && isActivePlayerOutOfMoves) {
+            LOG.fine(String.format("WON: %s won, %s lost. (%s put themselves in a corner)", nextPlayer, activePlayer, activePlayer));
         	recordEndGame(nextPlayer, activePlayer);
 
         } else if (nextPlayerHasMoves && nextPlayerHasPieces) {
+        	LOG.fine("Nobody has WON yet");
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
-
         }
     }
 
@@ -127,7 +131,9 @@ public class CheckersGame {
 
         winner.wonAGame();
 
-        TournamentScoreboard.sortPlayers();
+        if (winner.isTournament()) {
+            TournamentScoreboard.sortPlayers();
+        }
 
         activeTurn = null;
 
@@ -171,12 +177,16 @@ public class CheckersGame {
         // This is our backdoor into setting up a starting board for testing
         // If the red player is named one of the public static methods in TestCheckersBoards
         // then we use that board builder
-        try {
-            Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerRed.getName());
+        if (playerRed.getName() == "Tester") {
+            try {
+                Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerWhite.getName());
 
-            builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
+                builder = (CheckersBoardBuilder) boardBuilderMethod.invoke(null);
 
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                builder = CheckersBoardBuilder.aStartingBoard();
+            }
+        } else {
             builder = CheckersBoardBuilder.aStartingBoard();
         }
 
@@ -210,7 +220,6 @@ public class CheckersGame {
         	if (finalizedMessage.getType() == Message.MessageType.info) {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
-                makeKings();
           }
 			    return finalizedMessage;
 
