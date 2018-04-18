@@ -21,6 +21,8 @@
     <div class="body">
         <#if currentPlayer??>
 
+            <a href="/signout" style="float: right";>tournament scoreboard</a>
+
             <p>Welcome, ${currentPlayer.name}.</p>
 
             <#if message??>
