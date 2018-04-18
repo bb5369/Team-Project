@@ -201,10 +201,14 @@ public class CheckersGame {
      * Allow the active player to resign the game
      * @return boolean - if resignation was successful
      */
-    public boolean resignGame() {
-        if (activeTurn.canResign()) {
+    public boolean resignGame(Player player) {
+        if (!player.equals(activeTurn.getPlayer()) || activeTurn.canResign()) {
             state = State.RESIGNED;
-
+            loser = player;
+            if(playerRed.equals(player))
+                winner = playerWhite;
+            else
+                winner = playerRed;
             return true;
         }
 
