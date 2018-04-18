@@ -15,6 +15,8 @@ public class Player {
 
     public final GameType type;
 
+    public int wins;
+
 
     /**
      * Parameterize constructor
@@ -26,6 +28,7 @@ public class Player {
     public Player(String name, GameType type) {
         this.name = name;
         this.type = type;
+        this.wins = 0;
     }
 
     /**
@@ -44,6 +47,24 @@ public class Player {
      */
     public Player.GameType getType(){ return this.type; }
 
+    /**
+     * Gets the player's number of wins
+     *
+     * @return - number of wins
+     */
+    public int getWins(){ return this.wins; }
+
+    /**
+     * Increment the number of wins if the player won their game
+     */
+    public void wonAGame(){ this.wins++; }
+
+    /**
+     * Used by home.ftl to determine if a player is in tournament mode
+     * or not
+     *
+     * @return - true if in tournament mode, false otherwise
+     */
     public boolean isTournament(){ return this.type == GameType.TOURNAMENT; }
 
     /**
