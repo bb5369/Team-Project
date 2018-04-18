@@ -42,8 +42,10 @@ public class  GetSpectateRoute implements Route {
         Player spectator = request.session().attribute("Player");
         Player gamePlayer = playerLobby.getPlayer(request.queryParams("redPlayer"));
 
+        LOG.fine("Adding Spectator");
         gameManager.addSpectator(spectator, gamePlayer);
 
+        LOG.fine("Redircting to game");
         response.redirect(WebServer.GAME_URL);
 
         return null;
