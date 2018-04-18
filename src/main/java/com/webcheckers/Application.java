@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.TournamentScoreboard;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.appl.GameManager;
 
@@ -53,12 +54,14 @@ public final class Application {
     final TemplateEngine templateEngine = new FreeMarkerEngine();
     final GameManager gameManager = new GameManager();
     final PlayerLobby playerLobby = new PlayerLobby();
+    final TournamentScoreboard tournamentScoreboard = new TournamentScoreboard();
 
     // Inject some dependencies
     final WebServer webServer = new WebServer(templateEngine,
                                               gameManager,
                                               playerLobby,
-                                              gson);
+                                              gson,
+                                              tournamentScoreboard);
     final Application app = new Application(webServer);
 
     app.initialize();

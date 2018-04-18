@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.TournamentScoreboard;
 import spark.TemplateEngine;
 
 
@@ -53,6 +54,7 @@ public class WebServer {
 	private final GameManager gameManager;
 	private final PlayerLobby playerLobby;
 	private final Gson gson;
+	private final TournamentScoreboard tournamentScoreboard;
 
 
 	//
@@ -69,17 +71,20 @@ public class WebServer {
 	public WebServer(final TemplateEngine templateEngine,
 					 final GameManager gameManager,
 					 final PlayerLobby playerLobby,
-					 final Gson gson) {
+					 final Gson gson,
+					 final TournamentScoreboard tournamentScoreboard) {
 
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 		Objects.requireNonNull(gameManager, "gameManager must not be null");
 		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 		Objects.requireNonNull(gson, "gson must not be null");
+		Objects.requireNonNull(tournamentScoreboard, "tournamentScoreboard must not be null");
 
 		this.templateEngine = templateEngine;
 		this.gameManager = gameManager;
 		this.playerLobby = playerLobby;
 		this.gson = gson;
+		this.tournamentScoreboard = tournamentScoreboard;
 	}
 
 	//
@@ -103,7 +108,7 @@ public class WebServer {
 		// Login and Player Lobby
 		get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby, gameManager));
 		get(SIGNIN_URL, new GetSignInRoute(templateEngine));
-		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
+		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby, tournamentScoreboard));
 		get(SIGNOUT_URL, new GetSignOutRoute(playerLobby, gameManager));
 
 		// Game operation

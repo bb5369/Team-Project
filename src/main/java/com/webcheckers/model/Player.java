@@ -52,7 +52,7 @@ public class Player {
      *
      * @return - number of wins
      */
-    public int getWins(){ return this.wins; }
+    public Integer getWins(){ return this.wins; }
 
     /**
      * Increment the number of wins if the player won their game

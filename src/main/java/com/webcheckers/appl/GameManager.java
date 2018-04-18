@@ -179,7 +179,7 @@ public class GameManager {
      *
      * @param game - game being removed
      */
-    public void destroyGame(CheckersGame game) {
+    public void destoryGame(CheckersGame game) {
         this.gameList.remove(game);
     }
 }

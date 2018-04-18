@@ -104,6 +104,7 @@ public class CheckersGame {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
             this.winner = activePlayer;
+            this.winner.wonAGame();
             this.loser = nextPlayer;
             this.state = State.WON;
             this.activeTurn = null;
