@@ -30,6 +30,7 @@ public class GetGameRoute implements Route {
     private final String VIEW_TITLE = "Checkers Game";
 
     private final String VIEW_NAME = "game.ftl";
+    private String viewMode;
 
     private static String PLAYER_IN_GAME_MESSAGE = "The player you've selected is already in a game.";
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
@@ -77,7 +78,15 @@ public class GetGameRoute implements Route {
             request.session().removeAttribute("message");
             vm.put("message", messageToRender);
         }
-
+        if(gameManager.isPlayerASpectator(currentPlayer)){
+            viewMode = "SPECTATOR";
+            //gameManager.updateSpectator(currentPlayer);
+            CheckersGame game = gameManager.getSpectatorGame(currentPlayer);
+            return renderGame(renderGame(game, game.getPlayerRed(), vm, VIEW_TITLE), game.getPlayerRed(), game.getPlayerWhite());
+        }
+        else{
+            viewMode = "PLAY";
+        }
         // TODO: Refactor the conditional game set-up logic below into GameManager
         if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
             return renderGame(vm, currentPlayer, null);
@@ -182,7 +191,7 @@ public class GetGameRoute implements Route {
 
         vm.put("title", viewTitle);
         vm.put("currentPlayer", sessionPlayer);
-        vm.put("viewMode", "PLAY");
+        vm.put("viewMode", viewMode);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
         vm.put("activeColor", game.getPlayerColor(game.getPlayerActive()));

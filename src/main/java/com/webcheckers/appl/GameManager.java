@@ -16,6 +16,7 @@ public class GameManager {
 
     // A list of all active games
     private ArrayList<CheckersGame> gameList;
+    private HashMap<Player, Player> spectators;
 
     /**
      * default construct
@@ -23,6 +24,7 @@ public class GameManager {
      */
     public GameManager() {
         gameList = new ArrayList<>();
+        spectators = new HashMap<>();
     }
 
 
@@ -44,7 +46,26 @@ public class GameManager {
         return false;
     }
 
+    public boolean isPlayerASpectator(Player player){
+        return spectators.containsKey(player);
+    }
 
+
+    public void addSpectator(Player spectator, Player player){
+        spectators.put(spectator, player);
+    }
+
+    public void removeSpectator(Player player){
+        spectators.remove(player);
+    }
+
+    public CheckersGame getSpectatorGame(Player player){
+        return this.getGame(spectators.get(player));
+    }
+
+    public ArrayList<CheckersGame> getGameList(){
+        return gameList;
+    }
     /**
      * This is a private method that checks if the player is in a game
      *
@@ -176,5 +197,6 @@ public class GameManager {
      */
     public void destoryGame(CheckersGame game) {
         this.gameList.remove(game);
+
     }
 }
