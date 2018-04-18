@@ -15,6 +15,8 @@ public class CheckersGame {
 
     private final Player playerRed;
     private final Player playerWhite;
+    private Player winner;
+    private Player loser;
     private Space[][] board;
     private Turn activeTurn;
     private State state;
@@ -34,6 +36,8 @@ public class CheckersGame {
         this.playerRed = playerRed;
         this.playerWhite = playerWhite;
         this.state = State.IN_PLAY;
+        this.winner = null;
+        this.loser = null;
 
         initStartingBoard();
 
@@ -68,6 +72,8 @@ public class CheckersGame {
      * @return - player whose turn it is
      */
     public Player getPlayerActive() {
+        if(activeTurn == null)
+            return winner;
         return this.activeTurn.getPlayer();
     }
 
@@ -90,15 +96,18 @@ public class CheckersGame {
         }
 
         // make sure the next player has moves available
-        if (MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)) {
+        if (MoveValidator.playerHasPieces(board, nextPlayerColor) &&
+                MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)){
             // setup their turn
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
         } else {
 		    // trigger a win for activePlayer
             LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
-            // TODO: Do a win thing
+            this.winner = activePlayer;
+            this.loser = nextPlayer;
+            this.state = State.WON;
+            this.activeTurn = null;
         }
-
     }
 
     /**
@@ -145,8 +154,6 @@ public class CheckersGame {
             builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
-            System.out.println(e.toString());
-            e.printStackTrace();
             builder = CheckersBoardBuilder.aStartingBoard();
         }
 
@@ -181,8 +188,9 @@ public class CheckersGame {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
                 makeKings();
-            }
-			return finalizedMessage;
+          }
+			    return finalizedMessage;
+
 
         } else {
             return new Message("It is not your turn", Message.MessageType.error);
@@ -212,10 +220,14 @@ public class CheckersGame {
      * Allow the active player to resign the game
      * @return boolean - if resignation was successful
      */
-    public boolean resignGame() {
-        if (activeTurn.canResign()) {
+    public boolean resignGame(Player player) {
+        if (!player.equals(activeTurn.getPlayer()) || activeTurn.canResign()) {
             state = State.RESIGNED;
-
+            loser = player;
+            if(playerRed.equals(player))
+                winner = playerWhite;
+            else
+                winner = playerRed;
             return true;
         }
 
@@ -231,6 +243,12 @@ public class CheckersGame {
     }
 
     /**
+     * Indicates if this game has been won
+     * @return - true if the game is won, false otherwise
+     */
+    public boolean isWon(){ return state == State.WON; }
+
+    /**
      * Used for logging
      * @return
      */
@@ -238,4 +256,17 @@ public class CheckersGame {
         return state;
     }
 
+    /**
+     * Returns the winner of the game
+     *
+     * @return - the winner
+     */
+    public Player getWinner(){ return this.winner; }
+
+    /**
+     * Returns the loser of the game
+     *
+     * @return - the loser
+     */
+    public Player getLoser(){ return this.loser; }
 }

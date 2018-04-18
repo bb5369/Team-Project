@@ -72,9 +72,30 @@ public class CheckersGameTest {
     }
 
     @Test
-    @Disabled
     public void gameOver(){
-        //ToDo: create a board to Win a Thing
+        Player redPlayer = new Player("endGame");
+        CheckersGame gameOver = new CheckersGame(redPlayer, white);
+        Move move = new Move(new Position(1,0), new Position(3,2));
+        gameOver.getTurn().validateMove(move);
+        assertFalse(gameOver.isWon());
+        assertEquals(Message.MessageType.info, gameOver.submitTurn(redPlayer).getType());
+        assertEquals(gameOver.getPlayerRed(), gameOver.getWinner());
+        assertEquals(gameOver.getPlayerWhite(), gameOver.getLoser());
+        assertEquals(CheckersGame.State.WON, gameOver.getState());
+        assertTrue(gameOver.isWon());
+    }
+
+    @Test
+    public void unableToMove(){
+        Player red = new Player("noMoreMoves");
+        CheckersGame gameTest = new CheckersGame(red, white);
+        Move move = new Move(new Position(2,1), new Position(1,0));
+        Move move2 = new Move(new Position(1,2), new Position(2,3));
+        gameTest.getTurn().validateMove(move);
+        gameTest.submitTurn(red);
+        gameTest.getTurn().validateMove(move2);
+        gameTest.submitTurn(white);
+        assertTrue(gameTest.isWon());
     }
 
     @Test
