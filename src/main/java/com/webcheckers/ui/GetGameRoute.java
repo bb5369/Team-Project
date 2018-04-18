@@ -108,13 +108,14 @@ public class GetGameRoute implements Route {
             return renderGame(vm, redPlayer, whitePlayer);
         } else {
             response.redirect(WebServer.HOME_URL);
-            halt();
+            //halt();
+            return null;
         }
 
         // We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design
         // is proposed.
-        LOG.warning("We fell through in GameRoute...no view available");
-        return templateEngine.render(new ModelAndView(new HashMap<String, Object>(), "home.ftl"));
+        //LOG.warning("We fell through in GameRoute...no view available");
+        //return templateEngine.render(new ModelAndView(new HashMap<String, Object>(), "home.ftl"));
     }
 
 
