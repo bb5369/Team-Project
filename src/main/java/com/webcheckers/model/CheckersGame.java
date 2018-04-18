@@ -83,6 +83,7 @@ public class CheckersGame {
      */
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
+        Piece.Color activePlayerColor = getPlayerColor(activePlayer);
         Player nextPlayer;
         Piece.Color nextPlayerColor;
 
@@ -95,21 +96,41 @@ public class CheckersGame {
             nextPlayerColor = Piece.Color.WHITE;
         }
 
-        // make sure the next player has moves available
-        if (MoveValidator.playerHasPieces(board, nextPlayerColor) &&
-                MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)){
-            // setup their turn
+        boolean nextPlayerHasPieces = MoveValidator.playerHasPieces(board, nextPlayerColor);
+        boolean nextPlayerHasMoves  = MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor);
+
+        boolean isActivePlayerOutOfMoves = ! MoveValidator.areMovesAvailableForPlayer(board, activePlayer, activePlayerColor);
+
+
+        if (isActivePlayerOutOfMoves && !nextPlayerHasPieces) {
+        	recordEndGame(activePlayer, nextPlayer);
+
+        } else if (nextPlayerHasPieces && isActivePlayerOutOfMoves) {
+        	recordEndGame(nextPlayer, activePlayer);
+
+        } else if (nextPlayerHasMoves && nextPlayerHasPieces) {
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
-        } else {
-		    // trigger a win for activePlayer
-            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
-            this.winner = activePlayer;
-            this.winner.wonAGame();
-            this.loser = nextPlayer;
-            TournamentScoreboard.sortPlayers();
-            this.state = State.WON;
-            this.activeTurn = null;
+
         }
+    }
+
+    /**
+     * Transition game into WON state, recording winner and loser status
+     * @param winner
+     * @param loser
+     */
+    private void recordEndGame(Player winner, Player loser) {
+    	state = State.WON;
+
+        this.winner = winner;
+        this.loser = loser;
+
+        winner.wonAGame();
+
+        TournamentScoreboard.sortPlayers();
+
+        activeTurn = null;
+
     }
 
     /**
@@ -223,6 +244,9 @@ public class CheckersGame {
      * @return boolean - if resignation was successful
      */
     public boolean resignGame(Player player) {
+        if (activeTurn == null)
+            return false;
+
         if (!player.equals(activeTurn.getPlayer()) || activeTurn.canResign()) {
             state = State.RESIGNED;
             loser = player;
