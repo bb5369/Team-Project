@@ -29,7 +29,7 @@ public class GameManagerTest {
         redPlayer = new Player("red", Player.GameType.NORMAL);
         whitePlayer = new Player("white", Player.GameType.NORMAL);
         nullPlayer = null;
-        spectator = new Player("spectator");
+        spectator = new Player("spectator", Player.GameType.NORMAL);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class GameManagerTest {
         assertTrue(CuT.getGameList().isEmpty());
         CuT.getNewGame(redPlayer, whitePlayer);
         CuT.addSpectator(spectator,redPlayer);
-        Player spectator2 = new Player("spectator2");
+        Player spectator2 = new Player("spectator2", Player.GameType.NORMAL);
         CuT.removeSpectator(spectator);
         CuT.addSpectator(spectator2, redPlayer);
         CuT.removeSpectator(spectator2);

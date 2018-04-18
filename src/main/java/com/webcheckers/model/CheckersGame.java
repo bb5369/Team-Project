@@ -177,7 +177,7 @@ public class CheckersGame {
         // This is our backdoor into setting up a starting board for testing
         // If the red player is named one of the public static methods in TestCheckersBoards
         // then we use that board builder
-        if (playerRed.getName() == "Tester") {
+        if (playerRed.getName().equals("Tester")) {
             try {
                 Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerWhite.getName());
 
