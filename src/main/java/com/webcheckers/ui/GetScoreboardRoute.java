@@ -13,13 +13,19 @@ public class GetScoreboardRoute implements Route {
 
     private static final Logger LOG = Logger.getLogger(GetScoreboardRoute.class.getName());
 
-    static final String TITLE_ATTR = "title";
-    static final String TITLE = "Tournament Scoreboard";
-    static final String VIEW_NAME = "scoreboard.ftl";
+    private static final String TITLE_ATTR = "title";
+    private static final String TITLE = "Tournament Scoreboard";
+    private static final String VIEW_NAME = "scoreboard.ftl";
 
     private final TournamentScoreboard tournamentScoreboard;
     private final TemplateEngine templateEngine;
 
+    /**
+     * Initializes the GetScoreboardRoute
+     *
+     * @param tournamentScoreboard - scoreboard data
+     * @param templateEngine - used to render the view model
+     */
     public GetScoreboardRoute(TournamentScoreboard tournamentScoreboard, TemplateEngine templateEngine){
         Objects.requireNonNull(tournamentScoreboard, "tournamentScoreboard must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
@@ -29,6 +35,13 @@ public class GetScoreboardRoute implements Route {
         LOG.info("GetScoreboardRoute initialized");
     }
 
+    /**
+     * Creates and renders the view model
+     *
+     * @param request  - the HTTP request
+     * @param response - the HTTP response
+     * @return - view model map
+     */
     @Override
     public Object handle(Request request, Response response) {
 
