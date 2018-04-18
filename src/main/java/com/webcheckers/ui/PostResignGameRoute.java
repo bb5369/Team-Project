@@ -55,6 +55,10 @@ public class PostResignGameRoute implements Route {
 
         if (resignWorked) {
             LOG.finer("Resign worked");
+            if(sessionPlayer.isTournament()) {
+                sessionPlayer.wonAGame();
+                TournamentScoreboard.sortPlayers();
+            }
 			return (new Gson()).toJson(new Message(sessionPlayer.name + "Resigned", Message.MessageType.info));
 
 		} else{

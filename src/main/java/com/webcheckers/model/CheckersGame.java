@@ -131,9 +131,9 @@ public class CheckersGame {
 
         winner.wonAGame();
 
-        if (winner.isTournament()) {
+        //if (winner.isTournament()) {
             TournamentScoreboard.sortPlayers();
-        }
+        //}
 
         activeTurn = null;
 
