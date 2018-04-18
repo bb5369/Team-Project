@@ -53,4 +53,6 @@ public class TournamentScoreboard {
         players.remove(player);
     }
 
+    public LinkedList<Player> getPlayers(){ return this.players; }
+
 }
