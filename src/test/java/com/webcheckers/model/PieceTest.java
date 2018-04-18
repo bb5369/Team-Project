@@ -55,4 +55,10 @@ public class PieceTest {
         assertFalse(toClone.equals(test));
 
     }
+
+    @Test
+    public void testKing(){
+        singleRed.kingMe();
+        assertEquals(singleRed.getType(), kingType);
+    }
 }

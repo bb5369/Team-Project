@@ -48,12 +48,15 @@ public class CheckersGameTest {
     public void test_submitTurn(){
         Message test2 = new Message("It is not your turn", Message.MessageType.error);
         assertEquals(test2.toString(), game.submitTurn(white).toString());
+
         Move move = new Move(new Position(5,2), new Position(4,3));
         game.getTurn().validateMove(move);
         Message test = new Message("Turn has been finalized", Message.MessageType.info);
         assertEquals(test.toString(),game.submitTurn(red).toString());
+
         test = new Message(Turn.NO_MOVES_MSG, Message.MessageType.error);
         assertEquals(test.toString(), game.submitTurn(white).toString());
+
         move = new Move(new Position(2,5), new Position(3,4));
         game.getTurn().validateMove(move);
         game.submitTurn(white);
@@ -96,6 +99,16 @@ public class CheckersGameTest {
     }
 
     @Test
+    public void kingMe(){
+        Player redPlayer = new Player("kingAll");
+        CheckersGame game = new CheckersGame(redPlayer, white);
+        Move move = new Move(new Position(1,6), new Position(0,7));
+        game.getTurn().validateMove(move);
+        game.submitTurn(redPlayer);
+        assertEquals(game.getBoard()[0][5].getPiece().getType(), Piece.Type.KING);
+    }
+
+    @Test
     public void changeActivePlayer_endGame() {
     	// This uses TestCheckersBoards to give us a board that will end in one turn
         red = new Player("singleJumpToEnd");
@@ -112,7 +125,5 @@ public class CheckersGameTest {
 
         Message submittedTurnResponse = game.submitTurn(red);
         assertEquals(Message.MessageType.info, submittedTurnResponse.getType());
-
-
     }
 }
