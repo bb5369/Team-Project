@@ -49,6 +49,7 @@
                     </ul>
                     </p>
                 </td>
+                <td>
                     <p>
                     <ul>
                         <#if hasGames == true>
