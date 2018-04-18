@@ -38,9 +38,8 @@ public class PostEndSpectateRoute implements Route {
         Player spectator = request.session().attribute("Player");
 
         gameManager.removeSpectator(spectator);
-        request.session().attribute("message", new Message(String.format("Spectating mode has ended." +
-                " <a href=" + WebServer.HOME_URL + ">Return to lobby</a>."), Message.MessageType.info));
-                response.redirect(WebServer.HOME_URL);
+        request.session().attribute("message", new Message(String.format("Spectating mode has ended."), Message.MessageType.info));
+        response.redirect(WebServer.HOME_URL);
 
         return null;
     }
