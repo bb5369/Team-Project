@@ -57,8 +57,6 @@ public class PostCheckTurnRouteTest {
         when(game.getWinner()).thenReturn(currPlayer);
 
         CuT.handle(request, response);
-
-        // TODO: use template engine tester to ensure valid response here
     }
 
     @Test
@@ -72,8 +70,6 @@ public class PostCheckTurnRouteTest {
         when(game.getPlayerActive()).thenReturn(currPlayer);
 
         CuT.handle(request, response);
-
-        // TODO: use template engine tester to ensure valid response here
     }
 
     @Test
@@ -87,8 +83,6 @@ public class PostCheckTurnRouteTest {
         when(game.getPlayerActive()).thenReturn(null);
 
         CuT.handle(request, response);
-
-        // TODO: use template engine tester to ensure valid response here
     }
 
     @Test
@@ -98,15 +92,10 @@ public class PostCheckTurnRouteTest {
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getGame(currPlayer)).thenReturn(game);
         when(game.isResigned()).thenReturn(true);
-//        when(session.attribute("message")).thenReturn(new Message("message", Message.MessageType.info));
-//        when(request.session()).thenReturn(session);
         when(game.getLoser()).thenReturn(currPlayer);
         when(game.getWinner()).thenReturn(currPlayer);
-
-
+        
         CuT.handle(request, response);
-
-        // TODO: use template engine tester to ensure valid response here
     }
 
     @Test
