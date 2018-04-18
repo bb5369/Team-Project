@@ -67,7 +67,8 @@ public class PostCheckTurnRoute implements Route {
 
         if (game.isResigned()) {
 	        // This message is rendered when the frontend reloads the game view
-	        request.session().attribute("message", new Message(RESIGNED_NOTIFICATION_STRING, Message.MessageType.error));
+	        request.session().attribute("message", new Message(String.format("%s has resigned, %s has won the game <a href='/'>return to lobby</a>.",
+                    game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
 
 	        return formatMessageJson(opponentResigned);
 

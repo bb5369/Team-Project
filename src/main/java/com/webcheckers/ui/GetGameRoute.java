@@ -164,7 +164,8 @@ public class GetGameRoute implements Route {
         }
         if(game.isResigned()){
             if (vm.get("message") == null) {
-                vm.put("message", new Message(String.format("%s has resigned, %s has won the game", game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
+                vm.put("message", new Message(String.format("%s has resigned, %s has won the game <a href='/'>return to lobby</a>.",
+                        game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
             }
         }
         return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
