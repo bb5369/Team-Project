@@ -228,6 +228,7 @@ public class CheckersGame {
                 winner = playerWhite;
             else
                 winner = playerRed;
+            this.activeTurn = null;
             return true;
         }
 
