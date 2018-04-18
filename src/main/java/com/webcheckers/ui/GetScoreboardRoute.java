@@ -32,11 +32,10 @@ public class GetScoreboardRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
 
-        //response.redirect(WebServer.SCOREBOARD_URL);
-
         Map<String, Object> vm = new HashMap<>();
 
         vm.put(TITLE_ATTR, TITLE);
+        vm.put("players", tournamentScoreboard.getPlayers().iterator());
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }

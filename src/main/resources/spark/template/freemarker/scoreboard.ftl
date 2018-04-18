@@ -13,21 +13,14 @@
     </div>
 
     <div class="body">
-      <h2>Sign in:</h2>
+      <h2>Tournament Standings:</h2>
 
-      <#if message??>
-      <div class="error">${message}</div>
-      </#if>
-
-      <form action="/signin" method="POST">
-        Your name: <input name="name" />
-        <br/>
-
-        <input type="submit" name="casual" value="Casual"/>
-        <input type="submit" name="tournament" value="Tournament"/>
-
-
-      </form>
+        <ol>
+        <#list players as player>
+            <li>${player.getName()} - ${player.getWins()}</li>
+            <br>
+        </#list>
+        </ol>
     </div>
 
   </div>
