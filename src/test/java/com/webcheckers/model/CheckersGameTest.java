@@ -35,13 +35,15 @@ public class CheckersGameTest {
         assertEquals(board.length, builder.getBoard().length);
         assertEquals(CheckersBoardHelper.formatBoardString(board), CheckersBoardHelper.formatBoardString(builder.getBoard()));
         assertTrue(game.getTurn().isMyTurn(red));
+        assertEquals(game.toString(), red.getName() + " vs. " + white.getName());
     }
 
     @Test
     public void test_resigning(){
         assertFalse(game.isResigned());
-        assertTrue(game.resignGame());
+        assertTrue(game.resignGame(game.getPlayerWhite()));
         assertTrue(game.isResigned());
+        assertEquals(game.getWinner(),game.getPlayerActive());
     }
 
     @Test
@@ -61,13 +63,14 @@ public class CheckersGameTest {
         game.getTurn().validateMove(move);
         game.submitTurn(white);
         assertEquals(red, game.getPlayerActive());
+        assertTrue(game.resignGame(red));
     }
 
     @Test
     public void test_fail(){
         Move move = new Move(new Position(5,2), new Position(4,3));
         game.getTurn().validateMove(move);
-        assertFalse(game.resignGame());
+        assertFalse(game.resignGame(game.getPlayerRed()));
         assertNull(game.getPlayerColor(new Player("OwO")));
     }
 

@@ -41,7 +41,7 @@ define(function(require){
    * Build and begin the Spectator view mode.
    */
   SpectatorModeStartState.prototype.onEntry = function onEntry() {
-    alert('View mode not yet implemented: SPECTATOR');
+    this._controller.enableButton(PlayModeConstants.QUIT_SPEC_BUTTON);
   };
   
   // export class constructor

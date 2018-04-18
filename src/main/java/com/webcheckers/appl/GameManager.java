@@ -16,6 +16,7 @@ public class GameManager {
 
     // A list of all active games
     private ArrayList<CheckersGame> gameList;
+    private HashMap<Player, Player> spectators;
 
     /**
      * default construct
@@ -23,6 +24,7 @@ public class GameManager {
      */
     public GameManager() {
         gameList = new ArrayList<>();
+        spectators = new HashMap<>();
     }
 
 
@@ -44,7 +46,46 @@ public class GameManager {
         return false;
     }
 
+    public boolean isPlayerASpectator(Player player){
+        return spectators.containsKey(player);
+    }
 
+
+    public void addSpectator(Player spectator, Player player){
+        LOG.fine(String.format("%s is spectating %s's game", spectator.getName(), player.getName()));
+        spectators.put(spectator, player);
+    }
+
+    public void removeSpectator(Player player){
+        spectators.remove(player);
+    }
+
+    public CheckersGame getSpectatorGame(Player player){
+        return this.getGame(spectators.get(player));
+    }
+
+    public HashMap<String, CheckersGame> getGameList(){
+        HashMap<String, CheckersGame> games = new HashMap<>();
+        for (CheckersGame game : gameList) {
+            games.put(game.toString(), game);
+        }
+        return games;
+    }
+
+    public HashMap<Player, Player> clearGameSpectators(Player player, HashMap<Player, Player> specs){
+        if(spectators.containsValue(player)){
+            for(Player player1: specs.keySet()){
+                if(specs.get(player1).equals(player)){
+                    specs.remove(player1);
+                    break;
+                }
+            }
+            return clearGameSpectators(player, specs);
+        }
+        else{
+            return specs;
+        }
+    }
     /**
      * This is a private method that checks if the player is in a game
      *
@@ -145,10 +186,12 @@ public class GameManager {
     }
 
     public void clearGame(Player player) {
+        spectators = clearGameSpectators(getGame(player).getPlayerRed(), spectators);
         gameList.remove(getGame(player));
     }
 
     public void clearGames() {
+        this.spectators.clear();
         this.gameList.clear();
     }
 
@@ -167,14 +210,5 @@ public class GameManager {
 
         return null;
 
-    }
-
-    /**
-     * Removes a game from the active games list
-     *
-     * @param game - game being removed
-     */
-    public void destoryGame(CheckersGame game) {
-        this.gameList.remove(game);
     }
 }
