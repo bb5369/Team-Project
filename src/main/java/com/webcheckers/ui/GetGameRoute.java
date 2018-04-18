@@ -83,6 +83,7 @@ public class GetGameRoute implements Route {
         // TODO: Refactor the conditional game set-up logic below into GameManager
         if (currentPlayer != null && (gameManager.isPlayerASpectator(currentPlayer) || gameManager.isPlayerInAGame(currentPlayer))){
                 if (gameManager.isPlayerInAGame(currentPlayer)){
+                    viewMode = "PLAY";
                     return renderGame(vm, currentPlayer, null);
                 }
                 else{
