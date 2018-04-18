@@ -35,6 +35,7 @@ public class GetGameRoute implements Route {
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
     private static String PLAYER_INVALID_SELECT = "You cannot play a game with yourself";
     private static String PLAYER_LEFT_GAME = "The other player is not in the game";
+    private static String PLAYERS_DIFFERENT_TYPES = "You cannot play a game with someone in a different mode.";
 
     /**
      * Initializes the GetGameRoute
@@ -99,6 +100,9 @@ public class GetGameRoute implements Route {
 
             if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer)) {
                 redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
+            }
+            if (redPlayer.getType() != whitePlayer.getType()){
+                redirectWithType(request, response, new Message(PLAYERS_DIFFERENT_TYPES, Message.MessageType.error), WebServer.HOME_URL);
             }
 
             return renderGame(vm, redPlayer, whitePlayer);

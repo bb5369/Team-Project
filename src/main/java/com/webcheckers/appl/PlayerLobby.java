@@ -79,7 +79,7 @@ public class PlayerLobby {
             throw new PlayerLobbyException(MESSAGE_PLAYER_NAME_TAKEN);
         }
 
-        final Player newPlayer = new Player(name, Player.GameType.NORMAL);
+        final Player newPlayer = new Player(name, type);
 
         // Add the player to our lobby
         this.activePlayers.put(name, newPlayer);

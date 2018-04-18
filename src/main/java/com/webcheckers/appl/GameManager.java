@@ -114,6 +114,11 @@ public class GameManager {
      */
     public CheckersGame getNewGame(Player playerRed, Player playerWhite) {
 
+        if (playerRed.getType() != playerWhite.getType()){
+            LOG.warning("Casual players cannot play Tournament players");
+            return null;
+        }
+
         if (isPlayerInAGame(playerRed) || isPlayerInAGame(playerWhite)) {
             LOG.warning(String.format("getNewGame(Player: '%s', Player: '%s') Player in requested pair already in game",
                     playerRed.getName(),
