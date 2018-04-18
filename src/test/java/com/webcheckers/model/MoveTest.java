@@ -83,7 +83,7 @@ public class MoveTest {
 		assertFalse(alsoNotAJumpMove.isSingleSpace());
 		assertFalse(new Move(start, endAway2).isSingleSpace());
 		assertTrue(new Move(endAway, endAway2).isSingleSpace());
-		assertTrue(new Move(endAway, endAway2).isValid());
+		assertFalse(new Move(endAway, endAway2).isValid());
 		//assertFalse(alsoNotAJumpMove.isDiagonal());
 	}
 
@@ -102,7 +102,7 @@ public class MoveTest {
 
 	@Test
 	public void get_set(){
-		String name = "bodkj";
+		//String name = "bodkj";
 		Player test = new Player(name, Player.GameType.NORMAL);
 		CuT.setPlayer(test);
 		assertEquals(test.getName(), name);
@@ -142,7 +142,7 @@ public class MoveTest {
 		move = new Move(bad, end, new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 		assertFalse(move.isValid());
 		move = new Move(start, new Position(START_ROW + 3, START_CELL + 3), new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
-		assertFalse(move.isValid());
+		assertTrue(move.isValid());
 	}
 
 	@Test
