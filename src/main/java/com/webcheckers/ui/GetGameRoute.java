@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static spark.Spark.halt;
+import static spark.Spark.redirect;
 
 /**
  * Create the Spark Route (UI controller) for the
@@ -52,6 +53,7 @@ public class GetGameRoute implements Route {
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
+        this.viewMode = "PLAY";
 
         LOG.config("GetHomeRoute is initialized.");
     }
@@ -78,18 +80,14 @@ public class GetGameRoute implements Route {
             request.session().removeAttribute("message");
             vm.put("message", messageToRender);
         }
-        if(gameManager.isPlayerASpectator(currentPlayer)){
-            viewMode = "SPECTATOR";
-            //gameManager.updateSpectator(currentPlayer);
-            CheckersGame game = gameManager.getSpectatorGame(currentPlayer);
-            return renderGame(renderGame(game, game.getPlayerRed(), vm, VIEW_TITLE), game.getPlayerRed(), game.getPlayerWhite());
-        }
-        else{
-            viewMode = "PLAY";
-        }
         // TODO: Refactor the conditional game set-up logic below into GameManager
-        if (currentPlayer != null && gameManager.isPlayerInAGame(currentPlayer)) {
-            return renderGame(vm, currentPlayer, null);
+        if (currentPlayer != null && (gameManager.isPlayerASpectator(currentPlayer) || gameManager.isPlayerInAGame(currentPlayer))){
+                if (gameManager.isPlayerInAGame(currentPlayer)){
+                    return renderGame(vm, currentPlayer, null);
+                }
+                else{
+                    return renderGame(vm, gameManager.getSpectatorGame(currentPlayer).getPlayerRed(), gameManager.getSpectatorGame(currentPlayer).getPlayerWhite());
+                }
 
         } else if (currentPlayer != null && haveParam(request, "whitePlayer")) {
             // We are setting up a new game
@@ -177,10 +175,10 @@ public class GetGameRoute implements Route {
                         game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
             }
         }
-        return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm, VIEW_TITLE), VIEW_NAME));
+        return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm), VIEW_NAME));
     }
 
-    public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, Map<String, Object> vm, String viewTitle) {
+    public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, Map<String, Object> vm) {
         LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
                 game.getPlayerRed().getName(),
                 game.getPlayerWhite().getName(),
@@ -189,7 +187,7 @@ public class GetGameRoute implements Route {
         final Player redPlayer = game.getPlayerRed();
         final Player whitePlayer = game.getPlayerWhite();
 
-        vm.put("title", viewTitle);
+        vm.put("title", VIEW_TITLE);
         vm.put("currentPlayer", sessionPlayer);
         vm.put("viewMode", viewMode);
         vm.put("redPlayer", redPlayer);

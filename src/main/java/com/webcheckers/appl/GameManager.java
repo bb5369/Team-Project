@@ -63,8 +63,12 @@ public class GameManager {
         return this.getGame(spectators.get(player));
     }
 
-    public ArrayList<CheckersGame> getGameList(){
-        return gameList;
+    public HashMap<String, CheckersGame> getGameList(){
+        HashMap<String, CheckersGame> games = new HashMap<>();
+        for (CheckersGame game : gameList) {
+            games.put(game.toString(), game);
+        }
+        return games;
     }
     /**
      * This is a private method that checks if the player is in a game
