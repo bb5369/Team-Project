@@ -211,15 +211,4 @@ public class GameManager {
         return null;
 
     }
-
-    /**
-     * Removes a game from the active games list
-     *
-     * @param game - game being removed
-     */
-    public void destoryGame(CheckersGame game) {
-        spectators = clearGameSpectators(game.getPlayerRed(), spectators);
-        this.gameList.remove(game);
-
-    }
 }

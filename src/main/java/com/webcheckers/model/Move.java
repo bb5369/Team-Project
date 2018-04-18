@@ -18,7 +18,7 @@ public class Move {
      * @param start - start position of the move
      * @param end   - end position of the move
      */
-    Move(Position start, Position end) {
+    public Move(Position start, Position end) {
         this.start = start;
         this.end = end;
         player = null;
@@ -32,7 +32,7 @@ public class Move {
      * @param player
      * @param color
      */
-    Move(Position start, Position end, Player player, Piece.Color color) {
+    public Move(Position start, Position end, Player player, Piece.Color color) {
         this.start = start;
         this.end = end;
         this.player = player;
