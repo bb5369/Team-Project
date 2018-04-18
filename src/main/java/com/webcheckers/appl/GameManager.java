@@ -52,6 +52,7 @@ public class GameManager {
 
 
     public void addSpectator(Player spectator, Player player){
+        LOG.fine(String.format("%s is spectating %s's game", spectator.getName(), player.getName()));
         spectators.put(spectator, player);
     }
 

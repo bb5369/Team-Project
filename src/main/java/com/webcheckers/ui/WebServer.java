@@ -107,7 +107,7 @@ public class WebServer {
 		get(SIGNIN_URL, new GetSignInRoute(templateEngine));
 		post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
 		get(SIGNOUT_URL, new GetSignOutRoute(playerLobby, gameManager));
-		get(SPECTATE_URL, new GetSpectateRoute(gameManager));
+		get(SPECTATE_URL, new GetSpectateRoute(playerLobby, gameManager));
 
 		// Game operation
 		get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager));

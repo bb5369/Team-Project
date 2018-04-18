@@ -2,26 +2,31 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
-public class GetSpectateRoute implements Route {
-
+public class  GetSpectateRoute implements Route {
+    private static final Logger LOG = Logger.getLogger(PostBackupMoveRoute.class.getName());
     private final GameManager gameManager;
+    private final PlayerLobby playerLobby;
 
     /**
      * Initializes the GetSignOutRoute
      *
+     * @param playerLobby
      * @param gameManager - game manager used to access games
      */
-    GetSpectateRoute(final GameManager gameManager) {
+    GetSpectateRoute(final PlayerLobby playerLobby, final GameManager gameManager) {
         Objects.requireNonNull(gameManager, "Game Manager must not be null");
+        Objects.requireNonNull(playerLobby, "Player Lobby must not be null");
+
         this.gameManager = gameManager;
+        this.playerLobby = playerLobby;
     }
 
     /**
@@ -33,13 +38,11 @@ public class GetSpectateRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        LOG.fine("GetSpectateRoute invoked");
         Player spectator = request.session().attribute("Player");
-        String gamePlayer = request.queryParams("redPlayer");
-        Player redPlayer = new Player(gamePlayer);
+        Player gamePlayer = playerLobby.getPlayer(request.queryParams("redPlayer"));
 
-        CheckersGame game = gameManager.getGame(redPlayer);
-
-        gameManager.addSpectator(spectator, redPlayer);
+        gameManager.addSpectator(spectator, gamePlayer);
 
         response.redirect(WebServer.GAME_URL);
 

@@ -86,7 +86,10 @@ public class GetGameRoute implements Route {
                     return renderGame(vm, currentPlayer, null);
                 }
                 else{
-                    return renderGame(vm, gameManager.getSpectatorGame(currentPlayer).getPlayerRed(), gameManager.getSpectatorGame(currentPlayer).getPlayerWhite());
+                    viewMode = "SPECTATOR";
+                    CheckersGame game = gameManager.getSpectatorGame(currentPlayer);
+                    LOG.fine(String.format("Rendering a Spectator for: %s",game.toString()));
+                    return renderGame(vm, game.getPlayerRed(), game.getPlayerWhite());
                 }
 
         } else if (currentPlayer != null && haveParam(request, "whitePlayer")) {
@@ -104,7 +107,7 @@ public class GetGameRoute implements Route {
                 redirectWithType(request, response, new Message(PLAYER_NOT_EXIST_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
 
-            if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer)) {
+            if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer) || gameManager.isPlayerInAGame(currentPlayer)) {
                 redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
 
