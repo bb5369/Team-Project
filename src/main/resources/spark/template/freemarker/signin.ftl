@@ -22,7 +22,11 @@
       <form action="/signin" method="POST">
         Your name: <input name="name" />
         <br/>
-        <button type="submit">Sign-In</button>
+
+        <input type="submit" name="casual" value="Casual"/>
+        <input type="submit" name="tournament" value="Tournament"/>
+
+
       </form>
     </div>
     

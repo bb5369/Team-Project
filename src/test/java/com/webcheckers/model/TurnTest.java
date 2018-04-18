@@ -18,7 +18,7 @@ public class TurnTest {
 
 	@BeforeAll
 	public static void setupTest() {
-		player = new Player("Testy McTestFace");
+		player = new Player("Testy McTestFace", Player.GameType.NORMAL);
 		playerColor = Piece.Color.RED;
 
 		invalidMove = new Move(

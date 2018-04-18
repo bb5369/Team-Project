@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<head>
-    <!DOCTYPE html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="refresh" content="10">
@@ -23,6 +21,8 @@
     <div class="body">
         <#if currentPlayer??>
 
+            <a href="/scoreboard" style="float: right";>Tournament Scoreboard</a>
+
             <p>Welcome, ${currentPlayer.name}.</p>
 
             <#if message??>
@@ -35,29 +35,47 @@
             <table width ="80%">
             <tr>
                 <th align="left">Casual Players</th>
+
+                <th align="left">Tournament Players</th>
+
                 <th align="left">Active Games</th>
             </tr>
             <tr>
                 <td>
                     <p>
-                    <ul>
+                        <ul>
                         <#list activePlayers?keys as key>
                         <#if activePlayers[key].name != currentPlayer.name>
+                            <#if activePlayers[key].isTournament() == false>
                             <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
                             </#if>
+                        </#if>
                         </#list>
                     </ul>
                     </p>
                 </td>
+                                <td>
+                                    <p>
+                                        <ul>
+                                        <#list activePlayers?keys as key>
+                                        <#if activePlayers[key].name != currentPlayer.name>
+                                            <#if activePlayers[key].isTournament() == true>
+                                            <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
+                                            </#if>
+                                            </#if>
+                                        </#list>
+                                    </ul>
+                                    </p>
+                                </td>
                 <td>
                     <p>
-                    <ul>
-                        <#if hasGames == true>
-                        <#list activeGames?keys as key>
-                            <li><a href="${spectatorRoute}?redPlayer=${activeGames[key].getPlayerRed().getName()}">${activeGames[key].toString()}</a></li>
-                        </#list>
-                        </#if>
-                    </ul>
+                        <ul>
+                            <#if hasGames == true>
+                                <#list activeGames?keys as key>
+                                    <li><a href="${spectatorRoute}?redPlayer=${activeGames[key].getPlayerRed().getName()}">${activeGames[key].toString()}</a></li>
+                                </#list>
+                            </#if>
+                        </ul>
                     </p>
                 </td>
             </tr>

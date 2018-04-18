@@ -41,7 +41,7 @@ public class GetClearRouteTest {
 
     @Test
     public void runAdmin(){
-        currPlayer = new Player("adminDude");
+        currPlayer = new Player("adminDude", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
 
         CuT.handle(request, response);
@@ -57,7 +57,7 @@ public class GetClearRouteTest {
 
     @Test
     public void runNormal(){
-        currPlayer = new Player("bro");
+        currPlayer = new Player("bro", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
 
         CuT.handle(request, response);

@@ -4,11 +4,13 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerLobbyException;
 import com.webcheckers.model.Player;
 
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.model.TournamentScoreboard;
 import spark.TemplateEngine;
 import spark.Route;
 import spark.ModelAndView;
@@ -29,6 +31,7 @@ public class PostSignInRoute implements Route {
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
+    private final TournamentScoreboard tournamentScoreboard;
 
     /**
      * Initializes the PostSignInRoute
@@ -36,12 +39,14 @@ public class PostSignInRoute implements Route {
      * @param templateEngine - template engine used to render the view model
      * @param playerLobby    - player lobby used to create and store a new player
      */
-    PostSignInRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby) {
+    PostSignInRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby, final TournamentScoreboard tournamentScoreboard) {
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(tournamentScoreboard, "tournamentScoreboard must not be null");
 
         this.templateEngine = templateEngine;
         this.playerLobby = playerLobby;
+        this.tournamentScoreboard = tournamentScoreboard;
 
         LOG.config("PostSignInRoute is initialized");
     }
@@ -63,11 +68,29 @@ public class PostSignInRoute implements Route {
 
         String playerName = request.queryParams("name");
 
+        String casual = request.queryParams("casual");
+
+        Player.GameType type;
+
+        if(casual == null) {
+            type = Player.GameType.TOURNAMENT;
+            LOG.info(String.format("Player [%s] is in TOURNAMENT mode.", playerName));
+        }else {
+            type = Player.GameType.NORMAL;
+            LOG.info(String.format("Player [%s] is in NORMAL mode.", playerName));
+        }
+
         Player newPlayer;
 
         try {
 
-            newPlayer = playerLobby.newPlayer(playerName);
+            newPlayer = playerLobby.newPlayer(playerName, type);
+
+            if(type == Player.GameType.TOURNAMENT) {
+                tournamentScoreboard.newPlayer(newPlayer);
+                LOG.info(String.format("Added %s to the tournament.", newPlayer.getName()));
+            }
+
             // Add the new Player's model to their session
             request.session().attribute("Player", newPlayer);
 

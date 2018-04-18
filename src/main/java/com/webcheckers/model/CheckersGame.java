@@ -83,6 +83,7 @@ public class CheckersGame {
      */
     private void changeActivePlayer() {
         Player activePlayer = activeTurn.getPlayer();
+        Piece.Color activePlayerColor = getPlayerColor(activePlayer);
         Player nextPlayer;
         Piece.Color nextPlayerColor;
 
@@ -95,19 +96,47 @@ public class CheckersGame {
             nextPlayerColor = Piece.Color.WHITE;
         }
 
-        // make sure the next player has moves available
-        if (MoveValidator.playerHasPieces(board, nextPlayerColor) &&
-                MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor)){
-            // setup their turn
+        makeKings();
+
+        boolean nextPlayerHasPieces = MoveValidator.playerHasPieces(board, nextPlayerColor);
+        boolean nextPlayerHasMoves  = MoveValidator.areMovesAvailableForPlayer(board, nextPlayer, nextPlayerColor);
+
+        boolean isActivePlayerOutOfMoves = ! MoveValidator.areMovesAvailableForPlayer(board, activePlayer, activePlayerColor);
+
+
+        if (!nextPlayerHasPieces) {
+            LOG.fine(String.format("WON: %s won, %s lost. (%s has no pieces)", activePlayer, nextPlayer, nextPlayer));
+        	recordEndGame(activePlayer, nextPlayer);
+
+        } else if (nextPlayerHasPieces && isActivePlayerOutOfMoves) {
+            LOG.fine(String.format("WON: %s won, %s lost. (%s put themselves in a corner)", nextPlayer, activePlayer, activePlayer));
+        	recordEndGame(nextPlayer, activePlayer);
+
+        } else if (nextPlayerHasMoves && nextPlayerHasPieces) {
+        	LOG.fine("Nobody has WON yet");
             activeTurn = new Turn(board, nextPlayer, nextPlayerColor);
-        } else {
-		    // trigger a win for activePlayer
-            LOG.info(String.format("%s has no more moves. Sad! %s wins.", nextPlayer.getName(), activePlayer.getName()));
-            this.winner = activePlayer;
-            this.loser = nextPlayer;
-            this.state = State.WON;
-            this.activeTurn = null;
         }
+    }
+
+    /**
+     * Transition game into WON state, recording winner and loser status
+     * @param winner
+     * @param loser
+     */
+    private void recordEndGame(Player winner, Player loser) {
+    	state = State.WON;
+
+        this.winner = winner;
+        this.loser = loser;
+
+        winner.wonAGame();
+
+        //if (winner.isTournament()) {
+            TournamentScoreboard.sortPlayers();
+        //}
+
+        activeTurn = null;
+
     }
 
     /**
@@ -148,12 +177,16 @@ public class CheckersGame {
         // This is our backdoor into setting up a starting board for testing
         // If the red player is named one of the public static methods in TestCheckersBoards
         // then we use that board builder
-        try {
-            Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerRed.getName());
+        if (playerRed.getName().equals("Tester")) {
+            try {
+                Method boardBuilderMethod = TestCheckersBoards.class.getMethod(playerWhite.getName());
 
-            builder = (CheckersBoardBuilder)boardBuilderMethod.invoke(null);
+                builder = (CheckersBoardBuilder) boardBuilderMethod.invoke(null);
 
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)  {
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                builder = CheckersBoardBuilder.aStartingBoard();
+            }
+        } else {
             builder = CheckersBoardBuilder.aStartingBoard();
         }
 
@@ -187,7 +220,6 @@ public class CheckersGame {
         	if (finalizedMessage.getType() == Message.MessageType.info) {
                 board = getTurn().getLatestBoard();
                 changeActivePlayer();
-                makeKings();
           }
 			    return finalizedMessage;
 
@@ -221,6 +253,9 @@ public class CheckersGame {
      * @return boolean - if resignation was successful
      */
     public boolean resignGame(Player player) {
+        if (activeTurn == null)
+            return false;
+
         if (!player.equals(activeTurn.getPlayer()) || activeTurn.canResign()) {
             state = State.RESIGNED;
             loser = player;

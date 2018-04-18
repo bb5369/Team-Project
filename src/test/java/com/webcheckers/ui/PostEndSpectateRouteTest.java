@@ -23,8 +23,8 @@ public class PostEndSpectateRouteTest {
     private Response response;
     private GameManager gameManager;
 
-    private Player red = new Player("redPlayer");
-    private Player spectator = new Player ("spectator");
+    private Player red = new Player("redPlayer", Player.GameType.NORMAL);
+    private Player spectator = new Player ("spectator", Player.GameType.NORMAL);
 
     @BeforeEach
     public void setup(){
@@ -35,7 +35,7 @@ public class PostEndSpectateRouteTest {
 
         this.gameManager = new GameManager();
 
-        gameManager.getNewGame(red, new Player("white"));
+        gameManager.getNewGame(red, new Player("white", Player.GameType.NORMAL));
         gameManager.addSpectator(spectator, red);
 
         CuT = new PostEndSpectateRoute(gameManager);

@@ -4,10 +4,9 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TournamentScoreboard;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import static spark.Spark.halt;
@@ -44,19 +43,21 @@ public class GetSignOutRoute implements Route {
     public Object handle(Request request, Response response) {
         Player player = request.session().attribute("Player");
         String playerName = player.getName();
+        Player.GameType type = player.getType();
 
         CheckersGame game = gameManager.getGame(player);
 
         playerLobby.destroyPlayer(playerName);
+
+        if(player.getType() == Player.GameType.TOURNAMENT)
+            TournamentScoreboard.removePlayer(player);
 
         if (!playerLobby.isPlayerInLobby(player)) {
             // Remove the player from the session
             request.session().removeAttribute(playerName);
             player = null;
             if(game != null) {
-                gameManager.resignGame(new Player(playerName));
-                //gameManager.destoryGame(game);
-                game = null;
+                gameManager.resignGame(new Player(playerName, type));
             }
         }
         // Redirect to homepage which should show the Signed Out page

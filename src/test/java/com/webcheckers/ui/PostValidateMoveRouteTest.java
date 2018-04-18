@@ -49,7 +49,7 @@ public class PostValidateMoveRouteTest {
     @Test
     @Disabled
     public void isNotEmptyValid(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(request.body()).thenReturn("{\"start\":{\"row\":5,\"cell\":2},\"end\":{\"row\":4,\"cell\":3}}");
@@ -60,7 +60,7 @@ public class PostValidateMoveRouteTest {
 
     @Test
     public void isEmptyNotValid(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(request.body()).thenReturn("");

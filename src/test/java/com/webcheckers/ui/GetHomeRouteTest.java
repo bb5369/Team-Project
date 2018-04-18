@@ -48,7 +48,7 @@ public class GetHomeRouteTest {
 
     @Test
     public void playerInLobbyNotNull(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         Message.MessageType type = Message.MessageType.info;
         CheckersGame game = mock(CheckersGame.class);
         message = new Message("message text", type);
@@ -67,7 +67,7 @@ public class GetHomeRouteTest {
 
     @Test
     public void playerNotInLobbyNotNull(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(playerLobby.isPlayerInLobby(currPlayer)).thenReturn(true);
         when(gameManager.isPlayerInAGame(currPlayer)).thenReturn(false);

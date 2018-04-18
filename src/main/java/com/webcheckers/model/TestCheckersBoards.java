@@ -297,4 +297,5 @@ public final class TestCheckersBoards {
 				new Piece(Piece.Type.SINGLE, Piece.Color.RED),
 				new Position(1, 0));
 	}
+
 }

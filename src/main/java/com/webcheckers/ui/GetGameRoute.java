@@ -37,6 +37,7 @@ public class GetGameRoute implements Route {
     private static String PLAYER_NOT_EXIST_MESSAGE = "The player by that name does not exist";
     private static String PLAYER_INVALID_SELECT = "You cannot play a game with yourself";
     private static String PLAYER_LEFT_GAME = "The other player is not in the game";
+    private static String PLAYERS_DIFFERENT_TYPES = "You cannot play a game with someone in a different mode.";
 
     /**
      * Initializes the GetGameRoute
@@ -114,16 +115,21 @@ public class GetGameRoute implements Route {
             if (gameManager.isPlayerInAGame(redPlayer) || gameManager.isPlayerInAGame(whitePlayer) || gameManager.isPlayerInAGame(currentPlayer)) {
                 redirectWithType(request, response, new Message(PLAYER_IN_GAME_MESSAGE, Message.MessageType.error), WebServer.HOME_URL);
             }
+            if (redPlayer.getType() != whitePlayer.getType()){
+                redirectWithType(request, response, new Message(PLAYERS_DIFFERENT_TYPES, Message.MessageType.error), WebServer.HOME_URL);
+            }
 
             return renderGame(vm, redPlayer, whitePlayer);
         } else {
             response.redirect(WebServer.HOME_URL);
+            //halt();
+            return null;
         }
 
         // We shouldn't ever hit this, but Spark redirects are unclean so this is a catch-all until a better design
         // is proposed.
-        LOG.warning("We fell through in GameRoute...no view available");
-        return templateEngine.render(new ModelAndView(new HashMap<String, Object>(), "home.ftl"));
+        //LOG.warning("We fell through in GameRoute...no view available");
+        //return templateEngine.render(new ModelAndView(new HashMap<String, Object>(), "home.ftl"));
     }
 
 
@@ -191,6 +197,14 @@ public class GetGameRoute implements Route {
         return templateEngine.render(new ModelAndView(renderGame(game, sessionPlayer, vm), VIEW_NAME));
     }
 
+    /**
+     * renderGame method
+     * This method renders the game
+     * @param game - game object
+     * @param sessionPlayer - the player session object
+     * @param vm - A map of key value pairs need for rendering the game
+     * @return A map with all the key value pair needed to render the game
+     */
     public Map<String, Object> renderGame(CheckersGame game, Player sessionPlayer, Map<String, Object> vm) {
         LOG.fine(String.format("Rendering game between red player [%s] and white player [%s]. currentPlayer: [%s]",
                 game.getPlayerRed().getName(),
@@ -218,7 +232,7 @@ public class GetGameRoute implements Route {
 
         // This is a really bad place to put something as important as this
 	    // Now that we've rendered the game for the final time, get rid of it!
-        if (game.isResigned() || (game.isWon() && game.getLoser().equals(sessionPlayer))) {
+        if (game.isResigned() || (game.isWon())) {
             gameManager.clearGame(sessionPlayer);
         }
 

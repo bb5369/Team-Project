@@ -29,11 +29,10 @@ public class PostSubmitTurnRouteTest {
     private CheckersGame game;
     private GameManager gameManager;
     private Player player;
-    private Turn turn;
 
     @BeforeEach
     public void setup(){
-        player = new Player("redPlayer");
+        player = new Player("redPlayer", Player.GameType.NORMAL);
 
         request = mock(Request.class);
         session = mock(Session.class);
@@ -49,17 +48,10 @@ public class PostSubmitTurnRouteTest {
     }
 
     @Test
-    @Disabled
     public void runCorrect(){
-        //when(game.submitTurn(player)).thenReturn(true);
-
-        CuT.handle(request, response);
-    }
-
-    @Test
-    @Disabled
-    public void runFail(){
-        //when(game.submitTurn(player)).thenReturn(false);
+        when(session.attribute("Player")).thenReturn(player);
+        when(gameManager.getGame(player)).thenReturn(game);
+        when(game.submitTurn(player)).thenReturn(new Message("message", Message.MessageType.info));
 
         CuT.handle(request, response);
     }

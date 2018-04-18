@@ -7,8 +7,15 @@ import java.util.Objects;
  */
 public class Player {
 
+    // Determines whether a player is in tournament mode or not
+    public enum GameType {NORMAL, TOURNAMENT};
+
     //instance variable
     public final String name;
+
+    public final GameType type;
+
+    public int wins;
 
 
     /**
@@ -16,9 +23,12 @@ public class Player {
      * Intializes the name of the player
      *
      * @param name - Player name String
+     * @param type - Player GameType
      */
-    public Player(String name) {
+    public Player(String name, GameType type) {
         this.name = name;
+        this.type = type;
+        this.wins = 0;
     }
 
     /**
@@ -29,6 +39,33 @@ public class Player {
     public String getName() {
         return this.name;
     }
+
+    /**
+     * Used to get the player's type
+     *
+     * @return - the player's type
+     */
+    public Player.GameType getType(){ return this.type; }
+
+    /**
+     * Gets the player's number of wins
+     *
+     * @return - number of wins
+     */
+    public Integer getWins(){ return this.wins; }
+
+    /**
+     * Increment the number of wins if the player won their game
+     */
+    public void wonAGame(){ this.wins++; }
+
+    /**
+     * Used by home.ftl to determine if a player is in tournament mode
+     * or not
+     *
+     * @return - true if in tournament mode, false otherwise
+     */
+    public boolean isTournament(){ return this.type == GameType.TOURNAMENT; }
 
     /**
      * This method is used to compare two Player objects
@@ -53,6 +90,7 @@ public class Player {
     public int hashCode() {
         return Objects.hash(this.name);
     }
+
 
     /**
      * Generates and returns a string of the player's name

@@ -3,9 +3,11 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Turn;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.Request;
@@ -29,7 +31,6 @@ public class PostCheckTurnRouteTest {
     private CheckersGame game;
     private Gson gson;
     private Player currPlayer;
-    private Turn turn;
 
     @BeforeEach
     public void setup() {
@@ -40,28 +41,66 @@ public class PostCheckTurnRouteTest {
         response = mock(Response.class);
 
         gameManager = mock(GameManager.class);
-        gson = new Gson();
-        turn = mock(Turn.class);
+        gson =  new Gson();
 
         CuT = new PostCheckTurnRoute(gameManager, gson);
     }
 
     @Test
-    public void gameNotNull(){
-        currPlayer = new Player("redPlayer");
+    public void gameNotNullNorResignedIsWon(){
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         game = mock(CheckersGame.class);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getGame(currPlayer)).thenReturn(game);
         when(game.isResigned()).thenReturn(false);
+        when(game.isWon()).thenReturn(true);
+        when(game.getWinner()).thenReturn(currPlayer);
 
         CuT.handle(request, response);
+    }
 
-        // TODO: use template engine tester to ensure valid response here
+    @Test
+    public void gameNotNullNorResignedNotWonIsEqual(){
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        game = mock(CheckersGame.class);
+        when(session.attribute("Player")).thenReturn(currPlayer);
+        when(gameManager.getGame(currPlayer)).thenReturn(game);
+        when(game.isResigned()).thenReturn(false);
+        when(game.isWon()).thenReturn(false);
+        when(game.getPlayerActive()).thenReturn(currPlayer);
+
+        CuT.handle(request, response);
+    }
+
+    @Test
+    public void gameNotNullNorResignedNotWonNotEqual(){
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        game = mock(CheckersGame.class);
+        when(session.attribute("Player")).thenReturn(currPlayer);
+        when(gameManager.getGame(currPlayer)).thenReturn(game);
+        when(game.isResigned()).thenReturn(false);
+        when(game.isWon()).thenReturn(false);
+        when(game.getPlayerActive()).thenReturn(null);
+
+        CuT.handle(request, response);
+    }
+
+    @Test
+    public void gameNotNullAndResigned(){
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        game = mock(CheckersGame.class);
+        when(session.attribute("Player")).thenReturn(currPlayer);
+        when(gameManager.getGame(currPlayer)).thenReturn(game);
+        when(game.isResigned()).thenReturn(true);
+        when(game.getLoser()).thenReturn(currPlayer);
+        when(game.getWinner()).thenReturn(currPlayer);
+
+        CuT.handle(request, response);
     }
 
     @Test
     public void gameNull(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         game = null;
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getGame(currPlayer)).thenReturn(game);

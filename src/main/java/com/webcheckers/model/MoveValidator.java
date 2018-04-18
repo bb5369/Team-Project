@@ -69,18 +69,24 @@ public class MoveValidator {
 
                         Move checkMove;
 
-                        for(int row = -1; row < 2; row += 2){
+                        for(int row = -2; row <= 2; row += 1){
 
-                            for(int col = -1; col < 2; col += 2){
+                            for(int col = -2; col <= 2; col += 1){
 
                                 int destRow = i + row;
                                 int destCell = j + col;
 
-                                if (destRow < 0 || destCell < 0)
-                                    continue;
+                                LOG.info(String.format("Checking space <%d, %d>", destRow, destCell));
 
-                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS)
+                                if (destRow < 0 || destCell < 0) {
+                                    LOG.info("Row or Cell is less than 0.");
                                     continue;
+                                }
+
+                                if (destRow >= CheckersBoardBuilder.ROWS || destCell >= CheckersBoardBuilder.CELLS) {
+                                    LOG.info("Row or Cell is greater than the number of rows or cells.");
+                                    continue;
+                                }
 
                                 Position place = new Position(destRow, destCell);
                                 checkMove = new Move(currentPos, place, player, color);
@@ -292,14 +298,12 @@ public class MoveValidator {
                 if (row + 2 < board.length) {
                     testMove = new Move(start, new Position(row + JUMP_DIFF, cell + JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
                     testMove = new Move(start, new Position(row - JUMP_DIFF, cell + JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
@@ -308,14 +312,12 @@ public class MoveValidator {
                 if (row + 2 < board.length) {
                     testMove = new Move(start, new Position(row + JUMP_DIFF, cell - JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }
                 if (row - 2 >= 0) {
                     testMove = new Move(start, new Position(row - JUMP_DIFF, cell - JUMP_DIFF));
                     testMove.setPieceColor(getSpacePieceColor(board, testMove.getStart()));
-                    //test.setPlayer(new Player(move.getPlayerName()));
                     if (canJumpValidation(board,testMove))
                         return true;
                 }

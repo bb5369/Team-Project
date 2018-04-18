@@ -41,7 +41,7 @@ public class PostBackupMoveRouteTest {
 
     @Test
     public void runTrue(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(turn.backupMove()).thenReturn(true);
@@ -51,7 +51,7 @@ public class PostBackupMoveRouteTest {
 
     @Test
     public void runFalse(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getPlayerTurn(currPlayer)).thenReturn(turn);
         when(turn.backupMove()).thenReturn(false);
