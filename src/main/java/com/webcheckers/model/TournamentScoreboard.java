@@ -7,7 +7,7 @@ public class TournamentScoreboard {
 
     private static final Logger LOG = Logger.getLogger(TournamentScoreboard.class.getName());
 
-    private LinkedList<Player> players;
+    private static LinkedList<Player> players;
 
     /**
      * Initializes the list of players
@@ -20,7 +20,7 @@ public class TournamentScoreboard {
     /**
      * Sorts the list of players so the most wins comes first and the players follow in descending order
      */
-    private void sortPlayers() {
+    public static void sortPlayers() {
         LOG.info("Sorting...");
         int size = players.size();
         LinkedList<Player> newList = new LinkedList<>();
@@ -52,7 +52,7 @@ public class TournamentScoreboard {
      *
      * @param player - player to be added
      */
-    public void newPlayer(Player player) {
+    public static void newPlayer(Player player) {
         LOG.info(String.format("Adding %s to the tournament scoreboard", player.getName()));
         players.add(player);
         sortPlayers();
@@ -64,7 +64,7 @@ public class TournamentScoreboard {
      *
      * @param player - player to be removed
      */
-    public void removePlayer(Player player) {
+    public static void removePlayer(Player player) {
         players.remove(player);
     }
 
@@ -73,6 +73,6 @@ public class TournamentScoreboard {
      *
      * @return - linked list of players
      */
-    public LinkedList<Player> getPlayers() { return this.players; }
+    public static LinkedList<Player> getPlayers() { return players; }
 
 }

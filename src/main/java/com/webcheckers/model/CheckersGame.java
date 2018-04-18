@@ -106,6 +106,7 @@ public class CheckersGame {
             this.winner = activePlayer;
             this.winner.wonAGame();
             this.loser = nextPlayer;
+            TournamentScoreboard.sortPlayers();
             this.state = State.WON;
             this.activeTurn = null;
         }
