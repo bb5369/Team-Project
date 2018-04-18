@@ -9,6 +9,7 @@ import com.webcheckers.model.Player;
 
 import com.google.gson.Gson;
 
+import com.webcheckers.model.TournamentScoreboard;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -19,16 +20,19 @@ public class PostResignGameRoute implements Route {
     private static final Logger LOG = Logger.getLogger(PostResignGameRoute.class.getName());
 
     private final GameManager gameManager;
+    private final TournamentScoreboard tournamentScoreboard;
 
     /**
      * Initializes PostResignGame
      *
      * @param gameManager - used to resign from the game
      */
-    public PostResignGameRoute(GameManager gameManager) {
+    public PostResignGameRoute(GameManager gameManager, TournamentScoreboard tournamentScoreboard) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
+        Objects.requireNonNull(tournamentScoreboard, "tournamentScoreboard must not be null");
 
         this.gameManager = gameManager;
+        this.tournamentScoreboard = tournamentScoreboard;
         LOG.config("PostResignRoute is initialized");
     }
 
@@ -51,6 +55,8 @@ public class PostResignGameRoute implements Route {
 
         if (resignWorked) {
             LOG.finer("Resign worked");
+            if(sessionPlayer.getType() == Player.GameType.TOURNAMENT)
+                tournamentScoreboard.removePlayer(sessionPlayer);
 			return (new Gson()).toJson(new Message(sessionPlayer.name + "Resigned", Message.MessageType.info));
 
 		} else{

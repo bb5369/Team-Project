@@ -49,4 +49,8 @@ public class TournamentScoreboard {
         sortPlayers();
     }
 
+    public void removePlayer(Player player){
+        players.remove(player);
+    }
+
 }
