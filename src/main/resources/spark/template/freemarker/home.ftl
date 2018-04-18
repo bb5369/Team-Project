@@ -49,22 +49,33 @@
                             <#if activePlayers[key].isTournament() == false>
                             <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
                             </#if>
-                            </#if>
+                        </#if>
                         </#list>
                     </ul>
                     </p>
                 </td>
+                                <td>
+                                    <p>
+                                        <ul>
+                                        <#list activePlayers?keys as key>
+                                        <#if activePlayers[key].name != currentPlayer.name>
+                                            <#if activePlayers[key].isTournament() == true>
+                                            <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
+                                            </#if>
+                                            </#if>
+                                        </#list>
+                                    </ul>
+                                    </p>
+                                </td>
                 <td>
                     <p>
                         <ul>
-                        <#list activePlayers?keys as key>
-                        <#if activePlayers[key].name != currentPlayer.name>
-                            <#if activePlayers[key].isTournament() == true>
-                                <li><a href="${gameRoute}?whitePlayer=${activePlayers[key].name}">${activePlayers[key].name}</a></li>
-                        </#if>
-                        </#if>
-                        </#list>
-                    </ul>
+                            <#if hasGames == true>
+                                <#list activeGames?keys as key>
+                                    <li><a href="${spectatorRoute}?redPlayer=${activeGames[key].getPlayerRed().getName()}">${activeGames[key].toString()}</a></li>
+                                </#list>
+                            </#if>
+                        </ul>
                     </p>
                 </td>
             </tr>
