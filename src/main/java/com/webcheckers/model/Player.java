@@ -44,6 +44,8 @@ public class Player {
      */
     public Player.GameType getType(){ return this.type; }
 
+    public boolean isTournament(){ return this.type == GameType.TOURNAMENT; }
+
     /**
      * This method is used to compare two Player objects
      *
