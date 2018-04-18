@@ -22,7 +22,6 @@ public class PlayerLobby {
      */
     public PlayerLobby() {
         activePlayers = new HashMap<String, Player>();
-        //this.newPlayer("hey");
     }
 
     // Behaviors
