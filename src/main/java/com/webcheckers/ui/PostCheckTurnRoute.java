@@ -1,11 +1,9 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Message;
 import com.webcheckers.model.Player;
-import spark.TemplateEngine;
 import spark.Response;
 import spark.Route;
 import spark.Request;
@@ -28,7 +26,9 @@ public class PostCheckTurnRoute implements Route {
     private final String thisPlayersTurn = "true";
     private final String otherPlayersTurn = "false";
     private final String RESIGNED_NOTIFICATION_STRING = "The other player has resigned! <a href='/'>return to lobby</a>.";
-	private final String GAME_ENDED_STRING = "The game has ended! <a href='/'>return to lobby</a>.";
+	private final String GAME_ENDED_STRING = "The game has ended! <a href=" + WebServer.HOME_URL + ">return to lobby</a>.";
+    private final String WON_GAME_NOTIFICATION_APPEND = " has won the game. <a href='/'>return to lobby</a>.";
+    private final String gameWon = "true";
 
 
     /**
@@ -67,9 +67,17 @@ public class PostCheckTurnRoute implements Route {
 
         if (game.isResigned()) {
 	        // This message is rendered when the frontend reloads the game view
-	        request.session().attribute("message", new Message(RESIGNED_NOTIFICATION_STRING, Message.MessageType.error));
+	        request.session().attribute("message", new Message(String.format("%s has resigned, %s has won the game <a href='/'>return to lobby</a>.",
+                    game.getLoser().getName(), game.getWinner().getName()), Message.MessageType.info));
 
 	        return formatMessageJson(opponentResigned);
+
+        } else if(game.isWon()) {
+            String WON_GAME_NOTIFICATION_STRING = game.getWinner().getName() + WON_GAME_NOTIFICATION_APPEND;
+
+            //request.session().attribute("message", new Message(WON_GAME_NOTIFICATION_STRING, Message.MessageType.info));
+
+            return new Message(String.format("Game won by %s", game.getWinner().getName()), Message.MessageType.error).toJson();
 
         } else if (currentPlayer.equals(game.getPlayerActive())) {
             return formatMessageJson(thisPlayersTurn);
