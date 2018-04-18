@@ -4,6 +4,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TournamentScoreboard;
 import spark.*;
 
 import java.util.Objects;
@@ -47,6 +48,9 @@ public class GetSignOutRoute implements Route {
         CheckersGame game = gameManager.getGame(player);
 
         playerLobby.destroyPlayer(playerName);
+
+        if(player.getType() == Player.GameType.TOURNAMENT)
+            TournamentScoreboard.removePlayer(player);
 
         if (!playerLobby.isPlayerInLobby(player)) {
             // Remove the player from the session
