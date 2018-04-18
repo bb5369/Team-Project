@@ -26,8 +26,8 @@ public class GameManagerTest {
     @BeforeEach
     public void setup(){
         CuT = new GameManager();
-        redPlayer = new Player("red");
-        whitePlayer = new Player("white");
+        redPlayer = new Player("red", Player.GameType.NORMAL);
+        whitePlayer = new Player("white", Player.GameType.NORMAL);
         nullPlayer = null;
     }
 

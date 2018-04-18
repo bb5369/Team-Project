@@ -69,9 +69,9 @@ public class MoveValidator {
 
                         Move checkMove;
 
-                        for(int row = -1; row < 2; row += 2){
+                        for(int row = -2; row < 2; row += 2){
 
-                            for(int col = -1; col < 2; col += 2){
+                            for(int col = -2; col < 2; col += 2){
 
                                 int destRow = i + row;
                                 int destCell = j + col;

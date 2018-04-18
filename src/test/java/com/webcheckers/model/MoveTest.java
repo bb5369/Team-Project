@@ -25,11 +25,11 @@ public class MoveTest {
 		end   = new Position(END_ROW, END_CELL);
 
 		CuT = new Move(start, end);
-		CuT.setPlayer(new Player(name));
+		CuT.setPlayer(new Player(name, Player.GameType.NORMAL));
 		CuT.setPieceColor(Piece.Color.RED);
 		single = new Move(start, new Position(2,2));
 		CuT.setPieceColor(Piece.Color.RED);
-		CuT.setPlayer(new Player("test"));
+		CuT.setPlayer(new Player("test", Player.GameType.NORMAL));
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class MoveTest {
 	@Test
 	public void get_set(){
 		String name = "bodkj";
-		Player test = new Player(name);
+		Player test = new Player(name, Player.GameType.NORMAL);
 		CuT.setPlayer(test);
 		assertEquals(test.getName(), name);
 		Piece.Color color = Piece.Color.RED;
@@ -136,12 +136,12 @@ public class MoveTest {
 	@Test
 	public void testOtherConstruct() {
 		Position bad = new Position(-1, 0);
-		Move move = new Move(start, bad, new Player(name), Piece.Color.WHITE);
+		Move move = new Move(start, bad, new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 
 		assertFalse(move.isValid());
-		move = new Move(bad, end, new Player(name), Piece.Color.WHITE);
+		move = new Move(bad, end, new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 		assertFalse(move.isValid());
-		move = new Move(start, new Position(START_ROW + 3, START_CELL + 3), new Player(name), Piece.Color.WHITE);
+		move = new Move(start, new Position(START_ROW + 3, START_CELL + 3), new Player(name, Player.GameType.NORMAL), Piece.Color.WHITE);
 		assertFalse(move.isValid());
 	}
 

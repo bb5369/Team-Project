@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 @Tag("Model-tier")
 public class PlayerTest {
 
-    Player player = new Player("Bob");
+    Player player = new Player("Bob", Player.GameType.NORMAL);
 
     @Test
     public void test1(){
-        final Player bob = new Player("Bob");
+        final Player bob = new Player("Bob", Player.GameType.NORMAL);
         assertTrue(bob.equals(player));
     }
     @Test
@@ -23,7 +23,7 @@ public class PlayerTest {
     @Test
     public void test3(){
         String name = player.getName();
-        assertEquals(player.hashCode(), new Player(name).hashCode());
+        assertEquals(player.hashCode(), new Player(name, Player.GameType.NORMAL).hashCode());
     }
 
     @Test

@@ -42,7 +42,7 @@ public class GetSignOutRouteTest {
         session = mock(Session.class);
         when(request.session()).thenReturn(session);
         playerRed = mock(Player.class);
-        playerWhite = new Player("white");
+        playerWhite = new Player("white", Player.GameType.NORMAL);
         templateEngine = mock(TemplateEngine.class);
         testHelper = new TemplateEngineTester();
         playerLobby = mock(PlayerLobby.class);

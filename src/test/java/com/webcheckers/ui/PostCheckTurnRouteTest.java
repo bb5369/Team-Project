@@ -48,7 +48,7 @@ public class PostCheckTurnRouteTest {
 
     @Test
     public void gameNotNull(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         game = mock(CheckersGame.class);
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getGame(currPlayer)).thenReturn(game);
@@ -61,7 +61,7 @@ public class PostCheckTurnRouteTest {
 
     @Test
     public void gameNull(){
-        currPlayer = new Player("redPlayer");
+        currPlayer = new Player("redPlayer", Player.GameType.NORMAL);
         game = null;
         when(session.attribute("Player")).thenReturn(currPlayer);
         when(gameManager.getGame(currPlayer)).thenReturn(game);

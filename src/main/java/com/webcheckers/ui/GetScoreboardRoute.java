@@ -13,9 +13,9 @@ public class GetScoreboardRoute implements Route {
 
     private static final Logger LOG = Logger.getLogger(GetScoreboardRoute.class.getName());
 
-    private static final String TITLE_ATTR = "title";
-    private static final String TITLE = "Tournament Scoreboard";
-    private static final String VIEW_NAME = "scoreboard.ftl";
+    static final String TITLE_ATTR = "title";
+    static final String TITLE = "Tournament Scoreboard";
+    static final String VIEW_NAME = "scoreboard.ftl";
 
     private final TournamentScoreboard tournamentScoreboard;
     private final TemplateEngine templateEngine;

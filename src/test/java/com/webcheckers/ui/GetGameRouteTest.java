@@ -50,8 +50,8 @@ public class GetGameRouteTest {
 
     @Test
     public void inGameRed(){
-        redPlayer = new Player("redPlayer");
-        whitePlayer = new Player("whitePlayer");
+        redPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        whitePlayer = new Player("whitePlayer", Player.GameType.NORMAL);
         game = new CheckersGame(redPlayer, whitePlayer);
         when(session.attribute("Player")).thenReturn(redPlayer);
         when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
@@ -62,8 +62,8 @@ public class GetGameRouteTest {
 
     @Test
     public void inGameWhite(){
-        redPlayer = new Player("redPlayer");
-        whitePlayer = new Player("whitePlayer");
+        redPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        whitePlayer = new Player("whitePlayer", Player.GameType.NORMAL);
         game = new CheckersGame(redPlayer, whitePlayer);
         when(session.attribute("Player")).thenReturn(whitePlayer);
         when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
@@ -74,8 +74,8 @@ public class GetGameRouteTest {
 
     @Test
     public void notInGameRed(){
-        redPlayer = new Player("redPlayer");
-        whitePlayer = new Player("whitePlayer");
+        redPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        whitePlayer = new Player("whitePlayer", Player.GameType.NORMAL);
         game = new CheckersGame(redPlayer, whitePlayer);
         when(session.attribute("Player")).thenReturn(redPlayer);
         //when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
@@ -88,8 +88,8 @@ public class GetGameRouteTest {
 
     @Test
     public void notInGameWhite(){
-        redPlayer = new Player("redPlayer");
-        whitePlayer = new Player("whitePlayer");
+        redPlayer = new Player("redPlayer", Player.GameType.NORMAL);
+        whitePlayer = new Player("whitePlayer", Player.GameType.NORMAL);
         game = new CheckersGame(redPlayer, whitePlayer);
         when(session.attribute("Player")).thenReturn(whitePlayer);
         when(playerLobby.getPlayer("whitePlayer")).thenReturn(whitePlayer);
